@@ -1,4 +1,6 @@
 node_modules
+.content-collections
+content
 .DS_Store
 dist
 dist-ssr
@@ -11,3 +13,5 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+

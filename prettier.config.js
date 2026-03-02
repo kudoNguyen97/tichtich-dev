@@ -1,10 +1,13 @@
-//  @ts-check
-
 /** @type {import('prettier').Config} */
 const config = {
-  semi: false,
-  singleQuote: true,
-  trailingComma: "all",
+    semi: true,
+    singleQuote: true,
+    trailingComma: 'es5',
+    bracketSpacing: true,
+    arrowParens: 'always',
+    printWidth: 80,
+    tabWidth: 4,
+    endOfLine: 'lf',
 };
 
 export default config;

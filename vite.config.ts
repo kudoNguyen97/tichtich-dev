@@ -5,7 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 
-import viteReact from '@vitejs/plugin-react';
+import react  from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 
@@ -21,7 +21,7 @@ const config = defineConfig({
             routesDirectory: './src/routes',
             generatedRouteTree: './src/routeTree.gen.ts',
         }),
-        viteReact(),
+        react(),
     ],
     resolve: {
         alias: {

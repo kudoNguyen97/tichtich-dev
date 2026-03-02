@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@layer {
+    .mobile-container {
+        @apply w-full max-w-[720px] mx-auto px-4;
+    }
+}

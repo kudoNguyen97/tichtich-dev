@@ -26,7 +26,7 @@ const navItems = CHILD_NAV_ITEMS
     <nav
       className={cn(
         'fixed bottom-0 left-1/2 -translate-x-1/2 z-50',
-        'w-full max-w-mobile',
+        'w-full max-w-[720px]',
         'bg-white/90 dark:bg-surface-900/90 backdrop-blur-xl',
         'border-t border-surface-100 dark:border-surface-800',
         'safe-bottom',

@@ -7,7 +7,7 @@ import { routeTree } from '@/routeTree.gen';
 import { config } from '@/constants/config';
 import { queryClient } from '@/lib/queryClient';
 import '@/i18n';
-import '@/styles.css';
+import '@/styles/styles.css';
 
 const router = createRouter({
     routeTree,

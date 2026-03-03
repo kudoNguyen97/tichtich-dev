@@ -13,7 +13,6 @@
         "module": "ESNext",
         "baseUrl": ".",
         "paths": {
-            "content-collections": ["./.content-collections/generated"],
             "@/*": ["./src/*"]
         },
         "lib": ["ES2022", "DOM", "DOM.Iterable"],

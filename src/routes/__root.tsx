@@ -1,35 +1,28 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { TanStackDevtools } from '@tanstack/react-devtools';
-
 import '@/styles/styles.css';
-import { LoadingTichTich } from '#/components/common/LoadingTichTich';
-import { AppToastRegion } from '#/components/common/Toast';
+import { LoadingTichTich } from '@/components/common/LoadingTichTich';
+import { AppToastRegion } from '@/components/common/Toast';
+import { useSplash } from '@/hooks/useSplash';
+import { SplashScreen } from '@/components/SplashScreen';
+
 
 export const Route = createRootRoute({
     component: RootComponent,
     pendingComponent: () => <LoadingTichTich isLoading />,
-    pendingMs: 200,
-    pendingMinMs: 300,
+    pendingMs: 10000,
+    pendingMinMs: 10000,
 });
 
 function RootComponent() {
+    const { visible, dismiss } = useSplash();
     return (
         <>
             <LoadingTichTich />
             <AppToastRegion />
             <Outlet />
-            <TanStackDevtools
-                config={{
-                    position: 'bottom-right',
-                }}
-                plugins={[
-                    {
-                        name: 'TanStack Router',
-                        render: <TanStackRouterDevtoolsPanel />,
-                    },
-                ]}
-            />
+            {visible && (
+            <SplashScreen onDone={dismiss} duration={1500} />
+      )}
         </>
     );
 }

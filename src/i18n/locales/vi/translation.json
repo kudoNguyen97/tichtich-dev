@@ -4,6 +4,14 @@
         "about": "Về chúng tôi",
         "contact": "Liên hệ"
     },
+    "auth": {
+        "email": "Email",
+        "password": "Mật khẩu",
+        "login": "Đăng nhập",
+        "register": "Đăng ký",
+        "forgotPassword": "Quên mật khẩu",
+        "noAccount": "Bạn không có tài khoản? Đăng ký"
+    },
     "error": {
         "unknown": "Đã xảy ra lỗi không mong muốn",
         "network": "Không thể kết nối đến máy chủ",

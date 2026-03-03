@@ -11,14 +11,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 
 const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')()
 const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppChildrenRouteLazyRoute = AppChildrenRouteLazyRouteImport.update({
@@ -37,40 +42,51 @@ const AppChildrenIndexLazyRoute = AppChildrenIndexLazyRouteImport.update({
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthRouteRoute
+  '/login': typeof LoginRoute
   '/children': typeof AppChildrenRouteLazyRouteWithChildren
   '/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof AuthRouteRoute
+  '/login': typeof LoginRoute
   '/children': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRoute
+  '/login': typeof LoginRoute
   '/_app/children': typeof AppChildrenRouteLazyRouteWithChildren
   '/_app/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/children' | '/children/'
+  fullPaths: '/' | '/login' | '/children' | '/children/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/children'
-  id: '__root__' | '/' | '/_app/children' | '/_app/children/'
+  to: '/' | '/login' | '/children'
+  id: '__root__' | '/_auth' | '/login' | '/_app/children' | '/_app/children/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRoute
+  LoginRoute: typeof LoginRoute
   AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/children': {
@@ -102,7 +118,8 @@ const AppChildrenRouteLazyRouteWithChildren =
   AppChildrenRouteLazyRoute._addFileChildren(AppChildrenRouteLazyRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRoute,
+  LoginRoute: LoginRoute,
   AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
 }
 export const routeTree = rootRouteImport

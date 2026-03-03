@@ -12,7 +12,7 @@ i18n.use(LanguageDetector)
             en: { translation: en },
             vi: { translation: vi },
         },
-        fallbackLng: 'en',
+        fallbackLng: 'vi',
         supportedLngs: ['en', 'vi'],
         interpolation: {
             escapeValue: false,

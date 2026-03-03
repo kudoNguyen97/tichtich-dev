@@ -4,6 +4,14 @@
         "about": "About",
         "contact": "Contact"
     },
+    "auth": {
+        "email": "Email",
+        "password": "Password",
+        "login": "Login",
+        "register": "Register",
+        "forgotPassword": "Forgot password",
+        "noAccount": "Don't have an account? Register"
+    },
     "error": {
         "unknown": "An unexpected error occurred",
         "network": "Unable to connect to the server",

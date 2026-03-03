@@ -5,7 +5,6 @@ import { AppToastRegion } from '@/components/common/Toast';
 import { useSplash } from '@/hooks/useSplash';
 import { SplashScreen } from '@/components/SplashScreen';
 
-
 export const Route = createRootRoute({
     component: RootComponent,
     pendingComponent: () => <LoadingTichTich isLoading />,
@@ -20,9 +19,7 @@ function RootComponent() {
             <LoadingTichTich />
             <AppToastRegion />
             <Outlet />
-            {visible && (
-            <SplashScreen onDone={dismiss} duration={1500} />
-      )}
+            {visible && <SplashScreen onDone={dismiss} duration={1500} />}
         </>
     );
 }

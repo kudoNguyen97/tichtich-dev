@@ -4,19 +4,19 @@
     --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
 
     /* main colors */
-    --color-tichtich-primary-300: #FFEFCD;
-    --color-tichtich-primary-200: #EF6725;
-    --color-tichtich-primary-100: #FAB516FD;
+    --color-tichtich-primary-300: #ffefcd;
+    --color-tichtich-primary-200: #ef6725;
+    --color-tichtich-primary-100: #fab516fd;
 
     /* supporting colors */
     --color-tichtich-black: #000000;
-    --color-tichtich-violet: #2D2F76;
-    --color-tichtich-blue: #BCE4E5;
-    --color-tichtich-green: #C5D047;
-    --color-tichtich-red: #FF0000;
-    --color-tichtich-pink: #F9C3D2;
-    --color-tichtich-orange: #EF6725;
-    --color-tichtich-yellow: #FFB700;
+    --color-tichtich-violet: #2d2f76;
+    --color-tichtich-blue: #bce4e5;
+    --color-tichtich-green: #c5d047;
+    --color-tichtich-red: #ff0000;
+    --color-tichtich-pink: #f9c3d2;
+    --color-tichtich-orange: #ef6725;
+    --color-tichtich-yellow: #ffb700;
 }
 
 @layer {

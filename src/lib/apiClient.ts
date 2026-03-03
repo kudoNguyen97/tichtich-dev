@@ -22,17 +22,13 @@ async function request<T>(config: AxiosRequestConfig): Promise<T> {
         if (error instanceof ApiError) throw error;
 
         const axiosError = error as AxiosError<ApiResponse>;
-        if (axiosError.response) {
-            const body = axiosError.response.data;
-            throw new ApiError(
-                body?.resultCode ?? -1,
-                axiosError.response.status,
-                body?.message ?? axiosError.message,
-                body?.data
-            );
-        }
-
-        throw new ApiError(-1, 0, 'Network error');
+        const body = axiosError.response!.data;
+        throw new ApiError(
+            body.resultCode,
+            axiosError.response!.status,
+            body.message,
+            body.data
+        );
     }
 }
 

@@ -8,120 +8,122 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as rootRouteImport } from './routes/__root';
+import { Route as LoginRouteImport } from './routes/login';
+import { Route as AuthRouteRouteImport } from './routes/_auth/route';
 
-const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')()
-const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
+const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')();
+const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')();
 
 const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: '/login',
+    path: '/login',
+    getParentRoute: () => rootRouteImport,
+} as any);
 const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: '/_auth',
+    getParentRoute: () => rootRouteImport,
+} as any);
 const AppChildrenRouteLazyRoute = AppChildrenRouteLazyRouteImport.update({
-  id: '/_app/children',
-  path: '/children',
-  getParentRoute: () => rootRouteImport,
+    id: '/_app/children',
+    path: '/children',
+    getParentRoute: () => rootRouteImport,
 } as any).lazy(() =>
-  import('./routes/_app/children/route.lazy').then((d) => d.Route),
-)
+    import('./routes/_app/children/route.lazy').then((d) => d.Route)
+);
 const AppChildrenIndexLazyRoute = AppChildrenIndexLazyRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppChildrenRouteLazyRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppChildrenRouteLazyRoute,
 } as any).lazy(() =>
-  import('./routes/_app/children/index.lazy').then((d) => d.Route),
-)
+    import('./routes/_app/children/index.lazy').then((d) => d.Route)
+);
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthRouteRoute
-  '/login': typeof LoginRoute
-  '/children': typeof AppChildrenRouteLazyRouteWithChildren
-  '/children/': typeof AppChildrenIndexLazyRoute
+    '/': typeof AuthRouteRoute;
+    '/login': typeof LoginRoute;
+    '/children': typeof AppChildrenRouteLazyRouteWithChildren;
+    '/children/': typeof AppChildrenIndexLazyRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthRouteRoute
-  '/login': typeof LoginRoute
-  '/children': typeof AppChildrenIndexLazyRoute
+    '/': typeof AuthRouteRoute;
+    '/login': typeof LoginRoute;
+    '/children': typeof AppChildrenIndexLazyRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteRoute
-  '/login': typeof LoginRoute
-  '/_app/children': typeof AppChildrenRouteLazyRouteWithChildren
-  '/_app/children/': typeof AppChildrenIndexLazyRoute
+    __root__: typeof rootRouteImport;
+    '/_auth': typeof AuthRouteRoute;
+    '/login': typeof LoginRoute;
+    '/_app/children': typeof AppChildrenRouteLazyRouteWithChildren;
+    '/_app/children/': typeof AppChildrenIndexLazyRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/children' | '/children/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/children'
-  id: '__root__' | '/_auth' | '/login' | '/_app/children' | '/_app/children/'
-  fileRoutesById: FileRoutesById
+    fileRoutesByFullPath: FileRoutesByFullPath;
+    fullPaths: '/' | '/login' | '/children' | '/children/';
+    fileRoutesByTo: FileRoutesByTo;
+    to: '/' | '/login' | '/children';
+    id: '__root__' | '/_auth' | '/login' | '/_app/children' | '/_app/children/';
+    fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRoute
-  LoginRoute: typeof LoginRoute
-  AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
+    AuthRouteRoute: typeof AuthRouteRoute;
+    LoginRoute: typeof LoginRoute;
+    AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren;
 }
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
+    interface FileRoutesByPath {
+        '/login': {
+            id: '/login';
+            path: '/login';
+            fullPath: '/login';
+            preLoaderRoute: typeof LoginRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        '/_auth': {
+            id: '/_auth';
+            path: '';
+            fullPath: '/';
+            preLoaderRoute: typeof AuthRouteRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        '/_app/children': {
+            id: '/_app/children';
+            path: '/children';
+            fullPath: '/children';
+            preLoaderRoute: typeof AppChildrenRouteLazyRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        '/_app/children/': {
+            id: '/_app/children/';
+            path: '/';
+            fullPath: '/children/';
+            preLoaderRoute: typeof AppChildrenIndexLazyRouteImport;
+            parentRoute: typeof AppChildrenRouteLazyRoute;
+        };
     }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/children': {
-      id: '/_app/children'
-      path: '/children'
-      fullPath: '/children'
-      preLoaderRoute: typeof AppChildrenRouteLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/children/': {
-      id: '/_app/children/'
-      path: '/'
-      fullPath: '/children/'
-      preLoaderRoute: typeof AppChildrenIndexLazyRouteImport
-      parentRoute: typeof AppChildrenRouteLazyRoute
-    }
-  }
 }
 
 interface AppChildrenRouteLazyRouteChildren {
-  AppChildrenIndexLazyRoute: typeof AppChildrenIndexLazyRoute
+    AppChildrenIndexLazyRoute: typeof AppChildrenIndexLazyRoute;
 }
 
 const AppChildrenRouteLazyRouteChildren: AppChildrenRouteLazyRouteChildren = {
-  AppChildrenIndexLazyRoute: AppChildrenIndexLazyRoute,
-}
+    AppChildrenIndexLazyRoute: AppChildrenIndexLazyRoute,
+};
 
 const AppChildrenRouteLazyRouteWithChildren =
-  AppChildrenRouteLazyRoute._addFileChildren(AppChildrenRouteLazyRouteChildren)
+    AppChildrenRouteLazyRoute._addFileChildren(
+        AppChildrenRouteLazyRouteChildren
+    );
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthRouteRoute: AuthRouteRoute,
-  LoginRoute: LoginRoute,
-  AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
-}
+    AuthRouteRoute: AuthRouteRoute,
+    LoginRoute: LoginRoute,
+    AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+    ._addFileChildren(rootRouteChildren)
+    ._addFileTypes<FileRouteTypes>();

@@ -11,27 +11,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')()
 const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppChildrenRouteLazyRoute = AppChildrenRouteLazyRouteImport.update({
@@ -41,11 +28,6 @@ const AppChildrenRouteLazyRoute = AppChildrenRouteLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_app/children/route.lazy').then((d) => d.Route),
 )
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppChildrenIndexLazyRoute = AppChildrenIndexLazyRouteImport.update({
   id: '/',
   path: '/',
@@ -56,66 +38,34 @@ const AppChildrenIndexLazyRoute = AppChildrenIndexLazyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/children': typeof AppChildrenRouteLazyRouteWithChildren
-  '/blog/': typeof BlogIndexRoute
   '/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/blog/$slug': typeof BlogSlugRoute
-  '/blog': typeof BlogIndexRoute
   '/children': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/blog/$slug': typeof BlogSlugRoute
   '/_app/children': typeof AppChildrenRouteLazyRouteWithChildren
-  '/blog/': typeof BlogIndexRoute
   '/_app/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/blog/$slug'
-    | '/children'
-    | '/blog/'
-    | '/children/'
+  fullPaths: '/' | '/children' | '/children/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/blog/$slug' | '/blog' | '/children'
-  id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/blog/$slug'
-    | '/_app/children'
-    | '/blog/'
-    | '/_app/children/'
+  to: '/' | '/children'
+  id: '__root__' | '/' | '/_app/children' | '/_app/children/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  BlogSlugRoute: typeof BlogSlugRoute
   AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
-  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -123,25 +73,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_app/children': {
       id: '/_app/children'
       path: '/children'
       fullPath: '/children'
       preLoaderRoute: typeof AppChildrenRouteLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/children/': {
@@ -167,10 +103,7 @@ const AppChildrenRouteLazyRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  BlogSlugRoute: BlogSlugRoute,
   AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
-  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

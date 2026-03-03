@@ -1,5 +1,24 @@
 @import 'tailwindcss';
 
+@theme {
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+    /* main colors */
+    --color-tichtich-primary-300: #FFEFCD;
+    --color-tichtich-primary-200: #EF6725;
+    --color-tichtich-primary-100: #FAB516FD;
+
+    /* supporting colors */
+    --color-tichtich-black: #000000;
+    --color-tichtich-violet: #2D2F76;
+    --color-tichtich-blue: #BCE4E5;
+    --color-tichtich-green: #C5D047;
+    --color-tichtich-red: #FF0000;
+    --color-tichtich-pink: #F9C3D2;
+    --color-tichtich-orange: #EF6725;
+    --color-tichtich-yellow: #FFB700;
+}
+
 @layer {
     .mobile-container {
         @apply w-full max-w-[720px] mx-auto px-4;

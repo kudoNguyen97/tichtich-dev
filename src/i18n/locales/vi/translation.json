@@ -3,5 +3,33 @@
         "home": "Trang chủ",
         "about": "Về chúng tôi",
         "contact": "Liên hệ"
+    },
+    "error": {
+        "unknown": "Đã xảy ra lỗi không mong muốn",
+        "network": "Không thể kết nối đến máy chủ",
+        "auth": {
+            "invalidCredentials": "Email hoặc mật khẩu không đúng",
+            "tokenExpired": "Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại",
+            "accountLocked": "Tài khoản của bạn đã bị khóa"
+        },
+        "validation": {
+            "invalidInput": "Dữ liệu gửi lên không hợp lệ",
+            "required": "Vui lòng điền đầy đủ các trường bắt buộc"
+        },
+        "permission": {
+            "denied": "Bạn không có quyền thực hiện hành động này"
+        },
+        "resource": {
+            "notFound": "Không tìm thấy tài nguyên yêu cầu",
+            "alreadyExists": "Tài nguyên này đã tồn tại"
+        }
+    },
+    "success": {
+        "saved": "Lưu thay đổi thành công",
+        "deleted": "Xóa thành công",
+        "login": "Đăng nhập thành công",
+        "logout": "Đăng xuất thành công",
+        "created": "Tạo thành công",
+        "updated": "Cập nhật thành công"
     }
 }

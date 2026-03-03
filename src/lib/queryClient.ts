@@ -1,15 +1,19 @@
-import { QueryClient } from '@tanstack/react-query';
+import { MutationCache, QueryClient } from '@tanstack/react-query';
+import { ApiError } from '@/types/api.type';
+import { showError } from './toast';
 
 export const queryClient = new QueryClient({
+    mutationCache: new MutationCache({
+        onError: (error) => showError(error),
+    }),
     defaultOptions: {
         queries: {
-            staleTime: 1000 * 60 * 5, // 5 minutes
-            gcTime: 1000 * 60 * 10, // 10 minutes
-            retry: (failureCount, error: unknown) => {
-                const status = (error as { response?: { status: number } })
-                    .response?.status;
-                // Don't retry on 4xx errors
-                if (status && status >= 400 && status < 500) return false;
+            staleTime: 1000 * 60 * 5,
+            gcTime: 1000 * 60 * 10,
+            retry: (failureCount, error) => {
+                if (error instanceof ApiError && error.statusCode >= 400 && error.statusCode < 500) {
+                    return false;
+                }
                 return failureCount < 2;
             },
             refetchOnWindowFocus: false,

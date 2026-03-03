@@ -10,7 +10,6 @@ export const axiosInstance = axios.create({
     },
 });
 
-// Request interceptor — attach token
 axiosInstance.interceptors.request.use((requestConfig) => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -19,20 +18,13 @@ axiosInstance.interceptors.request.use((requestConfig) => {
     return requestConfig;
 });
 
-// Response interceptor — handle errors globally
 axiosInstance.interceptors.response.use(
     (response) => response,
-    async (error: AxiosError) => {
-        const status = error.response?.status;
-
-        if (status === 401) {
-            // Clear auth state and redirect to login
+    (error: AxiosError) => {
+        if (error.response?.status === 401) {
             localStorage.removeItem('access_token');
             window.location.href = '/login';
         }
-
         return Promise.reject(error);
-    }
+    },
 );
-
-export default axiosInstance;

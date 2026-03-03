@@ -1,50 +1,34 @@
-import { cn } from '@/utils/cn'
-import { Dialog, DialogTrigger, Modal, ModalOverlay } from 'react-aria-components'
+import { AnimatePresence, motion } from 'motion/react'
+import { useLoadingStore } from '@/stores/useLoadingStore'
 
-interface LoadingTichTichProps {
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-  fullScreen?: boolean,
-  isLoading?: boolean
-}
+export function LoadingTichTich({ isLoading }: { isLoading?: boolean }) {
+  const storeLoading = useLoadingStore((s) => s.isLoading)
+  const visible = isLoading ?? storeLoading
 
-const sizes = {
-  sm: 'size-4 border-2',
-  md: 'size-8 border-2',
-  lg: 'size-12 border-[3px]',
-}
-
-export function LoadingTichTich({ isLoading = false }: LoadingTichTichProps) {
-    // if (!isLoading) return null;
-    // return (
-    //   <div className="fixed inset-0 flex flex-col items-center justify-center bg-green-100 opacity-50 z-50">
-    //     <div className="w-[170px] h-[170px]">
-    //         <img src="/pig-loading.svg" alt="logo" className="w-full h-full object-contain" />
-    //     </div>
-    //     <div className="text-2xl font-bold">
-    //         Loading...
-    //     </div>
-    //   </div>
-    // )
-    return (
-        <DialogTrigger isOpen={isLoading}>
-          <ModalOverlay className="z-1000 bg-black/20 backdrop-blur-xs flex items-center justify-center fixed inset-0">
-            <Modal
-              className="outline-none border-none bg-transparent shadow-none p-0 m-0 flex items-center justify-center"
-            >
-              <Dialog>
-                <div className="flex flex-col items-center gap-4 py-8 px-6  min-w-[200px]">
-                   <div className="w-[170px] h-[170px]">
-                    <img src="/pig-loading.svg" alt="logo" className="w-full h-full object-contain" />
-                    </div>
-                    <div className="text-xl font-bold">
-                        Loading...
-                    </div>
-                </div>
-              </Dialog>
-            </Modal>
-          </ModalOverlay>
-        </DialogTrigger>
-
-    )
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          role="status"
+          aria-label="Loading"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-1000 flex items-center justify-center bg-black/20 backdrop-blur-xs"
+        >
+          <div className="flex flex-col items-center gap-4 px-6 py-8">
+            <div className="size-[170px]">
+              <img
+                src="/pig-loading.svg"
+                alt=""
+                className="size-full object-contain"
+              />
+            </div>
+            <p className="text-xl font-bold">Loading...</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
 }

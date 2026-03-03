@@ -3,5 +3,33 @@
         "home": "Home",
         "about": "About",
         "contact": "Contact"
+    },
+    "error": {
+        "unknown": "An unexpected error occurred",
+        "network": "Unable to connect to the server",
+        "auth": {
+            "invalidCredentials": "Invalid email or password",
+            "tokenExpired": "Your session has expired, please log in again",
+            "accountLocked": "Your account has been locked"
+        },
+        "validation": {
+            "invalidInput": "The submitted data is invalid",
+            "required": "Please fill in all required fields"
+        },
+        "permission": {
+            "denied": "You do not have permission to perform this action"
+        },
+        "resource": {
+            "notFound": "The requested resource was not found",
+            "alreadyExists": "This resource already exists"
+        }
+    },
+    "success": {
+        "saved": "Changes saved successfully",
+        "deleted": "Deleted successfully",
+        "login": "Logged in successfully",
+        "logout": "Logged out successfully",
+        "created": "Created successfully",
+        "updated": "Updated successfully"
     }
 }

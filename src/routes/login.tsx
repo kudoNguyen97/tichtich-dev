@@ -10,6 +10,10 @@ import {
     Form,
     Separator,
 } from 'react-aria-components';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebase';
+import { TichTichButton } from '@/components/common/TichTichButton';
+import { TichTichInput } from '@/components/common/TichTichInput';
 
 const GoogleIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -74,10 +78,13 @@ function LoginPage() {
     const [password, setPassword] = useState('');
 
     const isValid = email.trim() !== '' && password.trim() !== '';
-
-    function handleSubmit(e: React.FormEvent) {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        if (!validate()) return;
+        try {
+             await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.log((error as Error).message);
+        }
     }
 
     return (
@@ -204,15 +211,10 @@ function LoginPage() {
                             <Separator className="flex-1 h-px bg-gray-200 border-none" />
                         </div>
 
+                        <TichTichInput label="Email" placeholder="Nhập email của bạn" type="email" rightAdornment={<Mail color="#aaa" />}/>
+
                         {/* Google Login Button */}
-                        <Button
-                            type="button"
-                            onPress={() => alert('Đăng nhập bằng Google')}
-                            className="w-full py-3.5 rounded-full border border-gray-900 bg-white text-gray-900 text-sm font-semibold flex items-center justify-center gap-2.5 hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 cursor-pointer"
-                        >
-                            <GoogleIcon />
-                            <span>Đăng nhập bằng Google</span>
-                        </Button>
+                        <TichTichButton type="button" onPress={() => alert('Đăng nhập bằng Google')} variant="primary" isDisabled size="md" fullWidth leftIcon={<GoogleIcon />} rightIcon={<span>Đăng nhập bằng Google</span>} />
                     </Form>
                 </div>
             </div>

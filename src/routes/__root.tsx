@@ -1,7 +1,7 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import '@/styles/styles.css';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
-import { AppToastRegion } from '@/components/common/Toast';
+import { AppNotificationModal } from '@/components/common/AppNotificationModal';
 import { useSplash } from '@/hooks/useSplash';
 import { SplashScreen } from '@/components/SplashScreen';
 
@@ -17,7 +17,7 @@ function RootComponent() {
     return (
         <>
             <LoadingTichTich />
-            <AppToastRegion />
+            <AppNotificationModal />
             <Outlet />
             {visible && <SplashScreen onDone={dismiss} duration={1500} />}
         </>

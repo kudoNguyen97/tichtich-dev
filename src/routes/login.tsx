@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
+import { showSuccess } from '@/lib/toast';
 
 const GoogleIcon = () => (
     <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
@@ -56,13 +57,31 @@ function LoginPage() {
     const [password, setPassword] = useState('');
 
     const isValid = email.trim() !== '' && password.trim() !== '';
+
     const handleSubmit = async (e: any) => {
+        if (!validate()) return;
+        showSuccess('success.login');
         e.preventDefault();
         try {
              await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
             console.log((error as Error).message);
         }
+    }
+
+    const validateEmail = (value: string) => {
+        const validEmail = value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        if (!validEmail) {
+            return false;
+        }
+        return true;
+    }
+
+    const validatePassword = (value: string) => {
+       if (!value && !value.trim()) {
+        return false;
+       }
+       return true
     }
 
     return (
@@ -88,10 +107,10 @@ function LoginPage() {
                         className="flex flex-col gap-4 px-4 py-8"
                     >
                         {/* Email Field */}
-                        <TichTichInput label="Email" placeholder="Nhập email của bạn" type="email" value={email} onChange={setEmail} rightAdornment={<Mail color="#aaa" />}/>
+                        <TichTichInput label="Email" placeholder="Nhập email của bạn" type="email" value={email} onChange={setEmail} errorMessage={errors.email} rightAdornment={<Mail color="#aaa" />}/>
 
                         {/* Password Field */}
-                        <TichTichInput label="Mật khẩu" placeholder="Nhập mật khẩu của bạn" type="password" value={password} onChange={setPassword} rightAdornment={<Eye color="#aaa" />}/>
+                        <TichTichInput label="Mật khẩu" placeholder="Nhập mật khẩu của bạn" type="password" value={password} onChange={setPassword} errorMessage={errors.password} rightAdornment={<Eye color="#aaa" />}/>
 
                         {/* Forgot Password */}
                         <Link to="/register" className="text-base font-medium text-gray-500 hover:text-gray-900 transition-colors duration-150 no-underline">

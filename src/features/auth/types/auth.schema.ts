@@ -19,7 +19,9 @@ export const registerSchema = z
             .min(1, { error: 'auth.emailRequired' })
             .pipe(z.email({ error: 'auth.emailInvalid' })),
         password: z.string().min(6, { error: 'auth.passwordMin' }),
-        confirmPassword: z.string().min(1, { error: 'auth.confirmPasswordRequired' }),
+        confirmPassword: z
+            .string()
+            .min(1, { error: 'auth.confirmPasswordRequired' }),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'auth.passwordMismatch',

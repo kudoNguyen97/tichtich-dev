@@ -23,5 +23,10 @@ export const useNotificationStore = create<NotificationState>((set) => ({
     show: ({ title, description, variant = 'info' }) =>
         set({ isOpen: true, title, description, variant }),
     close: () =>
-        set({ isOpen: false, title: '', description: undefined, variant: 'info' }),
+        set({
+            isOpen: false,
+            title: '',
+            description: undefined,
+            variant: 'info',
+        }),
 }));

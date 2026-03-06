@@ -8,11 +8,23 @@ export function showError(error: unknown) {
     if (error instanceof ApiError) {
         const key = ERROR_CODE_I18N[error.resultCode];
         const message = key ? i18n.t(key) : error.message;
-        show({ title: 'Có lỗi xảy ra',description: message, variant: 'error' });
+        show({
+            title: 'Có lỗi xảy ra',
+            description: message,
+            variant: 'error',
+        });
     } else if (error instanceof Error) {
-        show({ title: 'Có lỗi xảy ra',description: error.message, variant: 'error' });
+        show({
+            title: 'Có lỗi xảy ra',
+            description: error.message,
+            variant: 'error',
+        });
     } else {
-        show({ title: 'Có lỗi xảy ra',description: i18n.t('error.unknown'), variant: 'error' });
+        show({
+            title: 'Có lỗi xảy ra',
+            description: i18n.t('error.unknown'),
+            variant: 'error',
+        });
     }
 }
 

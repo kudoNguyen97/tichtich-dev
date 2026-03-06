@@ -187,9 +187,7 @@ function RegisterPage() {
                                 <TichTichInput
                                     label={t('auth.password')}
                                     placeholder={t('auth.createPassword')}
-                                    type={
-                                        showPassword ? 'text' : 'password'
-                                    }
+                                    type={showPassword ? 'text' : 'password'}
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}

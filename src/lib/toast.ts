@@ -1,41 +1,33 @@
 import i18n from '@/i18n';
-import { toastQueue } from '@/components/common/Toast';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { ApiError } from '@/types/api.type';
 import { ERROR_CODE_I18N } from '@/constants/errorCodes';
 
-const DEFAULT_TIMEOUT = 5000;
-
 export function showError(error: unknown) {
+    const show = useNotificationStore.getState().show;
     if (error instanceof ApiError) {
         const key = ERROR_CODE_I18N[error.resultCode];
         const message = key ? i18n.t(key) : error.message;
-        toastQueue.add(
-            { title: message, variant: 'error' },
-            { timeout: DEFAULT_TIMEOUT }
-        );
+        show({ title: message, variant: 'error' });
     } else if (error instanceof Error) {
-        toastQueue.add(
-            { title: error.message, variant: 'error' },
-            { timeout: DEFAULT_TIMEOUT }
-        );
+        show({ title: error.message, variant: 'error' });
     } else {
-        toastQueue.add(
-            { title: i18n.t('error.unknown'), variant: 'error' },
-            { timeout: DEFAULT_TIMEOUT }
-        );
+        show({ title: i18n.t('error.unknown'), variant: 'error' });
     }
 }
 
 export function showSuccess(key: string, description?: string) {
-    toastQueue.add(
-        { title: i18n.t(key), description, variant: 'success' },
-        { timeout: DEFAULT_TIMEOUT }
-    );
+    useNotificationStore.getState().show({
+        title: i18n.t(key),
+        description,
+        variant: 'success',
+    });
 }
 
 export function showInfo(key: string, description?: string) {
-    toastQueue.add(
-        { title: i18n.t(key), description, variant: 'info' },
-        { timeout: DEFAULT_TIMEOUT }
-    );
+    useNotificationStore.getState().show({
+        title: i18n.t(key),
+        description,
+        variant: 'info',
+    });
 }

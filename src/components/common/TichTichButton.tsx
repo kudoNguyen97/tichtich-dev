@@ -15,7 +15,7 @@ const buttonVariants = cva(
     "rounded-[40px] font-semibold transition-all duration-200",
     "cursor-pointer select-none",
     "focus-visible:ring-2 focus-visible:ring-offset-2",
-    "disabled:opacity-50 disabled:cursor-not-allowed",
+    "disabled:opacity-70 disabled:cursor-not-allowed",
     "active:scale-[0.97]",
   ],
   {
@@ -51,6 +51,9 @@ const buttonVariants = cva(
           "hover:brightness-110",
           "focus-visible:ring-tichtich-red",
         ],
+        disabled: [
+          "bg-gray-900 text-white hover:bg-gray-700 active:scale-[0.98]",
+        ],
       },
       size: {
         sm: "h-9 px-4 text-sm",
@@ -83,7 +86,7 @@ const buttonVariants = cva(
  */
 
 interface TichTichButtonProps extends ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'outline-primary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'outline-primary' | 'ghost' | 'danger' | 'disabled';
   size?: 'sm' | 'md' | 'lg' | 'icon';
   fullWidth?: boolean;
   isLoading?: boolean;

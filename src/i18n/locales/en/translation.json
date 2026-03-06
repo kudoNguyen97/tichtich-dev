@@ -10,7 +10,13 @@
         "login": "Login",
         "register": "Register",
         "forgotPassword": "Forgot password",
-        "noAccount": "Don't have an account? Register"
+        "noAccount": "Don't have an account? Register",
+        "emailRequired": "Please enter your email",
+        "emailInvalid": "Invalid email format",
+        "passwordRequired": "Please enter your password",
+        "passwordMin": "Password must be at least 8 characters",
+        "emailPlaceholder": "Enter your email",
+        "passwordPlaceholder": "Enter your password"
     },
     "error": {
         "unknown": "An unexpected error occurred",

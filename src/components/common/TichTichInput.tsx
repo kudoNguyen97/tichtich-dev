@@ -80,7 +80,7 @@ export function TichTichInput({
       {...props}
     >
       {label && (
-        <Label className="text-sm font-semibold text-tichtich-black">
+        <Label className="text-base font-bold text-tichtich-black">
           {label}
           {isRequired && (
             <span className="ml-0.5 text-tichtich-red" aria-hidden="true">*</span>
@@ -99,9 +99,9 @@ export function TichTichInput({
           placeholder={placeholder}
           maxLength={maxLength}
           className={cn(
-            "w-full rounded-xl border bg-white text-sm text-tichtich-black",
+            "w-full rounded-xl border border-red-500 bg-white text-sm text-tichtich-black",
             "placeholder:text-gray-300 transition-all duration-200 outline-none",
-            "px-4 py-3.5",
+            "px-4 py-3.5 text-base",
             leftAdornment && "pl-10",
             rightAdornment && "pr-11",
             hasError

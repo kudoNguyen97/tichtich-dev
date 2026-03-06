@@ -19,7 +19,7 @@ export function AppBar({
         <header
             className={cn(
                 'sticky top-0 z-50',
-                'max-w-[720px] mx-auto',
+                'max-w-[720px] w-full mx-auto',
                 'h-14 px-4',
                 'border-b border-gray-200 bg-white',
                 'grid grid-cols-[40px_1fr_40px] items-center',

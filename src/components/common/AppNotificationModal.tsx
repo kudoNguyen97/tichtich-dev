@@ -2,6 +2,7 @@ import { TichTichModal } from '@/components/common/TichTichModal';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import { cn } from '@/utils/cn';
 import { CheckCircle, XCircle, Info } from 'lucide-react';
+import { TichTichButton } from '@/components/common/TichTichButton';
 
 const variantConfig = {
     success: {
@@ -32,22 +33,17 @@ export function AppNotificationModal() {
         <TichTichModal
             isOpen={isOpen}
             onClose={close}
-            title=""
-            size="sm"
-            isDismissable
+            size="lg"
+            isDismissable={false}
             footer={
-                <button
-                    type="button"
+                <TichTichButton
+                    variant="primary"
+                    size="md"
+                    fullWidth
                     onClick={close}
-                    className={cn(
-                        'w-full h-12 rounded-pill text-sm font-semibold',
-                        'bg-tichtich-primary-200 text-white',
-                        'transition-all active:scale-[0.97] cursor-pointer border-none',
-                        'hover:brightness-110'
-                    )}
                 >
                     Đóng
-                </button>
+                </TichTichButton>
             }
         >
             <div className="flex flex-col items-center text-center gap-3">

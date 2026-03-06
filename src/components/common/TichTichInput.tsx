@@ -110,14 +110,14 @@ export function TichTichInput({
                     placeholder={placeholder}
                     maxLength={maxLength}
                     className={cn(
-                        'w-full rounded-xl border border-red-500 bg-white text-sm text-tichtich-black',
-                        'placeholder:text-gray-300 transition-all duration-200 outline-none',
+                        'w-full rounded-xl border bg-white text-sm text-tichtich-black',
+                        'placeholder:text-gray-#BFBFBF transition-all duration-200 outline-none',
                         'px-4 py-3.5 text-base',
                         leftAdornment && 'pl-10',
                         rightAdornment && 'pr-11',
                         hasError
                             ? 'border-tichtich-red focus:border-tichtich-red focus:ring-2 focus:ring-tichtich-red/15'
-                            : 'border-gray-200 focus:border-tichtich-primary-200 focus:ring-2 focus:ring-tichtich-primary-200/15',
+                            : 'border-tichtich-black focus:border-tichtich-primary-200 focus:ring-2 focus:ring-tichtich-primary-200/15',
                         isDisabled &&
                             'bg-gray-50 text-gray-400 cursor-not-allowed',
                         isReadOnly && 'bg-gray-50 cursor-default',

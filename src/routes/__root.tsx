@@ -8,8 +8,6 @@ import { SplashScreen } from '@/components/SplashScreen';
 export const Route = createRootRoute({
     component: RootComponent,
     pendingComponent: () => <LoadingTichTich isLoading />,
-    pendingMs: 10000,
-    pendingMinMs: 10000,
 });
 
 function RootComponent() {

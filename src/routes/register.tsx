@@ -1,95 +1,282 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { setDoc, doc } from "firebase/firestore";
-import { auth,db } from '../firebase';
+import { useTranslation } from 'react-i18next';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { setDoc, doc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Pencil, Eye, EyeOff, User, UserPlus } from 'lucide-react';
+import { auth, db } from '../firebase';
+import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
+import { TichTichButton } from '@/components/common/TichTichButton';
+import { TichTichInput } from '@/components/common/TichTichInput';
+import { showError, showSuccess } from '@/lib/toast';
+import type { RegisterFormData } from '@/features/auth/types/auth.schema';
+import { registerSchema } from '@/features/auth/types/auth.schema';
+import { cn } from '@/utils/cn';
 
 export const Route = createFileRoute('/register')({
-  component: RouteComponent,
-})
+    component: RegisterPage,
+});
 
-function RouteComponent() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
+const REGISTER_FORM_ID = 'register-form';
 
-  const handleRegister = async (e: any) => {
-    e.preventDefault();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      const user = auth.currentUser;
-      console.log(user);
-      if (user) {
-        await setDoc(doc(db, "Users", user.uid), {
-          email: user.email,
-          firstName: fname,
-          lastName: lname,
-          photo:""
-        });
-      }
-      console.log("User Registered Successfully!!");
+function RegisterPage() {
+    const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    } catch (error) {
-      console.log((error as Error).message);
-    }
-  };
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting, isValid },
+    } = useForm<RegisterFormData>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: {
+            fullName: '',
+            phone: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        },
+        mode: 'onChange',
+    });
 
-  return (
-    <form onSubmit={handleRegister}>
-      <h3>Sign Up</h3>
+    const onSubmit = async (data: RegisterFormData) => {
+        try {
+            const { user } = await createUserWithEmailAndPassword(
+                auth,
+                data.email,
+                data.password
+            );
+            await setDoc(doc(db, 'Users', user.uid), {
+                email: user.email,
+                fullName: data.fullName,
+                phone: data.phone || '',
+                photo: '',
+            });
+            showSuccess('success.created');
+        } catch (error) {
+            showError(error);
+        }
+    };
 
-      <div className="mb-3">
-        <label>First name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="First name"
-          onChange={(e) => setFname(e.target.value)}
-          required
-        />
-      </div>
+    return (
+        <AuthFormLayout
+            title={t('auth.createParentAccount')}
+            backTo="/login"
+            submitButton={
+                <TichTichButton
+                    type="submit"
+                    form={REGISTER_FORM_ID}
+                    isDisabled={!isValid || isSubmitting}
+                    isLoading={isSubmitting}
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    leftIcon={<UserPlus className="size-5" />}
+                >
+                    {t('auth.continue')}
+                </TichTichButton>
+            }
+        >
+            <form
+                id={REGISTER_FORM_ID}
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-6 px-4 py-6"
+            >
+                {/* Thông tin cá nhân */}
+                <section className="rounded-2xl bg-white p-4 border border-tichtich-black shadow-xl">
+                    <h2 className="mb-4 text-xs font-bold text-tichtich-black">
+                        {t('auth.personalInfo')}
+                    </h2>
 
-      <div className="mb-3">
-        <label>Last name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Last name"
-          onChange={(e) => setLname(e.target.value)}
-        />
-      </div>
+                    <div className="mb-4 flex justify-center">
+                        <div className="relative">
+                            <div
+                                className={cn(
+                                    'flex size-24 items-center justify-center rounded-full',
+                                    'bg-gray-300'
+                                )}
+                            >
+                                <User className="size-12 text-gray-500" />
+                            </div>
+                            <button
+                                type="button"
+                                className={cn(
+                                    'absolute -bottom-1 -right-1',
+                                    'flex size-8 items-center justify-center rounded-full',
+                                    'bg-tichtich-primary-200 text-white',
+                                    'transition-colors hover:brightness-110'
+                                )}
+                                aria-label={t('auth.personalInfo')}
+                            >
+                                <Pencil className="size-4" />
+                            </button>
+                        </div>
+                    </div>
 
-      <div className="mb-3">
-        <label>Email address</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
+                    <div className="flex flex-col gap-4">
+                        <Controller
+                            name="fullName"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TichTichInput
+                                    label={t('auth.fullName')}
+                                    placeholder={t('auth.fullNamePlaceholder')}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur}
+                                    isInvalid={fieldState.invalid}
+                                    errorMessage={
+                                        fieldState.error?.message
+                                            ? t(fieldState.error.message)
+                                            : undefined
+                                    }
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="phone"
+                            control={control}
+                            render={({ field }) => (
+                                <TichTichInput
+                                    label={t('auth.phone')}
+                                    placeholder={t('auth.phonePlaceholder')}
+                                    type="tel"
+                                    value={field.value ?? ''}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur}
+                                />
+                            )}
+                        />
+                    </div>
+                </section>
 
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+                {/* Thông tin đăng nhập */}
+                <section className="rounded-2xl bg-white p-4 border border-tichtich-black shadow-xl">
+                    <h2 className="mb-4 text-xs font-bold text-tichtich-black">
+                        {t('auth.loginInfo')}
+                    </h2>
 
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Sign Up
-        </button>
-      </div>
-      <p className="forgot-password text-right">
-        Already registered <a href="/login">Login</a>
-      </p>
-    </form>
-  );
+                    <div className="flex flex-col gap-4">
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TichTichInput
+                                    label={t('auth.emailAddress')}
+                                    placeholder={t('auth.emailPlaceholder')}
+                                    type="email"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur}
+                                    isInvalid={fieldState.invalid}
+                                    errorMessage={
+                                        fieldState.error?.message
+                                            ? t(fieldState.error.message)
+                                            : undefined
+                                    }
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TichTichInput
+                                    label={t('auth.password')}
+                                    placeholder={t('auth.createPassword')}
+                                    type={
+                                        showPassword ? 'text' : 'password'
+                                    }
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur}
+                                    isInvalid={fieldState.invalid}
+                                    errorMessage={
+                                        fieldState.error?.message
+                                            ? t(fieldState.error.message)
+                                            : undefined
+                                    }
+                                    rightAdornment={
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setShowPassword((p) => !p)
+                                            }
+                                            className="cursor-pointer border-none bg-transparent p-0"
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff
+                                                    className="size-5 text-tichtich-primary-200"
+                                                    aria-hidden
+                                                />
+                                            ) : (
+                                                <Eye
+                                                    className="size-5 text-tichtich-primary-200"
+                                                    aria-hidden
+                                                />
+                                            )}
+                                        </button>
+                                    }
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="confirmPassword"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TichTichInput
+                                    label={t('auth.confirmPassword')}
+                                    placeholder={t(
+                                        'auth.confirmPasswordPlaceholder'
+                                    )}
+                                    type={
+                                        showConfirmPassword
+                                            ? 'text'
+                                            : 'password'
+                                    }
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    onBlur={field.onBlur}
+                                    isInvalid={fieldState.invalid}
+                                    errorMessage={
+                                        fieldState.error?.message
+                                            ? t(fieldState.error.message)
+                                            : undefined
+                                    }
+                                    rightAdornment={
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setShowConfirmPassword(
+                                                    (p) => !p
+                                                )
+                                            }
+                                            className="cursor-pointer border-none bg-transparent p-0"
+                                            tabIndex={-1}
+                                        >
+                                            {showConfirmPassword ? (
+                                                <EyeOff
+                                                    className="size-5 text-tichtich-primary-200"
+                                                    aria-hidden
+                                                />
+                                            ) : (
+                                                <Eye
+                                                    className="size-5 text-tichtich-primary-200"
+                                                    aria-hidden
+                                                />
+                                            )}
+                                        </button>
+                                    }
+                                />
+                            )}
+                        />
+                    </div>
+                </section>
+            </form>
+        </AuthFormLayout>
+    );
 }

@@ -1,16 +1,17 @@
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import {
-    Form,
-    Separator,
-} from 'react-aria-components';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, Eye, EyeOff } from 'lucide-react';
+import { Separator } from 'react-aria-components';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
-import { showSuccess } from '@/lib/toast';
+import { showError, showSuccess } from '@/lib/toast';
+import type { LoginFormData } from '@/features/auth/types/auth.schema';
+import { loginSchema } from '@/features/auth/types/auth.schema';
 
 const GoogleIcon = () => (
     <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
@@ -40,106 +41,155 @@ export const Route = createFileRoute('/login')({
 function LoginPage() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
-    const [form, setForm] = useState({ email: '', password: '' });
-    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    function validate() {
-        const errs: Record<string, string> = {};
-        if (!form.email) errs.email = t('auth.emailRequired');
-        if (!form.password) errs.password = t('auth.passwordRequired');
-        if (form.password && form.password.length < 8)
-            errs.password = t('auth.passwordMin');
-        setErrors(errs);
-        return Object.keys(errs).length === 0;
-    }
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting, isValid },
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: { email: '', password: '' },
+        mode: 'onBlur',
+    });
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const isValid = email.trim() !== '' && password.trim() !== '';
-
-    const handleSubmit = async (e: any) => {
-        if (!validate()) return;
-        showSuccess('success.login');
-        e.preventDefault();
+    const onSubmit = async (data: LoginFormData) => {
         try {
-             await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, data.email, data.password);
+            showSuccess('success.login');
         } catch (error) {
-            console.log((error as Error).message);
+            showError(error);
         }
-    }
-
-    const validateEmail = (value: string) => {
-        const validEmail = value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-        if (!validEmail) {
-            return false;
-        }
-        return true;
-    }
-
-    const validatePassword = (value: string) => {
-       if (!value && !value.trim()) {
-        return false;
-       }
-       return true
-    }
+    };
 
     return (
-        <>
-            <div className="mobile-container flex flex-col">
-                <div className="bg-white rounded-2xl shadow-lg w-full  h-full min-h-screen">
-                    <div className="w-full h-auto">
-                        <img
-                            src="/images/logo-login.svg"
-                            alt="logo"
-                            className="w-full h-auto object-contain"
-                        />
-                    </div>
-                    <div className="flex justify-center items-center">
-                        <img
-                            src="/images/tichtich-text.svg"
-                            alt="logo"
-                            className=" object-contain"
-                        />
-                    </div>
-                    <Form
-                        onSubmit={handleSubmit}
-                        className="flex flex-col gap-4 px-4 py-8"
-                    >
-                        {/* Email Field */}
-                        <TichTichInput label="Email" placeholder="Nhập email của bạn" type="email" value={email} onChange={setEmail} errorMessage={errors.email} rightAdornment={<Mail color="#aaa" />}/>
-
-                        {/* Password Field */}
-                        <TichTichInput label="Mật khẩu" placeholder="Nhập mật khẩu của bạn" type="password" value={password} onChange={setPassword} errorMessage={errors.password} rightAdornment={<Eye color="#aaa" />}/>
-
-                        {/* Forgot Password */}
-                        <Link to="/register" className="text-base font-medium text-gray-500 hover:text-gray-900 transition-colors duration-150 no-underline">
-                            <span>Quên mật khẩu?</span>
-                        </Link>
-
-                        <TichTichButton type="submit" isDisabled={!isValid} variant="primary" size="md" fullWidth>Đăng nhập</TichTichButton>
-
-                         <div className="text-center text-sm font-medium text-gray-500">
-                            Chưa có tài khoản? &nbsp;<Link to="/register" className="font-medium text-tichtich-primary-200 hover:text-tichtich-primary-200/80 transition-colors duration-150 no-underline">Đăng ký tài khoản mới</Link>
-                         </div>
-                        {/* Divider */}
-                        <div className="flex items-center gap-3">
-                            <Separator className="flex-1 h-px bg-gray-200 border-none" />
-                            <span className="text-xs text-gray-400 font-medium">
-                                hoặc đăng nhập bằng
-                            </span>
-                            <Separator className="flex-1 h-px bg-gray-200 border-none" />
-                        </div>
-
-                        <div className="flex items-center justify-center gap-6">
-                            <GoogleIcon />
-                            <div className="w-[30px] h-[30px]">
-                                <img src="/images/apple-logo.svg" alt="apple" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                    </Form>
+        <div className="mobile-container flex flex-col">
+            <div className="flex h-full min-h-screen w-full flex-col rounded-2xl bg-white shadow-lg">
+                <div className="h-auto w-full">
+                    <img
+                        src="/images/logo-login.svg"
+                        alt="logo"
+                        className="h-auto w-full object-contain"
+                    />
                 </div>
+                <div className="flex items-center justify-center">
+                    <img
+                        src="/images/tichtich-text.svg"
+                        alt="logo"
+                        className="object-contain"
+                    />
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex flex-col gap-4 px-4 py-8"
+                >
+                    <Controller
+                        name="email"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TichTichInput
+                                label={t('auth.email')}
+                                placeholder={t('auth.emailPlaceholder')}
+                                type="email"
+                                value={field.value}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
+                                isInvalid={fieldState.invalid}
+                                errorMessage={
+                                    fieldState.error?.message
+                                        ? t(fieldState.error.message)
+                                        : undefined
+                                }
+                                rightAdornment={<Mail color="#aaa" />}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="password"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TichTichInput
+                                label={t('auth.password')}
+                                placeholder={t('auth.passwordPlaceholder')}
+                                type={showPassword ? 'text' : 'password'}
+                                value={field.value}
+                                onChange={field.onChange}
+                                onBlur={field.onBlur}
+                                isInvalid={fieldState.invalid}
+                                errorMessage={
+                                    fieldState.error?.message
+                                        ? t(fieldState.error.message)
+                                        : undefined
+                                }
+                                rightAdornment={
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowPassword((prev) => !prev)
+                                        }
+                                        className="cursor-pointer border-none bg-transparent p-0"
+                                        tabIndex={-1}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff color="#aaa" />
+                                        ) : (
+                                            <Eye color="#aaa" />
+                                        )}
+                                    </button>
+                                }
+                            />
+                        )}
+                    />
+
+                    <Link
+                        to="/register"
+                        className="text-base font-medium text-gray-500 no-underline transition-colors duration-150 hover:text-gray-900"
+                    >
+                        <span>{t('auth.forgotPassword')}?</span>
+                    </Link>
+
+                    <TichTichButton
+                        type="submit"
+                        isDisabled={!isValid || isSubmitting}
+                        isLoading={isSubmitting}
+                        variant="primary"
+                        size="md"
+                        fullWidth
+                    >
+                        {t('auth.login')}
+                    </TichTichButton>
+
+                    <div className="text-center text-sm font-medium text-gray-500">
+                        {t('auth.noAccount')}&nbsp;
+                        <Link
+                            to="/register"
+                            className="font-medium text-tichtich-primary-200 no-underline transition-colors duration-150 hover:text-tichtich-primary-200/80"
+                        >
+                            {t('auth.register')}
+                        </Link>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <Separator className="h-px flex-1 border-none bg-gray-200" />
+                        <span className="text-xs font-medium text-gray-400">
+                            hoặc đăng nhập bằng
+                        </span>
+                        <Separator className="h-px flex-1 border-none bg-gray-200" />
+                    </div>
+
+                    <div className="flex items-center justify-center gap-6">
+                        <GoogleIcon />
+                        <div className="size-[30px]">
+                            <img
+                                src="/images/apple-logo.svg"
+                                alt="apple"
+                                className="size-full object-contain"
+                            />
+                        </div>
+                    </div>
+                </form>
             </div>
-        </>
+        </div>
     );
 }

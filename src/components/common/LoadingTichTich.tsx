@@ -25,7 +25,7 @@ export function LoadingTichTich({ isLoading }: { isLoading?: boolean }) {
                                 className="size-full object-contain"
                             />
                         </div>
-                        <p className="text-xl font-bold">Loading...</p>
+                        <p className="text-base font-bold">Đang tải...</p>
                     </div>
                 </motion.div>
             )}

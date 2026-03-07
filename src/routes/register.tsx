@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -25,11 +25,12 @@ function RegisterPage() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const navigate = useNavigate();
 
     const {
         control,
         handleSubmit,
-        formState: { isSubmitting, isValid },
+        formState: { isSubmitting },
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -39,26 +40,30 @@ function RegisterPage() {
             password: '',
             confirmPassword: '',
         },
-        mode: 'onChange',
     });
 
     const onSubmit = async (data: RegisterFormData) => {
-        try {
-            const { user } = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            );
-            await setDoc(doc(db, 'Users', user.uid), {
-                email: user.email,
-                fullName: data.fullName,
-                phone: data.phone || '',
-                photo: '',
-            });
-            showSuccess('success.created');
-        } catch (error) {
-            showError(error);
-        }
+        navigate({
+            to: '/verify-account',
+            replace: true,
+            search: { email: data.email },
+        });
+        // try {
+        //     const { user } = await createUserWithEmailAndPassword(
+        //         auth,
+        //         data.email,
+        //         data.password
+        //     );
+        //     await setDoc(doc(db, 'Users', user.uid), {
+        //         email: user.email,
+        //         fullName: data.fullName,
+        //         phone: data.phone || '',
+        //         photo: '',
+        //     });
+        //     showSuccess('success.created');
+        // } catch (error) {
+        //     showError(error);
+        // }
     };
 
     return (
@@ -67,9 +72,9 @@ function RegisterPage() {
             backTo="/login"
             submitButton={
                 <TichTichButton
-                    type="submit"
+                    onClick={handleSubmit(onSubmit)}
                     form={REGISTER_FORM_ID}
-                    isDisabled={!isValid || isSubmitting}
+                    isDisabled={isSubmitting}
                     isLoading={isSubmitting}
                     variant="primary"
                     size="lg"
@@ -124,6 +129,7 @@ function RegisterPage() {
                                 <TichTichInput
                                     label={t('auth.fullName')}
                                     placeholder={t('auth.fullNamePlaceholder')}
+                                    isRequired
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
@@ -171,6 +177,7 @@ function RegisterPage() {
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
+                                    isRequired
                                     isInvalid={fieldState.invalid}
                                     errorMessage={
                                         fieldState.error?.message
@@ -191,6 +198,7 @@ function RegisterPage() {
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
+                                    isRequired
                                     isInvalid={fieldState.invalid}
                                     errorMessage={
                                         fieldState.error?.message
@@ -239,6 +247,7 @@ function RegisterPage() {
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
+                                    isRequired
                                     isInvalid={fieldState.invalid}
                                     errorMessage={
                                         fieldState.error?.message

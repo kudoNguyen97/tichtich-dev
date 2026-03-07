@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyAccountRouteImport } from './routes/verify-account'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
@@ -18,6 +19,11 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')()
 const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
 
+const VerifyAccountRoute = VerifyAccountRouteImport.update({
+  id: '/verify-account',
+  path: '/verify-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthRouteRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/verify-account': typeof VerifyAccountRoute
   '/children': typeof AppChildrenRouteLazyRouteWithChildren
   '/children/': typeof AppChildrenIndexLazyRoute
 }
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthRouteRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/verify-account': typeof VerifyAccountRoute
   '/children': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesById {
@@ -65,19 +73,27 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/verify-account': typeof VerifyAccountRoute
   '/_app/children': typeof AppChildrenRouteLazyRouteWithChildren
   '/_app/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/children' | '/children/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/verify-account'
+    | '/children'
+    | '/children/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/children'
+  to: '/' | '/login' | '/register' | '/verify-account' | '/children'
   id:
     | '__root__'
     | '/_auth'
     | '/login'
     | '/register'
+    | '/verify-account'
     | '/_app/children'
     | '/_app/children/'
   fileRoutesById: FileRoutesById
@@ -86,11 +102,19 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  VerifyAccountRoute: typeof VerifyAccountRoute
   AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify-account': {
+      id: '/verify-account'
+      path: '/verify-account'
+      fullPath: '/verify-account'
+      preLoaderRoute: typeof VerifyAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -144,6 +168,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  VerifyAccountRoute: VerifyAccountRoute,
   AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
 }
 export const routeTree = rootRouteImport

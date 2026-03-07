@@ -6,7 +6,7 @@ import { cn } from '@/utils/cn';
 interface AuthFormLayoutProps {
     title: string;
     children: React.ReactNode;
-    submitButton: React.ReactNode;
+    submitButton?: React.ReactNode;
     backTo?: string;
     className?: string;
 }
@@ -44,20 +44,23 @@ export function AuthFormLayout({
 
             <main className="flex-1 overflow-y-auto pb-24">{children}</main>
 
-            <nav
-                className={cn(
-                    'fixed bottom-0 left-1/2 z-50 -translate-x-1/2',
-                    'w-full max-w-[720px] px-4 pb-3 pt-6',
-                    'bg-white/95 backdrop-blur-sm',
-                    'border-t border-gray-200',
-                    'safe-bottom'
-                )}
-                style={{
-                    paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
-                }}
-            >
-                {submitButton}
-            </nav>
+            {submitButton && (
+                <nav
+                    className={cn(
+                        'fixed bottom-0 left-1/2 z-50 -translate-x-1/2',
+                        'w-full max-w-[720px] px-4 pb-3 pt-6',
+                        'bg-white/95 backdrop-blur-sm',
+                        'border-t border-gray-200',
+                        'safe-bottom'
+                    )}
+                    style={{
+                        paddingBottom:
+                            'calc(12px + env(safe-area-inset-bottom))',
+                    }}
+                >
+                    {submitButton}
+                </nav>
+            )}
         </div>
     );
 }

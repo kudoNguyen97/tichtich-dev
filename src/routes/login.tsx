@@ -12,6 +12,7 @@ import { TichTichInput } from '@/components/common/TichTichInput';
 import { showError, showSuccess } from '@/lib/toast';
 import type { LoginFormData } from '@/features/auth/types/auth.schema';
 import { loginSchema } from '@/features/auth/types/auth.schema';
+import { useLoadingStore } from '@/stores/useLoadingStore';
 
 export const Route = createFileRoute('/login')({
     component: LoginPage,
@@ -21,6 +22,8 @@ function LoginPage() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
 
+    const { show, hide } = useLoadingStore();
+
     const {
         control,
         handleSubmit,
@@ -28,15 +31,18 @@ function LoginPage() {
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: { email: '', password: '' },
-        mode: 'onChange',
+        // mode: 'onChange',
     });
 
     const onSubmit = async (data: LoginFormData) => {
         try {
+            show();
             await signInWithEmailAndPassword(auth, data.email, data.password);
             showSuccess('success.login');
         } catch (error) {
             showError(error);
+        } finally {
+            hide();
         }
     };
 
@@ -132,7 +138,7 @@ function LoginPage() {
 
                     <TichTichButton
                         type="submit"
-                        isDisabled={!isValid || isSubmitting}
+                        isDisabled={isSubmitting}
                         isLoading={isSubmitting}
                         variant="primary"
                         size="md"

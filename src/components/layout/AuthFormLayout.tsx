@@ -23,12 +23,7 @@ export function AuthFormLayout({
     className,
 }: AuthFormLayoutProps) {
     return (
-        <div
-            className={cn(
-                'mobile-container flex min-h-screen flex-col rounded-2xl bg-white shadow-lg',
-                className
-            )}
-        >
+        <>
             <AppBar
                 title={title}
                 leftAction={
@@ -40,9 +35,10 @@ export function AuthFormLayout({
                         <ArrowLeft className="size-5 text-tichtich-black" />
                     </Link>
                 }
+                className={className}
             />
 
-            <main className="flex-1 overflow-y-auto pb-24">{children}</main>
+            <main className={cn("flex-1 overflow-y-auto pb-24", className)}>{children}</main>
 
             {submitButton && (
                 <nav
@@ -51,7 +47,8 @@ export function AuthFormLayout({
                         'w-full max-w-[720px] px-4 pb-3 pt-6',
                         'bg-white/95 backdrop-blur-sm',
                         'border-t border-gray-200',
-                        'safe-bottom'
+                        'safe-bottom',
+                        className
                     )}
                     style={{
                         paddingBottom:
@@ -61,6 +58,6 @@ export function AuthFormLayout({
                     {submitButton}
                 </nav>
             )}
-        </div>
+        </>
     );
 }

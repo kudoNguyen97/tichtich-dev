@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -16,6 +16,11 @@ import { useLoadingStore } from '@/stores/useLoadingStore';
 
 export const Route = createFileRoute('/login')({
     component: LoginPage,
+    head: () => ({
+        meta: [
+            { title: 'Tích Tích - Đăng nhập' },
+        ],
+    }),
 });
 
 function LoginPage() {
@@ -23,7 +28,7 @@ function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
 
     const { show, hide } = useLoadingStore();
-
+    const navigate = useNavigate();
     const {
         control,
         handleSubmit,
@@ -37,8 +42,9 @@ function LoginPage() {
     const onSubmit = async (data: LoginFormData) => {
         try {
             show();
-            await signInWithEmailAndPassword(auth, data.email, data.password);
-            showSuccess('success.login');
+            navigate({ to: '/profiles', replace: true });
+            // await signInWithEmailAndPassword(auth, data.email, data.password);
+            // showSuccess('success.login');
         } catch (error) {
             showError(error);
         } finally {
@@ -47,142 +53,131 @@ function LoginPage() {
     };
 
     return (
-        <div className="mobile-container flex flex-col">
-            <div className="flex h-full min-h-screen w-full flex-col rounded-2xl bg-white shadow-lg">
-                <div className="h-auto w-full">
-                    <img
-                        src="/images/logo-login.svg"
-                        alt="logo"
-                        className="h-auto w-full object-contain"
-                    />
-                </div>
-                <div className="flex items-center justify-center">
-                    <img
-                        src="/images/tichtich-text.svg"
-                        alt="logo"
-                        className="object-contain"
-                    />
-                </div>
-
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-col gap-4 px-4 py-8"
-                >
-                    <Controller
-                        name="email"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <TichTichInput
-                                label={t('auth.email')}
-                                placeholder={t('auth.emailPlaceholder')}
-                                type="email"
-                                value={field.value}
-                                onChange={field.onChange}
-                                onBlur={field.onBlur}
-                                isInvalid={fieldState.invalid}
-                                errorMessage={
-                                    fieldState.error?.message
-                                        ? t(fieldState.error.message)
-                                        : undefined
-                                }
-                                rightAdornment={<Mail color="#aaa" />}
-                            />
-                        )}
-                    />
-
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <TichTichInput
-                                label={t('auth.password')}
-                                placeholder={t('auth.passwordPlaceholder')}
-                                type={showPassword ? 'text' : 'password'}
-                                value={field.value}
-                                onChange={field.onChange}
-                                onBlur={field.onBlur}
-                                isInvalid={fieldState.invalid}
-                                errorMessage={
-                                    fieldState.error?.message
-                                        ? t(fieldState.error.message)
-                                        : undefined
-                                }
-                                rightAdornment={
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setShowPassword((prev) => !prev)
-                                        }
-                                        className="cursor-pointer border-none bg-transparent p-0"
-                                        tabIndex={-1}
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff color="#aaa" />
-                                        ) : (
-                                            <Eye color="#aaa" />
-                                        )}
-                                    </button>
-                                }
-                            />
-                        )}
-                    />
-
-                    <span>
-                        <Link
-                            to="/register"
-                            className="text-base inline-block font-medium text-tichtich-black no-underline transition-colors duration-150 hover:text-tichtich-primary-100"
-                        >
-                            {t('auth.forgotPassword')}?
-                        </Link>
-                    </span>
-
-                    <TichTichButton
-                        type="submit"
-                        isDisabled={isSubmitting}
-                        isLoading={isSubmitting}
-                        variant="primary"
-                        size="md"
-                        fullWidth
-                    >
-                        {t('auth.login')}
-                    </TichTichButton>
-
-                    <div className="text-center text-sm font-medium text-gray-500">
-                        {t('auth.noAccount')}&nbsp;
-                        <Link
-                            to="/register"
-                            className="font-medium text-tichtich-primary-200 no-underline transition-colors duration-150 hover:text-tichtich-primary-200/80"
-                        >
-                            {t('auth.registerNewAccount')}
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <Separator className="h-px flex-1 border-none bg-gray-200" />
-                        <span className="text-xs font-medium text-gray-400">
-                            hoặc đăng nhập bằng
-                        </span>
-                        <Separator className="h-px flex-1 border-none bg-gray-200" />
-                    </div>
-
-                    <div className="flex items-center justify-center gap-6">
-                        <button className="size-[30px] cursor-pointer border-none p-0">
-                            <img
-                                src="/images/icon-google.svg"
-                                alt="google"
-                                className="size-full object-contain"
-                            />
-                        </button>
-                        <button className="size-[30px] cursor-pointer border-none p-0">
-                            <img
-                                src="/images/icon-apple.svg"
-                                alt="apple"
-                                className="size-full object-contain"
-                            />
-                        </button>
-                    </div>
-                </form>
+        <div className="flex h-full min-h-screen w-full flex-col rounded-2xl bg-white shadow-lg">
+            <div className="h-auto w-full">
+                <img
+                    src="/images/logo-login.svg"
+                    alt="logo"
+                    className="h-auto w-full object-contain"
+                />
             </div>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex flex-col gap-4 p-4"
+            >
+                <Controller
+                    name="email"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <TichTichInput
+                            label={t('auth.email')}
+                            placeholder={t('auth.emailPlaceholder')}
+                            type="email"
+                            value={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            isInvalid={fieldState.invalid}
+                            errorMessage={
+                                fieldState.error?.message
+                                    ? t(fieldState.error.message)
+                                    : undefined
+                            }
+                            rightAdornment={<Mail color="#aaa" />}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="password"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <TichTichInput
+                            label={t('auth.password')}
+                            placeholder={t('auth.passwordPlaceholder')}
+                            type={showPassword ? 'text' : 'password'}
+                            value={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            isInvalid={fieldState.invalid}
+                            errorMessage={
+                                fieldState.error?.message
+                                    ? t(fieldState.error.message)
+                                    : undefined
+                            }
+                            rightAdornment={
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setShowPassword((prev) => !prev)
+                                    }
+                                    className="cursor-pointer border-none bg-transparent p-0"
+                                    tabIndex={-1}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff color="#aaa" />
+                                    ) : (
+                                        <Eye color="#aaa" />
+                                    )}
+                                </button>
+                            }
+                        />
+                    )}
+                />
+
+                <span>
+                    <Link
+                        to="/register"
+                        className="text-base inline-block font-medium text-tichtich-black no-underline transition-colors duration-150 hover:text-tichtich-primary-100"
+                    >
+                        {t('auth.forgotPassword')}?
+                    </Link>
+                </span>
+
+                <TichTichButton
+                    type="submit"
+                    isDisabled={isSubmitting}
+                    isLoading={isSubmitting}
+                    variant="primary"
+                    size="md"
+                    fullWidth
+                >
+                    {t('auth.login')}
+                </TichTichButton>
+            </form>
+            <div className="text-center text-sm font-medium text-gray-500 px-4 mb-4">
+                    {t('auth.noAccount')}&nbsp;
+                    <Link
+                        to="/register"
+                        className="font-medium text-tichtich-primary-200 no-underline transition-colors duration-150 hover:text-tichtich-primary-200/80"
+                    >
+                        {t('auth.registerNewAccount')}
+                    </Link>
+                </div>
+
+                <div className="flex items-center gap-3 my-4">
+                    <Separator className="h-px flex-1 border-none bg-gray-200" />
+                    <span className="text-xs font-medium text-gray-400">
+                        hoặc đăng nhập bằng
+                    </span>
+                    <Separator className="h-px flex-1 border-none bg-gray-200" />
+                </div>
+
+                <div className="flex items-center justify-center gap-6 my-4">
+                    <button className="size-[30px] cursor-pointer border-none p-0">
+                        <img
+                            src="/images/icon-google.svg"
+                            alt="google"
+                            className="size-full object-contain"
+                        />
+                    </button>
+                    <button className="size-[30px] cursor-pointer border-none p-0">
+                        <img
+                            src="/images/icon-apple.svg"
+                            alt="apple"
+                            className="size-full object-contain"
+                        />
+                    </button>
+                </div>
         </div>
     );
 }

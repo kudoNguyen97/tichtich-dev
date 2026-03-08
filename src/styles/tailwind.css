@@ -17,6 +17,14 @@
     --color-tichtich-pink: #f9c3d2;
     --color-tichtich-orange: #ef6725;
     --color-tichtich-yellow: #ffb700;
+
+    /* profile card colors */
+    --color-profile-parent: #DED5C9;
+    --color-profile-boy: #C0E0F0;
+    --color-profile-girl: #F0D0E0;
+
+    /* profile-pin page */
+    --color-profile-pin-frame: #908470;
 }
 
 @layer {

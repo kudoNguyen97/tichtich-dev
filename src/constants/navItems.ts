@@ -1,27 +1,26 @@
 import {
-    Home,
-    Gem,
-    User,
-    Map,
-    Settings,
     LayoutDashboard,
     Users,
     BarChart2,
+    Settings,
 } from 'lucide-react';
 
 export interface NavItem {
     labelKey: string;
     to: string;
-    icon: React.ElementType;
+    /** Lucide icon (dùng cho parent nav hoặc fallback) */
+    icon?: React.ElementType;
+    /** Đường dẫn icon SVG trong public (ưu tiên cho child nav — icon có pig motif) */
+    iconSrc?: string;
 }
 
-// Child profile — URL: /  /treasury  /character  /journey  /settings
+// Child profile — icon từ public/icons (kid-home, kid-treasure, ...)
 export const CHILD_NAV_ITEMS: NavItem[] = [
-    { labelKey: 'nav.home', to: '/', icon: Home },
-    { labelKey: 'nav.treasury', to: '/treasury', icon: Gem },
-    { labelKey: 'nav.character', to: '/character', icon: User },
-    { labelKey: 'nav.journey', to: '/journey', icon: Map },
-    { labelKey: 'nav.settings', to: '/settings', icon: Settings },
+    { labelKey: 'nav.home', to: '/children', iconSrc: '/icons/navbar/kid-home.svg' },
+    { labelKey: 'nav.treasury', to: '/children/treasury', iconSrc: '/icons/navbar/kid-treasure.svg' },
+    { labelKey: 'nav.character', to: '/children/character', iconSrc: '/icons/navbar/kid-figure.svg' },
+    { labelKey: 'nav.journey', to: '/children/journey', iconSrc: '/icons/navbar/kid-jouney.svg' },
+    { labelKey: 'nav.settings', to: '/children/settings', iconSrc: '/icons/navbar/setting.svg' },
 ];
 
 // Parent profile — URL: /parent/  /parent/manage  /parent/reports  /parent/settings

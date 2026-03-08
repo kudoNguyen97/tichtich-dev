@@ -1,4 +1,11 @@
 {
+    "nav": {
+        "home": "Trang chủ",
+        "treasury": "Kho báu",
+        "character": "Nhân vật",
+        "journey": "Hành trình",
+        "settings": "Cài đặt"
+    },
     "common": {
         "home": "Trang chủ",
         "about": "Về chúng tôi",
@@ -53,6 +60,19 @@
             "notFound": "Không tìm thấy tài nguyên yêu cầu",
             "alreadyExists": "Tài nguyên này đã tồn tại"
         }
+    },
+    "profiles": {
+        "title": "Tích Tích xin chào!",
+        "subtitle": "Hãy chọn tài khoản để tiếp tục",
+        "typeParent": "Tài khoản phụ huynh",
+        "typeChild": "Tài khoản trẻ em"
+    },
+    "profilePin": {
+        "greeting": "Xin chàooooo",
+        "enterNewPin": "Nhập mã PIN mới của bạn",
+        "reenterNewPin": "Nhập lại mã PIN mới của bạn",
+        "pinMismatch": "Mã PIN không khớp. Vui lòng thử lại",
+        "continue": "Tiếp tục"
     },
     "success": {
         "saved": "Lưu thay đổi thành công",

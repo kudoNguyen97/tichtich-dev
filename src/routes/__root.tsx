@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { HeadContent, Outlet, createRootRoute } from '@tanstack/react-router';
 import '@/styles/styles.css';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 import { AppNotificationModal } from '@/components/common/AppNotificationModal';
@@ -15,8 +15,11 @@ function RootComponent() {
     return (
         <>
             <LoadingTichTich />
+            <HeadContent />
             <AppNotificationModal />
-            <Outlet />
+            <div className="mobile-container flex flex-col min-h-screen bg-white">
+                <Outlet />
+            </div>
             {visible && <SplashScreen onDone={dismiss} duration={1500} />}
         </>
     );

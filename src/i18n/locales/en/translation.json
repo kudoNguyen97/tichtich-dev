@@ -1,4 +1,11 @@
 {
+    "nav": {
+        "home": "Home",
+        "treasury": "Treasure",
+        "character": "Character",
+        "journey": "Journey",
+        "settings": "Settings"
+    },
     "common": {
         "home": "Home",
         "about": "About",
@@ -53,6 +60,19 @@
             "notFound": "The requested resource was not found",
             "alreadyExists": "This resource already exists"
         }
+    },
+    "profiles": {
+        "title": "Tich Tich says hello!",
+        "subtitle": "Please select an account to continue",
+        "typeParent": "Parent account",
+        "typeChild": "Child account"
+    },
+    "profilePin": {
+        "greeting": "Hellooooo",
+        "enterNewPin": "Enter your new PIN",
+        "reenterNewPin": "Re-enter your new PIN",
+        "pinMismatch": "PIN does not match. Please try again",
+        "continue": "Continue"
     },
     "success": {
         "saved": "Changes saved successfully",

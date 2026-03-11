@@ -8,6 +8,7 @@ const config = {
     printWidth: 80,
     tabWidth: 4,
     endOfLine: 'lf',
+    autoFixOnSave: true,
 };
 
 export default config;

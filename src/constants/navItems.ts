@@ -1,9 +1,4 @@
-import {
-    LayoutDashboard,
-    Users,
-    BarChart2,
-    Settings,
-} from 'lucide-react';
+import { LayoutDashboard, Users, BarChart2, Settings } from 'lucide-react';
 
 export interface NavItem {
     labelKey: string;
@@ -16,11 +11,31 @@ export interface NavItem {
 
 // Child profile — icon từ public/icons (kid-home, kid-treasure, ...)
 export const CHILD_NAV_ITEMS: NavItem[] = [
-    { labelKey: 'nav.home', to: '/children', iconSrc: '/icons/navbar/kid-home.svg' },
-    { labelKey: 'nav.treasury', to: '/children/treasury', iconSrc: '/icons/navbar/kid-treasure.svg' },
-    { labelKey: 'nav.character', to: '/children/character', iconSrc: '/icons/navbar/kid-figure.svg' },
-    { labelKey: 'nav.journey', to: '/children/journey', iconSrc: '/icons/navbar/kid-jouney.svg' },
-    { labelKey: 'nav.settings', to: '/children/settings', iconSrc: '/icons/navbar/setting.svg' },
+    {
+        labelKey: 'nav.home',
+        to: '/children',
+        iconSrc: '/icons/navbar/kid-home.svg',
+    },
+    {
+        labelKey: 'nav.treasury',
+        to: '/children/treasury',
+        iconSrc: '/icons/navbar/kid-treasure.svg',
+    },
+    {
+        labelKey: 'nav.character',
+        to: '/children/character',
+        iconSrc: '/icons/navbar/kid-figure.svg',
+    },
+    {
+        labelKey: 'nav.journey',
+        to: '/children/journey',
+        iconSrc: '/icons/navbar/kid-jouney.svg',
+    },
+    {
+        labelKey: 'nav.settings',
+        to: '/children/settings',
+        iconSrc: '/icons/navbar/setting.svg',
+    },
 ];
 
 // Parent profile — URL: /parent/  /parent/manage  /parent/reports  /parent/settings

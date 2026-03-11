@@ -1,4 +1,9 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import {
+    createFileRoute,
+    Link,
+    redirect,
+    useNavigate,
+} from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
@@ -6,46 +11,102 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, Eye, EyeOff } from 'lucide-react';
 import { Separator } from 'react-aria-components';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import type { AuthError } from 'firebase/auth';
 import { auth } from '../firebase';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
-import { showError, showSuccess } from '@/lib/toast';
+import { showError } from '@/lib/toast';
 import type { LoginFormData } from '@/features/auth/types/auth.schema';
 import { loginSchema } from '@/features/auth/types/auth.schema';
 import { useLoadingStore } from '@/stores/useLoadingStore';
+import { useLogin } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 export const Route = createFileRoute('/login')({
     component: LoginPage,
+    beforeLoad: () => {
+        const { isAuthenticated } = useAuthStore.getState();
+        if (isAuthenticated) {
+            throw redirect({ to: '/profiles' });
+        }
+    },
     head: () => ({
-        meta: [
-            { title: 'Tích Tích - Đăng nhập' },
-        ],
+        meta: [{ title: 'Tích Tích - Đăng nhập' }],
     }),
 });
 
 function LoginPage() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
+    const { mutateAsync: login } = useLogin();
 
     const { show, hide } = useLoadingStore();
     const navigate = useNavigate();
     const {
         control,
         handleSubmit,
-        formState: { isSubmitting, isValid },
+        formState: { isSubmitting },
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: { email: '', password: '' },
         // mode: 'onChange',
     });
 
+    // useEffect(() => {
+    //     if (typeof window === 'undefined') return;
+    //     const token = localStorage.getItem('access_token');
+
+    //     if (token || user) {
+    //         navigate({ to: '/profiles', replace: true });
+    //     }
+    // }, [navigate, user]);
+
     const onSubmit = async (data: LoginFormData) => {
         try {
             show();
-            navigate({ to: '/profiles', replace: true });
-            // await signInWithEmailAndPassword(auth, data.email, data.password);
-            // showSuccess('success.login');
+
+            const credential = await signInWithEmailAndPassword(
+                auth,
+                data.email,
+                data.password
+            );
+            const { user: firebaseUser } = credential;
+
+            // Nếu thông tin đúng nhưng email chưa được xác thực -> chuyển sang verify-account
+            if (!firebaseUser.emailVerified) {
+                navigate({
+                    to: '/verify-account',
+                    replace: true,
+                    search: { email: data.email },
+                });
+                return;
+            }
+
+            // Email đã xác thực: lấy idToken từ Firebase và gọi API login backend
+            const idToken = await firebaseUser.getIdToken();
+            await login({
+                method: 'email',
+                provider: 'firebase',
+                idToken,
+            });
+
+            navigate({
+                to: '/profiles',
+                replace: true,
+            });
         } catch (error) {
+            const code = (error as AuthError | undefined)?.code;
+
+            // Thông tin đăng nhập sai (email hoặc mật khẩu) -> hiển thị message chung
+            if (
+                code === 'auth/invalid-credential' ||
+                code === 'auth/wrong-password' ||
+                code === 'auth/user-not-found'
+            ) {
+                showError(t('error.auth.invalidCredentials'));
+                return;
+            }
+
             showError(error);
         } finally {
             hide();
@@ -145,39 +206,39 @@ function LoginPage() {
                 </TichTichButton>
             </form>
             <div className="text-center text-sm font-medium text-gray-500 px-4 mb-4">
-                    {t('auth.noAccount')}&nbsp;
-                    <Link
-                        to="/register"
-                        className="font-medium text-tichtich-primary-200 no-underline transition-colors duration-150 hover:text-tichtich-primary-200/80"
-                    >
-                        {t('auth.registerNewAccount')}
-                    </Link>
-                </div>
+                {t('auth.noAccount')}&nbsp;
+                <Link
+                    to="/register"
+                    className="font-medium text-tichtich-primary-200 no-underline transition-colors duration-150 hover:text-tichtich-primary-200/80"
+                >
+                    {t('auth.registerNewAccount')}
+                </Link>
+            </div>
 
-                <div className="flex items-center gap-3 my-4">
-                    <Separator className="h-px flex-1 border-none bg-gray-200" />
-                    <span className="text-xs font-medium text-gray-400">
-                        hoặc đăng nhập bằng
-                    </span>
-                    <Separator className="h-px flex-1 border-none bg-gray-200" />
-                </div>
+            <div className="flex items-center gap-3 my-4">
+                <Separator className="h-px flex-1 border-none bg-gray-200" />
+                <span className="text-xs font-medium text-gray-400">
+                    hoặc đăng nhập bằng
+                </span>
+                <Separator className="h-px flex-1 border-none bg-gray-200" />
+            </div>
 
-                <div className="flex items-center justify-center gap-6 my-4">
-                    <button className="size-[30px] cursor-pointer border-none p-0">
-                        <img
-                            src="/images/icon-google.svg"
-                            alt="google"
-                            className="size-full object-contain"
-                        />
-                    </button>
-                    <button className="size-[30px] cursor-pointer border-none p-0">
-                        <img
-                            src="/images/icon-apple.svg"
-                            alt="apple"
-                            className="size-full object-contain"
-                        />
-                    </button>
-                </div>
+            <div className="flex items-center justify-center gap-6 my-4">
+                <button className="size-[30px] cursor-pointer border-none p-0">
+                    <img
+                        src="/images/icon-google.svg"
+                        alt="google"
+                        className="size-full object-contain"
+                    />
+                </button>
+                <button className="size-[30px] cursor-pointer border-none p-0">
+                    <img
+                        src="/images/icon-apple.svg"
+                        alt="apple"
+                        className="size-full object-contain"
+                    />
+                </button>
+            </div>
         </div>
     );
 }

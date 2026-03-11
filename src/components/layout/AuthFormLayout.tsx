@@ -38,7 +38,9 @@ export function AuthFormLayout({
                 className={className}
             />
 
-            <main className={cn("flex-1 overflow-y-auto pb-24", className)}>{children}</main>
+            <main className={cn('flex-1 overflow-y-auto pb-24', className)}>
+                {children}
+            </main>
 
             {submitButton && (
                 <nav

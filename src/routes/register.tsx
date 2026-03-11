@@ -3,17 +3,21 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setDoc, doc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+} from 'firebase/auth';
 import { Pencil, Eye, EyeOff, User, UserPlus } from 'lucide-react';
-import { auth, db } from '../firebase';
+import { auth } from '../firebase';
 import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
-import { showError, showSuccess } from '@/lib/toast';
+import { showError } from '@/lib/toast';
 import type { RegisterFormData } from '@/features/auth/types/auth.schema';
 import { registerSchema } from '@/features/auth/types/auth.schema';
 import { cn } from '@/utils/cn';
+import { useLoadingStore } from '@/stores/useLoadingStore';
+import { authService } from '@/features/auth/api/auth.service';
 
 export const Route = createFileRoute('/register')({
     component: RegisterPage,
@@ -25,8 +29,8 @@ function RegisterPage() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { show, hide } = useLoadingStore();
     const navigate = useNavigate();
-
     const {
         control,
         handleSubmit,
@@ -43,27 +47,41 @@ function RegisterPage() {
     });
 
     const onSubmit = async (data: RegisterFormData) => {
-        navigate({
-            to: '/verify-account',
-            replace: true,
-            search: { email: data.email },
-        });
-        // try {
-        //     const { user } = await createUserWithEmailAndPassword(
-        //         auth,
-        //         data.email,
-        //         data.password
-        //     );
-        //     await setDoc(doc(db, 'Users', user.uid), {
-        //         email: user.email,
-        //         fullName: data.fullName,
-        //         phone: data.phone || '',
-        //         photo: '',
-        //     });
-        //     showSuccess('success.created');
-        // } catch (error) {
-        //     showError(error);
-        // }
+        console.log('data', data);
+
+        try {
+            show();
+
+            const { user } = await createUserWithEmailAndPassword(
+                auth,
+                data.email,
+                data.password
+            );
+
+            const accessToken = await user.getIdToken();
+
+            await Promise.all([
+                authService.signUp({
+                    method: 'email',
+                    provider: 'firebase',
+                    idToken: accessToken,
+                    fullName: data.fullName,
+                    phoneNumber: data.phone || undefined,
+                    parentGender: 'male',
+                }),
+                sendEmailVerification(user),
+            ]);
+
+            navigate({
+                to: '/verify-account',
+                replace: true,
+                search: { email: data.email },
+            });
+        } catch (error) {
+            showError(error);
+        } finally {
+            hide();
+        }
     };
 
     return (

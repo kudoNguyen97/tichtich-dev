@@ -59,6 +59,13 @@
         "resource": {
             "notFound": "Không tìm thấy tài nguyên yêu cầu",
             "alreadyExists": "Tài nguyên này đã tồn tại"
+        },
+        "firebase": {
+            "emailAlreadyInUse": "Email này đã được sử dụng",
+            "invalidEmail": "Email không hợp lệ",
+            "wrongPassword": "Mật khẩu không đúng",
+            "userNotFound": "Không tìm thấy tài khoản với email này",
+            "tooManyRequests": "Bạn đã thử quá nhiều lần, vui lòng thử lại sau"
         }
     },
     "profiles": {

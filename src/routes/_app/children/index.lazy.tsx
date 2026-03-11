@@ -27,17 +27,48 @@ const SPENDING_CATEGORIES = [
 
 // Section 4 — sub-cards with darker orange bg, white text
 const RECENT_ACTIVITIES = [
-    { icon: 'save' as const, description: 'chia tổng số tiền vào ngăn tiết kiệm', value: '606,000₫' },
-    { icon: 'save' as const, description: 'đạt số lần chia tiền vào ví tiết kiệm', value: '10 lần' },
-    { icon: 'charity' as const, description: 'chia tổng số tiền vào ngăn từ thiện', value: '229,000₫' },
-    { icon: 'save' as const, description: 'đã tiết kiệm và không chỉ trong', value: '10 ngày' },
+    {
+        icon: 'save' as const,
+        description: 'chia tổng số tiền vào ngăn tiết kiệm',
+        value: '606,000₫',
+    },
+    {
+        icon: 'save' as const,
+        description: 'đạt số lần chia tiền vào ví tiết kiệm',
+        value: '10 lần',
+    },
+    {
+        icon: 'charity' as const,
+        description: 'chia tổng số tiền vào ngăn từ thiện',
+        value: '229,000₫',
+    },
+    {
+        icon: 'save' as const,
+        description: 'đã tiết kiệm và không chỉ trong',
+        value: '10 ngày',
+    },
 ];
 
 // Section 5 — sub-cards; progress: star 4 filled, heart 8 filled, coin 1 filled
 const SKILLS = [
-    { image: '/images/home-kid/pig-star.png', title: 'Ngôi sao học tập', filled: 4, type: 'star' as const },
-    { image: '/images/home-kid/pig-warm.png', title: 'Trái tim ấm áp', filled: 8, type: 'heart' as const },
-    { image: '/images/home-kid/pig-save.png', title: 'Bé chăm tích luỹ', filled: 1, type: 'coin' as const },
+    {
+        image: '/images/home-kid/pig-star.png',
+        title: 'Ngôi sao học tập',
+        filled: 4,
+        type: 'star' as const,
+    },
+    {
+        image: '/images/home-kid/pig-warm.png',
+        title: 'Trái tim ấm áp',
+        filled: 8,
+        type: 'heart' as const,
+    },
+    {
+        image: '/images/home-kid/pig-save.png',
+        title: 'Bé chăm tích luỹ',
+        filled: 1,
+        type: 'coin' as const,
+    },
 ];
 
 function formatBalance(n: number): string {
@@ -51,11 +82,13 @@ function formatBalance(n: number): string {
 }
 
 function RouteComponent() {
-    return <div className="">
-        <div className="px-4 pt-8 pb-6">
-            <h1 className="text-center text-xl font-bold text-tichtich-black">
-                asdsd
-            </h1>
+    return (
+        <div className="">
+            <div className="px-4 pt-8 pb-6">
+                <h1 className="text-center text-xl font-bold text-tichtich-black">
+                    asdsd
+                </h1>
+            </div>
         </div>
-    </div>;
+    );
 }

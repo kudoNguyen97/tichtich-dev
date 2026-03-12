@@ -1,14 +1,7 @@
-export interface User {
-    id: string;
-    email: string;
-    name: string;
-    avatar?: string;
-}
-
-export interface BackendProfile {
+export interface Profile {
     id: string;
     userId: string;
-    profileType: string;
+    profileType: 'adult' | 'kid';
     fullName: string;
     wallets: unknown[];
     pinCode: string;
@@ -16,7 +9,7 @@ export interface BackendProfile {
     updatedAt: string;
 }
 
-export interface BackendUser {
+export interface User {
     id: string;
     firebaseUid: string;
     email: string;
@@ -24,13 +17,13 @@ export interface BackendUser {
     fullName: string;
     maxKidProfile: number;
     loginMethod: 'email' | 'facebook' | 'google' | 'apple';
-    loginProvider: 'firebase';
-    emailVerified: boolean;
-    phoneVerified: boolean;
+    loginProvider?: 'firebase';
+    emailVerified?: boolean;
+    phoneVerified?: boolean;
     status: string;
-    profiles: BackendProfile[];
-    createdAt: string;
-    updatedAt: string;
+    profiles: Profile[];
+    // createdAt: string;
+    // updatedAt: string;
 }
 
 export interface LoginPayload {
@@ -42,7 +35,7 @@ export interface LoginPayload {
 export interface LoginResponse {
     userId: string;
     sessionToken: string;
-    user: BackendUser;
+    user: User;
 }
 
 export interface SignupPayload {

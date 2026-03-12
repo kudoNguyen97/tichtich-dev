@@ -1,10 +1,6 @@
-export type ProfileType = 'parent' | 'boy' | 'girl';
+import type { Profile } from '@/features/auth/types/auth.type';
 
-export interface Profile {
-    id: string;
-    name: string;
-    type: ProfileType;
-}
+export type ProfileType = 'parent' | 'boy' | 'girl';
 
 export type PigPosition = 'left' | 'right';
 
@@ -35,3 +31,8 @@ export const PROFILE_TYPE_CONFIG: Record<ProfileType, ProfileTypeConfig> = {
         pigPosition: 'right',
     },
 };
+
+export function getProfileType(profile: Profile): ProfileType {
+    if (profile.profileType === 'adult') return 'parent';
+    return profile.gender === 'female' ? 'girl' : 'boy';
+}

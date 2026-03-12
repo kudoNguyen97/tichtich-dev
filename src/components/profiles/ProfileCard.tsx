@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import type { Profile } from '@/features/profiles/types';
-import { PROFILE_TYPE_CONFIG } from '@/features/profiles/types';
+import type { Profile } from '@/features/auth/types/auth.type';
+import {
+    PROFILE_TYPE_CONFIG,
+    getProfileType,
+} from '@/features/profiles/types';
 import { ProfilePig } from '@/components/profiles/ProfilePig';
 import { cn } from '@/utils/cn';
 import * as motion from 'motion/react-client';
@@ -12,9 +15,10 @@ interface ProfileCardProps {
 
 export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
     const { t } = useTranslation();
-    const config = PROFILE_TYPE_CONFIG[profile.type];
+    const profileType = getProfileType(profile);
+    const config = PROFILE_TYPE_CONFIG[profileType];
     const typeLabel =
-        profile.type === 'parent'
+        profileType === 'parent'
             ? t('profiles.typeParent')
             : t('profiles.typeChild');
 
@@ -22,10 +26,6 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
         <>
             <motion.div
                 style={{}}
-                /**
-                 * Setting the initial keyframe to "null" will use
-                 * the current value to allow for interruptable keyframes.
-                 */
                 whileHover={{
                     scale: [null, 1.03],
                     transition: {
@@ -50,14 +50,14 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                 >
                     <div className="min-w-0 flex-1">
                         <p className="truncate text-base font-bold text-tichtich-black">
-                            {profile.name}
+                            {profile.fullName || profile.id}
                         </p>
                         <p className="mt-0.5 text-sm font-medium text-tichtich-black/80">
                             {typeLabel}
                         </p>
                     </div>
                     <ProfilePig
-                        profileType={profile.type}
+                        profileType={profileType}
                         className="h-[85%] max-h-[140px] w-auto"
                     />
                 </button>

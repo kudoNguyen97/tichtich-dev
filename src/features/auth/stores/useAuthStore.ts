@@ -1,19 +1,19 @@
 import { create } from 'zustand';
-import type { User } from '../types/auth.type';
+import type { Profile, User } from '../types/auth.type';
 import { persist } from 'zustand/middleware';
-import type { Profile } from '@/features/profiles/types';
 
 interface AuthState {
     user: User | null;
     accessToken: string | null;
-    profiles: Profile[] | null;
-    setAuth: (
-        user: User | null,
-        accessToken: string,
-        profiles: Profile[]
-    ) => void;
-    logout: () => void;
+    profiles: Profile[];
+    selectedProfile: Profile | null;
     isAuthenticated: boolean;
+
+    setAuth: (user: User, accessToken: string, profiles: Profile[]) => void;
+    setProfiles: (profiles: Profile[]) => void;
+    setSelectedProfile: (profile: Profile) => void;
+    clearSelectedProfile: () => void;
+    logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -21,15 +21,30 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             user: null,
             accessToken: null,
-            profiles: null,
+            profiles: [],
+            selectedProfile: null,
             isAuthenticated: false,
+
             setAuth: (user, accessToken, profiles) => {
                 localStorage.setItem('access_token', accessToken);
                 set({ user, accessToken, profiles, isAuthenticated: true });
             },
+
+            setProfiles: (profiles) => set({ profiles }),
+
+            setSelectedProfile: (profile) => set({ selectedProfile: profile }),
+
+            clearSelectedProfile: () => set({ selectedProfile: null }),
+
             logout: () => {
                 localStorage.removeItem('access_token');
-                set({ user: null });
+                set({
+                    user: null,
+                    accessToken: null,
+                    profiles: [],
+                    selectedProfile: null,
+                    isAuthenticated: false,
+                });
             },
         }),
         {

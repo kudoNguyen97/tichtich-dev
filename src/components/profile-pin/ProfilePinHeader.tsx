@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Bell } from 'lucide-react';
 import { ProfileAvatar } from './ProfileAvatar';
-import type { Profile } from '@/features/profiles/types';
+import type { Profile } from '@/features/auth/types/auth.type';
 import { cn } from '@/utils/cn';
 
 interface ProfilePinHeaderProps {
@@ -10,7 +10,6 @@ interface ProfilePinHeaderProps {
     className?: string;
 }
 
-/** Short name for header: "Trần Quốc Bảo" -> "Quốc Bảo" */
 function getShortName(fullName: string): string {
     const parts = fullName.trim().split(/\s+/);
     if (parts.length <= 1) return fullName;
@@ -23,7 +22,7 @@ export function ProfilePinHeader({
     className,
 }: ProfilePinHeaderProps) {
     const { t } = useTranslation();
-    const shortName = getShortName(profile.name);
+    const shortName = getShortName(profile.fullName);
 
     return (
         <header

@@ -6,17 +6,13 @@ import { showSuccess } from '@/lib/toast';
 import type { User } from '../types/auth.type';
 
 export function useMe() {
-    const setAuth = useAuthStore((s) => s.setAuth);
+    const { isAuthenticated } = useAuthStore();
 
     return useQuery<User>({
         queryKey: authKeys.me(),
         queryFn: authService.me,
         select: (data) => data,
-        meta: {
-            onSuccess: (data: User) => {
-                setAuth(data, '', []);
-            },
-        },
+        enabled: isAuthenticated,
     });
 }
 
@@ -27,14 +23,9 @@ export function useLogin() {
     return useMutation({
         mutationFn: authService.login,
         onSuccess: (data) => {
-            const mappedUser: User = {
-                id: data.user.id,
-                email: data.user.email,
-                name: data.user.fullName || data.user.email,
-            };
-
-            setAuth(mappedUser, data.sessionToken, []);
+            setAuth(data.user, data.sessionToken, data.user.profiles);
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
+            showSuccess('success.login');
         },
     });
 }

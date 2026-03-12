@@ -16,7 +16,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfilesRouteImport } from './routes/profiles'
 import { Route as ProfilePinRouteImport } from './routes/profile-pin'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
 
 const AppChildrenRouteLazyRouteImport = createFileRoute('/_app/children')()
 const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
@@ -58,14 +58,14 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppChildrenRouteLazyRoute = AppChildrenRouteLazyRouteImport.update({
-  id: '/_app/children',
+  id: '/children',
   path: '/children',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any).lazy(() =>
   import('./routes/_app/children/route.lazy').then((d) => d.Route),
 )
@@ -107,7 +107,7 @@ const AppChildrenCharacterLazyRoute =
   )
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthRouteRoute
+  '/': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-pin': typeof ProfilePinRoute
   '/profiles': typeof ProfilesRoute
@@ -121,7 +121,7 @@ export interface FileRoutesByFullPath {
   '/children/': typeof AppChildrenIndexLazyRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthRouteRoute
+  '/': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-pin': typeof ProfilePinRoute
   '/profiles': typeof ProfilesRoute
@@ -135,7 +135,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_auth': typeof AuthRouteRoute
+  '/_app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/profile-pin': typeof ProfilePinRoute
   '/profiles': typeof ProfilesRoute
@@ -178,7 +178,7 @@ export interface FileRouteTypes {
     | '/children'
   id:
     | '__root__'
-    | '/_auth'
+    | '/_app'
     | '/login'
     | '/profile-pin'
     | '/profiles'
@@ -193,13 +193,12 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfilePinRoute: typeof ProfilePinRoute
   ProfilesRoute: typeof ProfilesRoute
   RegisterRoute: typeof RegisterRoute
   VerifyAccountRoute: typeof VerifyAccountRoute
-  AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -239,11 +238,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth': {
-      id: '/_auth'
+    '/_app': {
+      id: '/_app'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof AuthRouteRouteImport
+      preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/children': {
@@ -251,7 +250,7 @@ declare module '@tanstack/react-router' {
       path: '/children'
       fullPath: '/children'
       preLoaderRoute: typeof AppChildrenRouteLazyRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/_app/children/': {
       id: '/_app/children/'
@@ -310,14 +309,25 @@ const AppChildrenRouteLazyRouteChildren: AppChildrenRouteLazyRouteChildren = {
 const AppChildrenRouteLazyRouteWithChildren =
   AppChildrenRouteLazyRoute._addFileChildren(AppChildrenRouteLazyRouteChildren)
 
+interface AppRouteRouteChildren {
+  AppChildrenRouteLazyRoute: typeof AppChildrenRouteLazyRouteWithChildren
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  AuthRouteRoute: AuthRouteRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfilePinRoute: ProfilePinRoute,
   ProfilesRoute: ProfilesRoute,
   RegisterRoute: RegisterRoute,
   VerifyAccountRoute: VerifyAccountRoute,
-  AppChildrenRouteLazyRoute: AppChildrenRouteLazyRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

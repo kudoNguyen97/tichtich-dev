@@ -1,45 +1,37 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
 import {
-    ProfilePinHeader,
     ProfileAvatar,
     PinInputDisplay,
     NumericKeypad,
 } from '@/components/profile-pin';
 import { TichTichButton } from '@/components/common/TichTichButton';
-import type { Profile } from '@/features/profiles/types';
 import { cn } from '@/utils/cn';
 import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 const PIN_LENGTH = 4;
 
-/** Mock profile khi chưa có store; sau có thể dùng useAuthStore().selectedProfile */
-const MOCK_PROFILE: Profile = {
-    id: '2',
-    name: 'Trần Quốc Bảo',
-    type: 'boy',
-};
-
 export const Route = createFileRoute('/profile-pin')({
     component: ProfilePinPage,
+    beforeLoad: () => {
+        const { isAuthenticated, selectedProfile } =
+            useAuthStore.getState();
+        if (!isAuthenticated) throw redirect({ to: '/login' });
+        if (!selectedProfile) throw redirect({ to: '/profiles' });
+    },
 });
-
-type Step = 1 | 2;
 
 function ProfilePinPage() {
     const { t } = useTranslation();
-    const [step, setStep] = useState<Step>(1);
-    const [firstPin, setFirstPin] = useState('');
     const [pin, setPin] = useState<string[]>([]);
     const [shakeKey, setShakeKey] = useState(0);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
-    const prompt =
-        step === 1
-            ? t('profilePin.enterNewPin')
-            : t('profilePin.reenterNewPin');
+    const selectedProfile = useAuthStore((s) => s.selectedProfile);
+
+    const prompt = t('profilePin.enterNewPin');
     const errorMessage = t('profilePin.pinMismatch');
 
     const resetError = useCallback(() => {
@@ -52,24 +44,19 @@ function ProfilePinPage() {
 
     const handlePinComplete = useCallback(
         (value: string) => {
-            if (step === 1) {
-                setFirstPin(value);
-                setPin([]);
-                setStep(2);
+            if (!selectedProfile) return;
+
+            // If profile has no pinCode yet, accept any PIN (first-time setup scenario)
+            if (!selectedProfile.pinCode || value === selectedProfile.pinCode) {
+                navigate({ to: '/children', replace: true });
                 return;
             }
-            if (value === firstPin) {
-                setPin([]);
-                setFirstPin('');
-                setStep(1);
-                // TODO: gọi API lưu PIN / verify và navigate
-                return;
-            }
+
             setShakeKey((k) => k + 1);
             setError(true);
             setTimeout(() => setPin([]), 400);
         },
-        [step, firstPin]
+        [selectedProfile, navigate]
     );
 
     useEffect(() => {
@@ -87,15 +74,7 @@ function ProfilePinPage() {
         setPin((prev) => prev.slice(0, -1));
     }
 
-    const canContinue = pin.length === PIN_LENGTH && !error;
-
-    const handleContinue = () => {
-        navigate({ to: '/children' });
-        if (!canContinue) return;
-        handlePinComplete(pin.join(''));
-    };
-
-    const profile = MOCK_PROFILE;
+    if (!selectedProfile) return null;
 
     return (
         <AuthFormLayout
@@ -104,13 +83,18 @@ function ProfilePinPage() {
                 'border-x border-profile-pin-frame'
             )}
             title={t('profilePin.title')}
+            backTo="/profiles"
             submitButton={
                 <TichTichButton
                     variant="outline"
                     size="lg"
                     fullWidth
-                    //   isDisabled={!canContinue}
-                    onPress={handleContinue}
+                    isDisabled={pin.length < PIN_LENGTH || error}
+                    onPress={() => {
+                        if (pin.length === PIN_LENGTH) {
+                            handlePinComplete(pin.join(''));
+                        }
+                    }}
                 >
                     {t('profilePin.continue')}
                 </TichTichButton>
@@ -118,7 +102,7 @@ function ProfilePinPage() {
         >
             <div className="flex flex-1 flex-col items-center px-6 pb-6 pt-8">
                 <ProfileAvatar
-                    profile={profile}
+                    profile={selectedProfile}
                     size="lg"
                     showName
                     className="mb-6"

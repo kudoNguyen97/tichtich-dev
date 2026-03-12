@@ -2,6 +2,7 @@ import { apiClient } from '@/lib/apiClient';
 import type {
     LoginPayload,
     LoginResponse,
+    Profile,
     SignupPayload,
     User,
 } from '../types/auth.type';
@@ -10,7 +11,9 @@ export const authService = {
     login: (payload: LoginPayload) =>
         apiClient.post<LoginResponse>('/auth/login', payload),
 
-    me: () => apiClient.get<User>('/auth/me'),
+    me: () => apiClient.get<User>('/me'),
+
+    meProfiles: () => apiClient.get<Profile[]>('/me/profiles'),
 
     logout: () => apiClient.post<void>('/auth/logout'),
 

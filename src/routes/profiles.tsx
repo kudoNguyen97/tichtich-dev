@@ -1,8 +1,8 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { ProfileCard } from '@/components/profiles/ProfileCard';
-import type { Profile } from '@/features/profiles/types';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import type { Profile } from '@/features/auth/types/auth.type';
 
 export const Route = createFileRoute('/profiles')({
     component: ProfilesPage,
@@ -14,16 +14,17 @@ export const Route = createFileRoute('/profiles')({
     },
 });
 
-const MOCK_PROFILES: Profile[] = [
-    { id: '1', name: 'Trần Quang Huy', type: 'parent' },
-    { id: '2', name: 'Trần Quốc Bảo', type: 'boy' },
-    { id: '3', name: 'Trần Tuệ Mẫn', type: 'girl' },
-    { id: '4', name: 'Trần Gia Phúc', type: 'boy' },
-];
-
 function ProfilesPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const profiles = useAuthStore((s) => s.profiles);
+    const setSelectedProfile = useAuthStore((s) => s.setSelectedProfile);
+
+    const handleSelect = (profile: Profile) => {
+        setSelectedProfile(profile);
+        navigate({ to: '/profile-pin' });
+    };
+
     return (
         <div className="flex min-h-full flex-1 flex-col bg-[url('/images/background-illustration-desktop.png')] bg-cover bg-center">
             <div className="px-4 pt-8 pb-6">
@@ -34,14 +35,11 @@ function ProfilesPage() {
                     {t('profiles.subtitle')}
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
-                    {MOCK_PROFILES.map((profile) => (
+                    {profiles.map((profile) => (
                         <ProfileCard
                             key={profile.id}
                             profile={profile}
-                            onSelect={() => {
-                                console.log(profile);
-                                navigate({ to: '/profile-pin' });
-                            }}
+                            onSelect={() => handleSelect(profile)}
                         />
                     ))}
                 </div>

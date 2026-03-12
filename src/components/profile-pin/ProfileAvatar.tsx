@@ -1,5 +1,8 @@
-import type { Profile } from '@/features/profiles/types';
-import { PROFILE_TYPE_CONFIG } from '@/features/profiles/types';
+import type { Profile } from '@/features/auth/types/auth.type';
+import {
+    PROFILE_TYPE_CONFIG,
+    getProfileType,
+} from '@/features/profiles/types';
 import { cn } from '@/utils/cn';
 
 interface ProfileAvatarProps {
@@ -15,7 +18,8 @@ export function ProfileAvatar({
     showName = false,
     className,
 }: ProfileAvatarProps) {
-    const { pigImageSrc } = PROFILE_TYPE_CONFIG[profile.type];
+    const profileType = getProfileType(profile);
+    const { pigImageSrc } = PROFILE_TYPE_CONFIG[profileType];
     const isSm = size === 'sm';
 
     return (
@@ -37,7 +41,7 @@ export function ProfileAvatar({
             </div>
             {showName && (
                 <p className="text-center text-sm font-medium text-tichtich-black">
-                    {profile.name}
+                    {profile.fullName}
                 </p>
             )}
         </div>

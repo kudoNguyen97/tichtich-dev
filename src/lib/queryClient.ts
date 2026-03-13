@@ -1,6 +1,6 @@
 import { MutationCache, QueryClient } from '@tanstack/react-query';
 import { ApiError } from '@/types/api.type';
-import { showError } from './toast';
+import { showError } from '@/lib/toast';
 
 export const queryClient = new QueryClient({
     mutationCache: new MutationCache({
@@ -21,6 +21,9 @@ export const queryClient = new QueryClient({
                 return failureCount < 2;
             },
             refetchOnWindowFocus: false,
+            refetchInterval: false,
+            refetchOnMount: true,
+            refetchOnReconnect: true
         },
         mutations: {
             retry: 0,

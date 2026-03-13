@@ -5,7 +5,7 @@ import type {
     Profile,
     SignupPayload,
     User,
-} from '../types/auth.type';
+} from '@/features/auth/types/auth.type';
 
 export const authService = {
     login: (payload: LoginPayload) =>

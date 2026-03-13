@@ -5,6 +5,7 @@ export interface Profile {
     fullName: string;
     wallets: unknown[];
     pinCode: string;
+    gender: 'male' | 'female';
     createdAt: string;
     updatedAt: string;
 }

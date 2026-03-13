@@ -77,14 +77,49 @@ function ProfilePinPage() {
     if (!selectedProfile) return null;
 
     return (
-        <AuthFormLayout
-            className={cn(
-                'bg-tichtich-primary-300',
-                'border-x border-profile-pin-frame'
-            )}
-            title={t('profilePin.title')}
-            backTo="/profiles"
-            submitButton={
+        <AuthFormLayout>
+            <AuthFormLayout.AppBar
+                title={t('profilePin.title')}
+                backTo="/profiles"
+                className={cn(
+                    'bg-tichtich-primary-300',
+                    'border-x border-profile-pin-frame'
+                )}
+            />
+            <AuthFormLayout.Content
+                className={cn(
+                    'bg-tichtich-primary-300',
+                    'border-x border-profile-pin-frame'
+                )}
+            >
+                <div className="flex flex-1 flex-col items-center px-6 pb-6 pt-8">
+                    <ProfileAvatar
+                        profile={selectedProfile}
+                        size="lg"
+                        showName
+                        className="mb-6"
+                    />
+
+                    <PinInputDisplay
+                        pinLength={PIN_LENGTH}
+                        filledCount={pin.length}
+                        error={error}
+                        prompt={prompt}
+                        errorMessage={errorMessage}
+                        shakeKey={shakeKey}
+                        className="mb-8"
+                    />
+
+                    <NumericKeypad
+                        pinLength={PIN_LENGTH}
+                        currentLength={pin.length}
+                        onDigit={handleDigit}
+                        onBackspace={handleBackspace}
+                        className="mb-8"
+                    />
+                </div>
+            </AuthFormLayout.Content>
+            <AuthFormLayout.Footer>
                 <TichTichButton
                     variant="outline"
                     size="lg"
@@ -98,34 +133,7 @@ function ProfilePinPage() {
                 >
                     {t('profilePin.continue')}
                 </TichTichButton>
-            }
-        >
-            <div className="flex flex-1 flex-col items-center px-6 pb-6 pt-8">
-                <ProfileAvatar
-                    profile={selectedProfile}
-                    size="lg"
-                    showName
-                    className="mb-6"
-                />
-
-                <PinInputDisplay
-                    pinLength={PIN_LENGTH}
-                    filledCount={pin.length}
-                    error={error}
-                    prompt={prompt}
-                    errorMessage={errorMessage}
-                    shakeKey={shakeKey}
-                    className="mb-8"
-                />
-
-                <NumericKeypad
-                    pinLength={PIN_LENGTH}
-                    currentLength={pin.length}
-                    onDigit={handleDigit}
-                    onBackspace={handleBackspace}
-                    className="mb-8"
-                />
-            </div>
+            </AuthFormLayout.Footer>
         </AuthFormLayout>
     );
 }

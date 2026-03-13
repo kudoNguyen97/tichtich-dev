@@ -52,15 +52,6 @@ function LoginPage() {
         // mode: 'onChange',
     });
 
-    // useEffect(() => {
-    //     if (typeof window === 'undefined') return;
-    //     const token = localStorage.getItem('access_token');
-
-    //     if (token || user) {
-    //         navigate({ to: '/profiles', replace: true });
-    //     }
-    // }, [navigate, user]);
-
     const onSubmit = async (data: LoginFormData) => {
         try {
             show();

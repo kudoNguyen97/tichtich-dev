@@ -1,9 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { Profile } from '@/features/auth/types/auth.type';
-import {
-    PROFILE_TYPE_CONFIG,
-    getProfileType,
-} from '@/features/profiles/types';
+import { PROFILE_TYPE_CONFIG, getProfileType } from '@/features/profiles/types';
 import { ProfilePig } from '@/components/profiles/ProfilePig';
 import { cn } from '@/utils/cn';
 import * as motion from 'motion/react-client';
@@ -17,8 +14,10 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
     const { t } = useTranslation();
     const profileType = getProfileType(profile);
     const config = PROFILE_TYPE_CONFIG[profileType];
+
+    console.log('config', config);
     const typeLabel =
-        profileType === 'parent'
+        profileType === 'adult'
             ? t('profiles.typeParent')
             : t('profiles.typeChild');
 
@@ -40,7 +39,6 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                 }}
             >
                 <button
-                    type="button"
                     onClick={onSelect}
                     className={cn(
                         'relative overflow-hidden flex w-full items-center rounded-2xl px-4 text-left transition-opacity border-transparent hover:opacity-95 hover:border-tichtich-primary-200 hover:border-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
@@ -58,7 +56,7 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                     </div>
                     <ProfilePig
                         profileType={profileType}
-                        className="h-[85%] max-h-[140px] w-auto"
+                        className="h-[85%] max-h-[100px] sm:max-h-[140px] w-auto"
                     />
                 </button>
             </motion.div>

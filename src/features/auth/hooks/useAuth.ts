@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { authService } from '../api/auth.service';
-import { authKeys } from '../api/auth.keys';
+import { authService } from '@/features/auth/api/auth.service';
+import { authKeys } from '@/features/auth/api/auth.keys';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { showSuccess } from '@/lib/toast';
-import type { User } from '../types/auth.type';
+import type { User } from '@/features/auth/types/auth.type';
 
 export function useMe() {
     const { isAuthenticated } = useAuthStore();
@@ -25,7 +25,6 @@ export function useLogin() {
         onSuccess: (data) => {
             setAuth(data.user, data.sessionToken, data.user.profiles);
             queryClient.invalidateQueries({ queryKey: authKeys.me() });
-            showSuccess('success.login');
         },
     });
 }

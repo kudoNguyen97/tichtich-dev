@@ -85,24 +85,9 @@ function RegisterPage() {
     };
 
     return (
-        <AuthFormLayout
-            title={t('auth.createParentAccount')}
-            backTo="/login"
-            submitButton={
-                <TichTichButton
-                    onClick={handleSubmit(onSubmit)}
-                    form={REGISTER_FORM_ID}
-                    isDisabled={isSubmitting}
-                    isLoading={isSubmitting}
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    leftIcon={<UserPlus className="size-5" />}
-                >
-                    {t('auth.continue')}
-                </TichTichButton>
-            }
-        >
+        <AuthFormLayout>
+            <AuthFormLayout.AppBar title={t('auth.createParentAccount')} backTo="/login" />
+            <AuthFormLayout.Content>
             <form
                 id={REGISTER_FORM_ID}
                 onSubmit={handleSubmit(onSubmit)}
@@ -302,6 +287,21 @@ function RegisterPage() {
                     </div>
                 </section>
             </form>
+            </AuthFormLayout.Content>
+            <AuthFormLayout.Footer>
+                <TichTichButton
+                    onClick={handleSubmit(onSubmit)}
+                    form={REGISTER_FORM_ID}
+                    isDisabled={isSubmitting}
+                    isLoading={isSubmitting}
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    leftIcon={<UserPlus className="size-5" />}
+                >
+                    {t('auth.continue')}
+                </TichTichButton>
+            </AuthFormLayout.Footer>
         </AuthFormLayout>
     );
 }

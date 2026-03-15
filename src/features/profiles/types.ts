@@ -13,7 +13,7 @@ export interface ProfileTypeConfig {
 
 export const PROFILE_TYPE_CONFIG: Record<ProfileType, ProfileTypeConfig> = {
     adult: {
-        backgroundColorClass: 'bg-profile-parent',
+        backgroundColorClass: 'bg-tichtich-primary-200',
         heightPx: 194,
         pigImageSrc: '/images/pig-dad.png',
         pigPosition: 'right',
@@ -25,7 +25,7 @@ export const PROFILE_TYPE_CONFIG: Record<ProfileType, ProfileTypeConfig> = {
         pigPosition: 'left',
     },
     kidGirl: {
-        backgroundColorClass: 'bg-profile-girl',
+        backgroundColorClass: 'bg-tichtich-blue',
         heightPx: 108,
         pigImageSrc: '/images/pig-gird-kid.png',
         pigPosition: 'right',

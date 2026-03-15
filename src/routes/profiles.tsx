@@ -40,10 +40,8 @@ function ProfilesPage() {
     }, [profiles, setProfiles]);
 
     const handleSelect = (profile: Profile) => {
-        console.log('profile', profile);
-
-        // setSelectedProfile(profile);
-        // navigate({ to: '/profile-pin' });
+        setSelectedProfile(profile);
+        navigate({ to: '/profile-pin' });
     };
 
     return (

@@ -68,10 +68,13 @@
         "typeChild": "Child account"
     },
     "profilePin": {
+        "title": "Enter your PIN",
         "greeting": "Hellooooo",
-        "enterNewPin": "Enter your new PIN",
+        "enterPin": "Enter your PIN",
+        "enterNewPin": "Set your new PIN",
         "reenterNewPin": "Re-enter your new PIN",
         "pinMismatch": "PIN does not match. Please try again",
+        "invalidPin": "Incorrect PIN. Please try again",
         "continue": "Continue"
     },
     "success": {

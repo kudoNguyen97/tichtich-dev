@@ -1,7 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/utils/cn';
-import { CHILD_NAV_ITEMS } from '@/constants/navItems';
+import { ADULT_NAV_ITEMS, CHILD_NAV_ITEMS } from '@/constants/navItems';
 import type { NavItem } from '@/constants/navItems';
 
 export function BottomNav() {
@@ -9,10 +9,12 @@ export function BottomNav() {
     const routerState = useRouterState();
     const currentPath = routerState.location.pathname;
 
-    const navItems = CHILD_NAV_ITEMS;
+    const isAdultPath = currentPath.startsWith('/adult');
+    const navItems = isAdultPath ? ADULT_NAV_ITEMS : CHILD_NAV_ITEMS;
 
     function isActive(item: NavItem): boolean {
-        if (item.to === '/children') return currentPath === item.to;
+        if (item.to === '/children' || item.to === '/adult')
+            return currentPath === item.to;
         return currentPath.startsWith(item.to);
     }
 

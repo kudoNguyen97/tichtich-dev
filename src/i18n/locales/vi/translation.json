@@ -75,10 +75,13 @@
         "typeChild": "Tài khoản trẻ em"
     },
     "profilePin": {
+        "title": "Nhập mã PIN của bạn",
         "greeting": "Xin chàooooo",
-        "enterNewPin": "Nhập mã PIN mới của bạn",
+        "enterPin": "Nhập mã PIN của bạn",
+        "enterNewPin": "Đặt mã PIN mới của bạn",
         "reenterNewPin": "Nhập lại mã PIN mới của bạn",
         "pinMismatch": "Mã PIN không khớp. Vui lòng thử lại",
+        "invalidPin": "Mã PIN không đúng. Vui lòng thử lại",
         "continue": "Tiếp tục"
     },
     "success": {

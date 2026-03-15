@@ -1,9 +1,16 @@
+/** Wallet item từ API (balance có thể dùng để tính tổng theo profile) */
+export interface ProfileWallet {
+    id?: string;
+    walletType?: string;
+    balance?: number;
+}
+
 export interface Profile {
     id: string;
     userId: string;
     profileType: 'adult' | 'kid';
     fullName: string;
-    wallets: unknown[];
+    wallets: ProfileWallet[];
     pinCode: string;
     gender: 'male' | 'female';
     createdAt: string;

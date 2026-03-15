@@ -38,6 +38,35 @@ export const CHILD_NAV_ITEMS: NavItem[] = [
     },
 ];
 
+// Adult profile — same structure as children, under /adult
+export const ADULT_NAV_ITEMS: NavItem[] = [
+    {
+        labelKey: 'nav.home',
+        to: '/adult',
+        iconSrc: '/icons/navbar/kid-home.svg',
+    },
+    {
+        labelKey: 'nav.treasury',
+        to: '/adult/treasury',
+        iconSrc: '/icons/navbar/kid-treasure.svg',
+    },
+    {
+        labelKey: 'nav.character',
+        to: '/adult/character',
+        iconSrc: '/icons/navbar/kid-figure.svg',
+    },
+    {
+        labelKey: 'nav.journey',
+        to: '/adult/journey',
+        iconSrc: '/icons/navbar/kid-jouney.svg',
+    },
+    {
+        labelKey: 'nav.settings',
+        to: '/adult/settings',
+        iconSrc: '/icons/navbar/setting.svg',
+    },
+];
+
 // Parent profile — URL: /parent/  /parent/manage  /parent/reports  /parent/settings
 export const PARENT_NAV_ITEMS: NavItem[] = [
     { labelKey: 'nav.overview', to: '/parent', icon: LayoutDashboard },

@@ -10,14 +10,17 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { cn } from '@/utils/cn';
 import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { profileService } from '@/features/profiles/api/profile.serivce';
+import { showError } from '@/lib/toast';
+import { useLoadingStore } from '@/stores/useLoadingStore';
+import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
 
 const PIN_LENGTH = 4;
 
 export const Route = createFileRoute('/profile-pin')({
     component: ProfilePinPage,
     beforeLoad: () => {
-        const { isAuthenticated, selectedProfile } =
-            useAuthStore.getState();
+        const { isAuthenticated, selectedProfile } = useAuthStore.getState();
         if (!isAuthenticated) throw redirect({ to: '/login' });
         if (!selectedProfile) throw redirect({ to: '/profiles' });
     },
@@ -26,13 +29,28 @@ export const Route = createFileRoute('/profile-pin')({
 function ProfilePinPage() {
     const { t } = useTranslation();
     const [pin, setPin] = useState<string[]>([]);
+    const [step, setStep] = useState<1 | 2>(1);
+    const [firstPin, setFirstPin] = useState('');
     const [shakeKey, setShakeKey] = useState(0);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
+    const { show: showLoading, hide: hideLoading } = useLoadingStore();
 
-    const prompt = t('profilePin.enterNewPin');
-    const errorMessage = t('profilePin.pinMismatch');
+    const { mutateAsync: updateProfilePinCode } = useUpdateProfilePinCode();
+
+    const hasPin =
+        !!selectedProfile?.pinCode && selectedProfile.pinCode.length === 4;
+
+    const prompt = hasPin
+        ? t('profilePin.enterPin')
+        : step === 1
+          ? t('profilePin.enterNewPin')
+          : t('profilePin.reenterNewPin');
+
+    const errorMessage = hasPin
+        ? t('profilePin.invalidPin')
+        : t('profilePin.pinMismatch');
 
     const resetError = useCallback(() => {
         setError(false);
@@ -43,20 +61,60 @@ function ProfilePinPage() {
     }, [pin.length, resetError]);
 
     const handlePinComplete = useCallback(
-        (value: string) => {
+        async (value: string) => {
             if (!selectedProfile) return;
 
-            // If profile has no pinCode yet, accept any PIN (first-time setup scenario)
-            if (!selectedProfile.pinCode || value === selectedProfile.pinCode) {
-                navigate({ to: '/children', replace: true });
+            if (hasPin) {
+                if (value === selectedProfile.pinCode) {
+                    const target =
+                        selectedProfile.profileType === 'adult'
+                            ? '/adult'
+                            : '/children';
+                    navigate({ to: target, replace: true });
+                    return;
+                }
+                setShakeKey((k) => k + 1);
+                setError(true);
+                setTimeout(() => setPin([]), 400);
                 return;
             }
 
-            setShakeKey((k) => k + 1);
-            setError(true);
-            setTimeout(() => setPin([]), 400);
+            if (step === 1) {
+                setFirstPin(value);
+                setPin([]);
+                setStep(2);
+                return;
+            }
+
+            if (value !== firstPin) {
+                setShakeKey((k) => k + 1);
+                setError(true);
+                setTimeout(() => setPin([]), 400);
+                return;
+            }
+
+            try {
+                showLoading();
+                await updateProfilePinCode({
+                    id: selectedProfile.id,
+                    pinCode: firstPin,
+                });
+                navigate({ to: '/create-success', replace: true });
+            } catch (err) {
+                showError(err);
+            } finally {
+                hideLoading();
+            }
         },
-        [selectedProfile, navigate]
+        [
+            selectedProfile,
+            hasPin,
+            step,
+            firstPin,
+            navigate,
+            showLoading,
+            hideLoading,
+        ]
     );
 
     useEffect(() => {
@@ -81,17 +139,9 @@ function ProfilePinPage() {
             <AuthFormLayout.AppBar
                 title={t('profilePin.title')}
                 backTo="/profiles"
-                className={cn(
-                    'bg-tichtich-primary-300',
-                    'border-x border-profile-pin-frame'
-                )}
+                className={cn('bg-tichtich-primary-300')}
             />
-            <AuthFormLayout.Content
-                className={cn(
-                    'bg-tichtich-primary-300',
-                    'border-x border-profile-pin-frame'
-                )}
-            >
+            <AuthFormLayout.Content className={cn('bg-tichtich-primary-300')}>
                 <div className="flex flex-1 flex-col items-center px-6 pb-6 pt-8">
                     <ProfileAvatar
                         profile={selectedProfile}
@@ -119,7 +169,7 @@ function ProfilePinPage() {
                     />
                 </div>
             </AuthFormLayout.Content>
-            <AuthFormLayout.Footer>
+            <AuthFormLayout.Footer className="bg-tichtich-primary-300">
                 <TichTichButton
                     variant="outline"
                     size="lg"

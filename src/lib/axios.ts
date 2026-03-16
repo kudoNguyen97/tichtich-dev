@@ -21,6 +21,7 @@ axiosInstance.interceptors.request.use((requestConfig) => {
     const deviceId = getOrCreateDeviceId();
 
     const timeExpiredStr = localStorage.getItem('time_expired');
+
     if (timeExpiredStr) {
         // Nếu lưu dạng số ms thì parseInt, nếu lưu dạng string thì dùng dayjs
         let timeExpired: number;

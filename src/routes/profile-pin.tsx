@@ -1,5 +1,10 @@
-import { createFileRoute, useNavigate, redirect } from '@tanstack/react-router';
-import { useState, useCallback, useEffect } from 'react';
+import {
+    createFileRoute,
+    useNavigate,
+    redirect,
+    useSearch,
+} from '@tanstack/react-router';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ProfileAvatar,
@@ -10,7 +15,6 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { cn } from '@/utils/cn';
 import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { profileService } from '@/features/profiles/api/profile.serivce';
 import { showError } from '@/lib/toast';
 import { useLoadingStore } from '@/stores/useLoadingStore';
 import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
@@ -20,9 +24,8 @@ const PIN_LENGTH = 4;
 export const Route = createFileRoute('/profile-pin')({
     component: ProfilePinPage,
     beforeLoad: () => {
-        const { isAuthenticated, selectedProfile } = useAuthStore.getState();
+        const { isAuthenticated } = useAuthStore.getState();
         if (!isAuthenticated) throw redirect({ to: '/login' });
-        if (!selectedProfile) throw redirect({ to: '/profiles' });
     },
 });
 
@@ -34,10 +37,17 @@ function ProfilePinPage() {
     const [shakeKey, setShakeKey] = useState(0);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
-    const selectedProfile = useAuthStore((s) => s.selectedProfile);
+    const search = useSearch({ from: '/profile-pin' });
+    const profiles = useAuthStore((s) => s.profiles);
+    const setSelectedProfile = useAuthStore((s) => s.setSelectedProfile);
     const { show: showLoading, hide: hideLoading } = useLoadingStore();
 
     const { mutateAsync: updateProfilePinCode } = useUpdateProfilePinCode();
+
+    const selectedProfile = useMemo(
+        () => profiles.find((p) => p.id === (search as { profileId?: string }).profileId),
+        [profiles, search]
+    );
 
     const hasPin =
         !!selectedProfile?.pinCode && selectedProfile.pinCode.length === 4;
@@ -66,6 +76,7 @@ function ProfilePinPage() {
 
             if (hasPin) {
                 if (value === selectedProfile.pinCode) {
+                    setSelectedProfile(selectedProfile);
                     const target =
                         selectedProfile.profileType === 'adult'
                             ? '/adult'

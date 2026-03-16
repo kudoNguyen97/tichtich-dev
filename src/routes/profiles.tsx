@@ -21,8 +21,8 @@ export const Route = createFileRoute('/profiles')({
 function ProfilesPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const setSelectedProfile = useAuthStore((s) => s.setSelectedProfile);
     const setProfiles = useAuthStore((s) => s.setProfiles);
+    const clearSelectedProfile = useAuthStore((s) => s.clearSelectedProfile);
 
     const { data: profiles = [], isLoading } = useQuery({
         queryKey: ['meProfiles'],
@@ -34,14 +34,17 @@ function ProfilesPage() {
     });
 
     useEffect(() => {
+        clearSelectedProfile();
         if (profiles.length > 0) {
             setProfiles(profiles);
         }
-    }, [profiles, setProfiles]);
+    }, [profiles, setProfiles, clearSelectedProfile]);
 
     const handleSelect = (profile: Profile) => {
-        setSelectedProfile(profile);
-        navigate({ to: '/profile-pin' });
+        navigate({
+            to: '/profile-pin',
+            search: { profileId: profile.id },
+        });
     };
 
     return (

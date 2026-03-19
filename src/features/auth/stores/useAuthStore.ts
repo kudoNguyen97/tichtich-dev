@@ -50,6 +50,7 @@ export const useAuthStore = create<AuthState>()(
 
                 logout: () => {
                     localStorage.removeItem('access_token');
+                    localStorage.removeItem('time_expired');
                     set({
                         user: null,
                         accessToken: null,

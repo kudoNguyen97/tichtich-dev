@@ -4,6 +4,7 @@ import { config } from '@/constants/config';
 import { getOrCreateDeviceId } from './deviceId';
 import dayjs from 'dayjs';
 import { showError } from './toast';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
 export const axiosInstance = axios.create({
     baseURL: config.API_BASE_URL,
@@ -33,9 +34,10 @@ axiosInstance.interceptors.request.use((requestConfig) => {
             timeExpired = dayjs(timeExpiredStr).valueOf();
         }
         if (!isNaN(timeExpired) && dayjs().valueOf() > timeExpired) {
-            localStorage.clear();
+            useAuthStore.getState().logout();
+            localStorage.removeItem('time_expired');
             showError('Hết hạn đăng nhập. Vui lòng đăng nhập lại.');
-            window.location.href = '/login';
+            window.location.replace('/login');
         }
     }
     if (token) {
@@ -51,8 +53,9 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
         if (error.response?.status === 401) {
-            localStorage.removeItem('access_token');
-            window.location.href = '/login';
+            useAuthStore.getState().logout();
+            localStorage.removeItem('time_expired');
+            window.location.replace('/login');
         }
         return Promise.reject(error);
     }

@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { authService } from '@/features/auth/api/auth.service';
-import { profileService } from '../api/profile.serivce';
 import { queryClient } from '@/lib/queryClient';
+import { profileKeys } from '@/features/profiles/api/profile.keys';
+import { profileService } from '../api/profile.serivce';
 
 export function useProfiles() {
     return useQuery({
-        queryKey: ['profiles'],
+        queryKey: profileKeys.profile,
         queryFn: authService.meProfiles,
     });
 }
@@ -15,7 +16,7 @@ export function useUpdateProfilePinCode() {
         mutationFn: (payload: { id: string; pinCode: string }) =>
             profileService.updateProfilePinCode(payload.id, payload.pinCode),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['profiles'] });
+            queryClient.invalidateQueries({ queryKey: profileKeys.profile });
         },
     });
 }

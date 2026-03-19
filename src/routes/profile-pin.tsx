@@ -110,6 +110,10 @@ function ProfilePinPage() {
                     id: selectedProfile.id,
                     pinCode: firstPin,
                 });
+                setSelectedProfile({
+                    ...selectedProfile,
+                    pinCode: firstPin,
+                });
                 navigate({ to: '/create-success', replace: true });
             } catch (err) {
                 showError(err);
@@ -123,6 +127,7 @@ function ProfilePinPage() {
             step,
             firstPin,
             navigate,
+            setSelectedProfile,
             showLoading,
             hideLoading,
         ]

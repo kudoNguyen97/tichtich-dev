@@ -70,8 +70,14 @@ export function TichTichInput({
     inputClassName,
     ...props
 }: TichTichInputProps) {
+    const { 'aria-label': ariaLabelProp, ...restProps } = props;
     const hasError = isInvalid || !!errorMessage;
     const charCount = typeof value === 'string' ? value.length : 0;
+
+    const ariaLabelForField =
+        label != null && label !== ''
+            ? undefined
+            : (ariaLabelProp ?? placeholder ?? 'Nhập nội dung');
 
     return (
         <TextField
@@ -83,7 +89,8 @@ export function TichTichInput({
             onChange={onChange}
             type={type}
             className={cn('flex flex-col gap-1.5', className)}
-            {...props}
+            {...restProps}
+            aria-label={ariaLabelForField}
         >
             {label && (
                 <Label className="text-base font-bold text-tichtich-black">

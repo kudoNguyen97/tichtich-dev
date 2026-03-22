@@ -13,6 +13,8 @@ export interface Profile {
     wallets: ProfileWallet[];
     pinCode: string;
     gender: 'male' | 'female';
+    /** ISO 8601 — optional until API always returns */
+    dateOfBirth?: string;
     createdAt: string;
     updatedAt: string;
 }

@@ -10,7 +10,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, Eye, EyeOff } from 'lucide-react';
 import { Separator } from 'react-aria-components';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import type { AuthError } from 'firebase/auth';
 import { auth } from '../firebase';
 import { TichTichButton } from '@/components/common/TichTichButton';
@@ -123,6 +123,8 @@ function LoginPage() {
                 <img
                     src="/images/logo-login.svg"
                     alt="logo"
+                    fetchPriority="high"
+                    draggable={false}
                     className="h-auto w-full object-contain"
                 />
             </div>

@@ -9,8 +9,7 @@ import { authService } from '@/features/auth/api/auth.service';
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
-        const { accessToken, user, setAuth, logout } =
-            useAuthStore.getState();
+        const { accessToken, user, setAuth, logout } = useAuthStore.getState();
 
         // Skip neu khong co token hoac da hydrate user roi
         if (!accessToken || user) return;

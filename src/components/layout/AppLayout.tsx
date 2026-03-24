@@ -5,10 +5,11 @@ import {
     useEffect,
     useCallback,
 } from 'react';
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useRouterState } from '@tanstack/react-router';
 import { BottomNav } from './BottomNav';
 import { PageTransition } from '@/components/ui/PageTransition';
 import { AppBar } from '@/components/layout/AppBar';
+import { cn } from '@/utils/cn';
 
 export interface AppBarConfig {
     title?: string;
@@ -29,6 +30,7 @@ interface AppLayoutProps {
     defaultLeftAction?: React.ReactNode;
     defaultRightAction?: React.ReactNode;
     className?: string;
+    appLayoutClassName?: string;
 }
 
 const DEFAULT_TITLE = 'TichTich';
@@ -39,7 +41,13 @@ export function AppLayout({
     defaultLeftAction,
     defaultRightAction,
     className,
+    appLayoutClassName,
 }: AppLayoutProps) {
+    const pathname = useRouterState({ select: (s) => s.location.pathname });
+    const hideBottomNav =
+        pathname === '/adult/information' ||
+        pathname.startsWith('/adult/information/');
+
     const [title, setTitle] = useState(defaultTitle);
     const [subtitle, setSubtitle] = useState(defaultSubtitle ?? '');
     const [leftAction, setLeftAction] =
@@ -71,13 +79,18 @@ export function AppLayout({
                 rightAction={rightAction}
                 className={className}
             />
-            <div className="mobile-container bg-white">
+            <div
+                className={cn(
+                    'mobile-container bg-white',
+                    hideBottomNav ? 'mb-0' : appLayoutClassName
+                )}
+            >
                 <main className="min-h-screen">
                     <PageTransition>
                         <Outlet />
                     </PageTransition>
                 </main>
-                <BottomNav />
+                {!hideBottomNav && <BottomNav />}
             </div>
         </AppLayoutContext.Provider>
     );

@@ -12,7 +12,10 @@ export const Route = createLazyFileRoute('/_app/adult/')({
 function HomeAdultPage() {
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
     const profiles = useAuthStore((s) => s.profiles);
-    const setSelectedProfile = useAuthStore((s) => s.setSelectedProfile);
+    const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
+    const setManagedKidProfileId = useAuthStore(
+        (s) => s.setManagedKidProfileId
+    );
 
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -26,17 +29,25 @@ function HomeAdultPage() {
     const handleSelectKid = (kidId: string) => {
         const kid = kidProfiles.find((p) => p.id === kidId);
         if (!kid) return;
-        setSelectedProfile(kid);
+        setManagedKidProfileId(kid.id);
         setIsSheetOpen(false);
     };
 
     if (!selectedProfile) return null;
 
+    let cardProfile = selectedProfile;
+    if (kidProfiles.length > 0) {
+        const resolved =
+            kidProfiles.find((p) => p.id === managedKidProfileId) ??
+            kidProfiles[0];
+        cardProfile = resolved;
+    }
+
     return (
         <>
             <div className="px-4 pt-8 pb-6">
                 <HomeCardSelectProfile
-                    profile={selectedProfile}
+                    profile={cardProfile}
                     onSelect={handleSelect}
                 />
             </div>

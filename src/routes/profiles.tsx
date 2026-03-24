@@ -6,6 +6,7 @@ import { ProfileCard } from '@/components/profiles/ProfileCard';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import type { Profile } from '@/features/auth/types/auth.type';
 import { authService } from '@/features/auth/api/auth.service';
+import { profileKeys } from '@/features/profiles/api/profile.keys';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 
 export const Route = createFileRoute('/profiles')({
@@ -25,12 +26,8 @@ function ProfilesPage() {
     const clearSelectedProfile = useAuthStore((s) => s.clearSelectedProfile);
 
     const { data: profiles = [], isLoading } = useQuery({
-        queryKey: ['meProfiles'],
-        queryFn: async () => {
-            const res = await authService.meProfiles();
-
-            return res;
-        },
+        queryKey: profileKeys.profile,
+        queryFn: () => authService.meProfiles(),
     });
 
     useEffect(() => {

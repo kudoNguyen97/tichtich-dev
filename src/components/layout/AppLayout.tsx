@@ -16,6 +16,8 @@ export interface AppBarConfig {
     subtitle?: string;
     leftAction?: React.ReactNode;
     rightAction?: React.ReactNode;
+    /** ClassName gộp thêm cho `<AppBar />` (ví dụ viền brand) */
+    appBarClassName?: string;
 }
 
 export interface AppLayoutOutletContext {
@@ -35,6 +37,13 @@ interface AppLayoutProps {
 
 const DEFAULT_TITLE = 'TichTich';
 
+/** Các route con tự gọi `setAppBar` — không reset app bar theo default khi đổi pathname trong nhánh này (tránh ghi đè sau effect của trang con / sau reload). */
+const PATH_CHILD_MANAGES_APP_BAR = /^\/adult\/setting\//;
+
+/** Màn tự vẽ header trong page — không render `<AppBar />` toàn cục. */
+const PATH_HIDE_GLOBAL_APP_BAR =
+    /^\/adult\/setting\/change-pin(?:-success)?\/?$/;
+
 export function AppLayout({
     defaultTitle = DEFAULT_TITLE,
     defaultSubtitle,
@@ -44,9 +53,11 @@ export function AppLayout({
     appLayoutClassName,
 }: AppLayoutProps) {
     const pathname = useRouterState({ select: (s) => s.location.pathname });
+    const hideGlobalAppBar = PATH_HIDE_GLOBAL_APP_BAR.test(pathname);
     const hideBottomNav =
         pathname === '/adult/information' ||
-        pathname.startsWith('/adult/information/');
+        pathname.startsWith('/adult/information/') ||
+        pathname.startsWith('/adult/setting/');
 
     const [title, setTitle] = useState(defaultTitle);
     const [subtitle, setSubtitle] = useState(defaultSubtitle ?? '');
@@ -54,13 +65,24 @@ export function AppLayout({
         useState<React.ReactNode>(defaultLeftAction);
     const [rightAction, setRightAction] =
         useState<React.ReactNode>(defaultRightAction);
+    const [appBarClassName, setAppBarClassName] = useState<string | undefined>();
 
     useEffect(() => {
+        if (PATH_CHILD_MANAGES_APP_BAR.test(pathname)) {
+            return;
+        }
         setTitle(defaultTitle);
         setSubtitle(defaultSubtitle ?? '');
         setLeftAction(defaultLeftAction);
         setRightAction(defaultRightAction);
-    }, [defaultTitle, defaultSubtitle, defaultLeftAction, defaultRightAction]);
+        setAppBarClassName(undefined);
+    }, [
+        pathname,
+        defaultTitle,
+        defaultSubtitle,
+        defaultLeftAction,
+        defaultRightAction,
+    ]);
 
     const setAppBar = useCallback((config: AppBarConfig) => {
         if (config.title !== undefined) setTitle(config.title);
@@ -68,17 +90,21 @@ export function AppLayout({
         if (config.leftAction !== undefined) setLeftAction(config.leftAction);
         if (config.rightAction !== undefined)
             setRightAction(config.rightAction);
+        if (config.appBarClassName !== undefined)
+            setAppBarClassName(config.appBarClassName);
     }, []);
 
     return (
         <AppLayoutContext.Provider value={{ setAppBar }}>
-            <AppBar
-                title={title}
-                subtitle={subtitle || undefined}
-                leftAction={leftAction}
-                rightAction={rightAction}
-                className={className}
-            />
+            {!hideGlobalAppBar && (
+                <AppBar
+                    title={title}
+                    subtitle={subtitle || undefined}
+                    leftAction={leftAction}
+                    rightAction={rightAction}
+                    className={cn(className, appBarClassName)}
+                />
+            )}
             <div
                 className={cn(
                     'mobile-container bg-white',

@@ -20,7 +20,11 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as AppChildrenRouteRouteImport } from './routes/_app/children/route'
 import { Route as AppAdultRouteRouteImport } from './routes/_app/adult/route'
-import { Route as AppAdultInformationRouteImport } from './routes/_app/adult/information'
+import { Route as AppAdultSettingInformationRouteImport } from './routes/_app/adult/setting/information'
+import { Route as AppAdultSettingChangePinSuccessRouteImport } from './routes/_app/adult/setting/change-pin-success'
+import { Route as AppAdultSettingChangePinRouteImport } from './routes/_app/adult/setting/change-pin'
+import { Route as AppAdultSettingChangePasswordSuccessRouteImport } from './routes/_app/adult/setting/change-password-success'
+import { Route as AppAdultSettingChangePasswordRouteImport } from './routes/_app/adult/setting/change-password'
 
 const CreateSuccessLazyRouteImport = createFileRoute('/create-success')()
 const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
@@ -170,11 +174,36 @@ const AppAdultCharacterLazyRoute = AppAdultCharacterLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_app/adult/character.lazy').then((d) => d.Route),
 )
-const AppAdultInformationRoute = AppAdultInformationRouteImport.update({
-  id: '/information',
-  path: '/information',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any)
+const AppAdultSettingInformationRoute =
+  AppAdultSettingInformationRouteImport.update({
+    id: '/setting/information',
+    path: '/setting/information',
+    getParentRoute: () => AppAdultRouteRoute,
+  } as any)
+const AppAdultSettingChangePinSuccessRoute =
+  AppAdultSettingChangePinSuccessRouteImport.update({
+    id: '/setting/change-pin-success',
+    path: '/setting/change-pin-success',
+    getParentRoute: () => AppAdultRouteRoute,
+  } as any)
+const AppAdultSettingChangePinRoute =
+  AppAdultSettingChangePinRouteImport.update({
+    id: '/setting/change-pin',
+    path: '/setting/change-pin',
+    getParentRoute: () => AppAdultRouteRoute,
+  } as any)
+const AppAdultSettingChangePasswordSuccessRoute =
+  AppAdultSettingChangePasswordSuccessRouteImport.update({
+    id: '/setting/change-password-success',
+    path: '/setting/change-password-success',
+    getParentRoute: () => AppAdultRouteRoute,
+  } as any)
+const AppAdultSettingChangePasswordRoute =
+  AppAdultSettingChangePasswordRouteImport.update({
+    id: '/setting/change-password',
+    path: '/setting/change-password',
+    getParentRoute: () => AppAdultRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
@@ -186,7 +215,6 @@ export interface FileRoutesByFullPath {
   '/create-success': typeof CreateSuccessLazyRoute
   '/adult': typeof AppAdultRouteRouteWithChildren
   '/children': typeof AppChildrenRouteRouteWithChildren
-  '/adult/information': typeof AppAdultInformationRoute
   '/adult/character': typeof AppAdultCharacterLazyRoute
   '/adult/journey': typeof AppAdultJourneyLazyRoute
   '/adult/settings': typeof AppAdultSettingsLazyRoute
@@ -197,6 +225,11 @@ export interface FileRoutesByFullPath {
   '/children/treasury': typeof AppChildrenTreasuryLazyRoute
   '/adult/': typeof AppAdultIndexLazyRoute
   '/children/': typeof AppChildrenIndexLazyRoute
+  '/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
+  '/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
+  '/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
+  '/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
+  '/adult/setting/information': typeof AppAdultSettingInformationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
@@ -206,7 +239,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
-  '/adult/information': typeof AppAdultInformationRoute
   '/adult/character': typeof AppAdultCharacterLazyRoute
   '/adult/journey': typeof AppAdultJourneyLazyRoute
   '/adult/settings': typeof AppAdultSettingsLazyRoute
@@ -217,6 +249,11 @@ export interface FileRoutesByTo {
   '/children/treasury': typeof AppChildrenTreasuryLazyRoute
   '/adult': typeof AppAdultIndexLazyRoute
   '/children': typeof AppChildrenIndexLazyRoute
+  '/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
+  '/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
+  '/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
+  '/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
+  '/adult/setting/information': typeof AppAdultSettingInformationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -230,7 +267,6 @@ export interface FileRoutesById {
   '/_app/adult': typeof AppAdultRouteRouteWithChildren
   '/_app/children': typeof AppChildrenRouteRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
-  '/_app/adult/information': typeof AppAdultInformationRoute
   '/_app/adult/character': typeof AppAdultCharacterLazyRoute
   '/_app/adult/journey': typeof AppAdultJourneyLazyRoute
   '/_app/adult/settings': typeof AppAdultSettingsLazyRoute
@@ -241,6 +277,11 @@ export interface FileRoutesById {
   '/_app/children/treasury': typeof AppChildrenTreasuryLazyRoute
   '/_app/adult/': typeof AppAdultIndexLazyRoute
   '/_app/children/': typeof AppChildrenIndexLazyRoute
+  '/_app/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
+  '/_app/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
+  '/_app/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
+  '/_app/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
+  '/_app/adult/setting/information': typeof AppAdultSettingInformationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -254,7 +295,6 @@ export interface FileRouteTypes {
     | '/create-success'
     | '/adult'
     | '/children'
-    | '/adult/information'
     | '/adult/character'
     | '/adult/journey'
     | '/adult/settings'
@@ -265,6 +305,11 @@ export interface FileRouteTypes {
     | '/children/treasury'
     | '/adult/'
     | '/children/'
+    | '/adult/setting/change-password'
+    | '/adult/setting/change-password-success'
+    | '/adult/setting/change-pin'
+    | '/adult/setting/change-pin-success'
+    | '/adult/setting/information'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -274,7 +319,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
-    | '/adult/information'
     | '/adult/character'
     | '/adult/journey'
     | '/adult/settings'
@@ -285,6 +329,11 @@ export interface FileRouteTypes {
     | '/children/treasury'
     | '/adult'
     | '/children'
+    | '/adult/setting/change-password'
+    | '/adult/setting/change-password-success'
+    | '/adult/setting/change-pin'
+    | '/adult/setting/change-pin-success'
+    | '/adult/setting/information'
   id:
     | '__root__'
     | '/_app'
@@ -297,7 +346,6 @@ export interface FileRouteTypes {
     | '/_app/adult'
     | '/_app/children'
     | '/_auth/'
-    | '/_app/adult/information'
     | '/_app/adult/character'
     | '/_app/adult/journey'
     | '/_app/adult/settings'
@@ -308,6 +356,11 @@ export interface FileRouteTypes {
     | '/_app/children/treasury'
     | '/_app/adult/'
     | '/_app/children/'
+    | '/_app/adult/setting/change-password'
+    | '/_app/adult/setting/change-password-success'
+    | '/_app/adult/setting/change-pin'
+    | '/_app/adult/setting/change-pin-success'
+    | '/_app/adult/setting/information'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -463,32 +516,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdultCharacterLazyRouteImport
       parentRoute: typeof AppAdultRouteRoute
     }
-    '/_app/adult/information': {
-      id: '/_app/adult/information'
-      path: '/information'
-      fullPath: '/adult/information'
-      preLoaderRoute: typeof AppAdultInformationRouteImport
+    '/_app/adult/setting/information': {
+      id: '/_app/adult/setting/information'
+      path: '/setting/information'
+      fullPath: '/adult/setting/information'
+      preLoaderRoute: typeof AppAdultSettingInformationRouteImport
+      parentRoute: typeof AppAdultRouteRoute
+    }
+    '/_app/adult/setting/change-pin-success': {
+      id: '/_app/adult/setting/change-pin-success'
+      path: '/setting/change-pin-success'
+      fullPath: '/adult/setting/change-pin-success'
+      preLoaderRoute: typeof AppAdultSettingChangePinSuccessRouteImport
+      parentRoute: typeof AppAdultRouteRoute
+    }
+    '/_app/adult/setting/change-pin': {
+      id: '/_app/adult/setting/change-pin'
+      path: '/setting/change-pin'
+      fullPath: '/adult/setting/change-pin'
+      preLoaderRoute: typeof AppAdultSettingChangePinRouteImport
+      parentRoute: typeof AppAdultRouteRoute
+    }
+    '/_app/adult/setting/change-password-success': {
+      id: '/_app/adult/setting/change-password-success'
+      path: '/setting/change-password-success'
+      fullPath: '/adult/setting/change-password-success'
+      preLoaderRoute: typeof AppAdultSettingChangePasswordSuccessRouteImport
+      parentRoute: typeof AppAdultRouteRoute
+    }
+    '/_app/adult/setting/change-password': {
+      id: '/_app/adult/setting/change-password'
+      path: '/setting/change-password'
+      fullPath: '/adult/setting/change-password'
+      preLoaderRoute: typeof AppAdultSettingChangePasswordRouteImport
       parentRoute: typeof AppAdultRouteRoute
     }
   }
 }
 
 interface AppAdultRouteRouteChildren {
-  AppAdultInformationRoute: typeof AppAdultInformationRoute
   AppAdultCharacterLazyRoute: typeof AppAdultCharacterLazyRoute
   AppAdultJourneyLazyRoute: typeof AppAdultJourneyLazyRoute
   AppAdultSettingsLazyRoute: typeof AppAdultSettingsLazyRoute
   AppAdultTreasuryLazyRoute: typeof AppAdultTreasuryLazyRoute
   AppAdultIndexLazyRoute: typeof AppAdultIndexLazyRoute
+  AppAdultSettingChangePasswordRoute: typeof AppAdultSettingChangePasswordRoute
+  AppAdultSettingChangePasswordSuccessRoute: typeof AppAdultSettingChangePasswordSuccessRoute
+  AppAdultSettingChangePinRoute: typeof AppAdultSettingChangePinRoute
+  AppAdultSettingChangePinSuccessRoute: typeof AppAdultSettingChangePinSuccessRoute
+  AppAdultSettingInformationRoute: typeof AppAdultSettingInformationRoute
 }
 
 const AppAdultRouteRouteChildren: AppAdultRouteRouteChildren = {
-  AppAdultInformationRoute: AppAdultInformationRoute,
   AppAdultCharacterLazyRoute: AppAdultCharacterLazyRoute,
   AppAdultJourneyLazyRoute: AppAdultJourneyLazyRoute,
   AppAdultSettingsLazyRoute: AppAdultSettingsLazyRoute,
   AppAdultTreasuryLazyRoute: AppAdultTreasuryLazyRoute,
   AppAdultIndexLazyRoute: AppAdultIndexLazyRoute,
+  AppAdultSettingChangePasswordRoute: AppAdultSettingChangePasswordRoute,
+  AppAdultSettingChangePasswordSuccessRoute:
+    AppAdultSettingChangePasswordSuccessRoute,
+  AppAdultSettingChangePinRoute: AppAdultSettingChangePinRoute,
+  AppAdultSettingChangePinSuccessRoute: AppAdultSettingChangePinSuccessRoute,
+  AppAdultSettingInformationRoute: AppAdultSettingInformationRoute,
 }
 
 const AppAdultRouteRouteWithChildren = AppAdultRouteRoute._addFileChildren(

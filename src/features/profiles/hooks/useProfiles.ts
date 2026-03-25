@@ -13,13 +13,11 @@ export function useProfiles() {
     });
 }
 
-export function useUpdateProfilePinCode() {
-    return useMutation({
-        mutationFn: (payload: { id: string; pinCode: string }) =>
-            profileService.updateProfilePinCode(payload.id, payload.pinCode),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: profileKeys.profile });
-        },
+export function useProfileDetail(id: string) {
+    return useQuery({
+        queryKey: profileKeys.profileDetail(id),
+        queryFn: () => profileService.getProfileDetail(id),
+        enabled: Boolean(id),
     });
 }
 
@@ -37,6 +35,20 @@ function applyProfilePatchToStore(id: string, patch: Partial<Profile>) {
     }
 }
 
+export function useUpdateProfilePinCode() {
+    return useMutation({
+        mutationFn: (payload: { id: string; pinCode: string }) =>
+            profileService.updateProfilePinCode(payload.id, payload.pinCode),
+        onSuccess: (_void, { id, pinCode }) => {
+            applyProfilePatchToStore(id, { pinCode });
+            queryClient.invalidateQueries({ queryKey: profileKeys.profile });
+            queryClient.invalidateQueries({
+                queryKey: profileKeys.profileDetail(id),
+            });
+        },
+    });
+}
+
 export function useUpdateProfile() {
     return useMutation({
         mutationFn: (payload: { id: string; data: Partial<Profile> }) =>
@@ -46,12 +58,13 @@ export function useUpdateProfile() {
 
             queryClient.setQueryData<Profile[]>(profileKeys.profile, (old) => {
                 if (!old) return old;
-                return old.map((p) =>
-                    p.id === id ? { ...p, ...data } : p
-                );
+                return old.map((p) => (p.id === id ? { ...p, ...data } : p));
             });
 
             queryClient.invalidateQueries({ queryKey: profileKeys.profile });
+            queryClient.invalidateQueries({
+                queryKey: profileKeys.profileDetail(id),
+            });
         },
     });
 }

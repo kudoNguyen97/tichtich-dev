@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/features/auth/api/auth.service';
 import { authKeys } from '@/features/auth/api/auth.keys';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { showSuccess } from '@/lib/toast';
-import type { User } from '@/features/auth/types/auth.type';
+import { showError, showSuccess } from '@/lib/toast';
+import type { User, UserSettings } from '@/features/auth/types/auth.type';
 
 export function useMe() {
     const { isAuthenticated } = useAuthStore();
@@ -39,6 +39,29 @@ export function useLogout() {
             logout();
             queryClient.clear();
             showSuccess('success.logout');
+        },
+    });
+}
+
+export function useMeSettings() {
+    const { isAuthenticated } = useAuthStore();
+
+    return useQuery<UserSettings>({
+        queryKey: authKeys.meSettings(),
+        queryFn: authService.meSettings,
+        enabled: isAuthenticated,
+    });
+}
+
+export function useUpdateMeSettings() {
+    const queryClient = useQueryClient();
+    return useMutation<UserSettings, Error, Partial<UserSettings>>({
+        mutationFn: authService.updateMeSettings,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: authKeys.meSettings() });
+        },
+        onError: (error) => {
+            showError(error);
         },
     });
 }

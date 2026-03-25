@@ -63,13 +63,6 @@ function LoginPage() {
             );
             const { user: firebaseUser } = credential;
 
-            console.log(
-                'firebaseUser.getIdTokenResult.expirationTime',
-                await firebaseUser
-                    .getIdTokenResult()
-                    .then((result) => result.expirationTime)
-            );
-
             const expirationTime = await firebaseUser
                 .getIdTokenResult()
                 .then((result) => result.expirationTime);

@@ -5,6 +5,7 @@ import type {
     Profile,
     SignupPayload,
     User,
+    UserSettings,
 } from '@/features/auth/types/auth.type';
 
 export const authService = {
@@ -12,6 +13,11 @@ export const authService = {
         apiClient.post<LoginResponse>('/auth/login', payload),
 
     me: () => apiClient.get<User>('/me'),
+
+    meSettings: () => apiClient.get<UserSettings>('/me/settings'),
+
+    updateMeSettings: (payload: Partial<UserSettings>) =>
+        apiClient.post<UserSettings>('/me/settings', payload),
 
     meProfiles: () => apiClient.get<Profile[]>('/me/profiles'),
 

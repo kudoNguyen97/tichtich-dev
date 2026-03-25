@@ -13,6 +13,7 @@ export interface Profile {
     wallets: ProfileWallet[];
     pinCode: string;
     gender: 'male' | 'female';
+    phone?: string;
     /** ISO 8601 — optional until API always returns */
     dateOfBirth?: string;
     createdAt: string;
@@ -59,4 +60,17 @@ export interface SignupPayload {
 
 export interface SignupResponse {
     user: any;
+}
+
+export interface UserSettings {
+    id: string;
+    userId: string;
+    dailySavingLimit: number;
+    maxMoneyInput: number;
+    maxMissionPerProfile: number;
+    isEnableDailyReminder: boolean;
+    isEnableWeeklySummary: boolean;
+    isNotifyWhenKidSavedMoney: boolean;
+    createdAt: string;
+    updatedAt: string;
 }

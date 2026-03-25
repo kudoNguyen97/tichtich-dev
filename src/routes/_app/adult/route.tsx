@@ -43,7 +43,7 @@ function AdultAppLayout() {
 
     const handleAccountInfo = () => {
         setIsSheetOpen(false);
-        navigate({ to: '/adult/information' });
+        navigate({ to: '/adult/setting/information' });
     };
 
     return (

@@ -28,7 +28,7 @@ export function AdultAppBarLeftAvatarButton({
                     src={
                         selectedProfile?.gender === 'male'
                             ? '/images/avatar/adult-fullface.png'
-                            : '/images/avatar/girlkid-fullface.png'
+                            : '/images/avatar/kidgirl-fullface.png'
                     }
                     alt="Avatar"
                     className="size-full w-6 h-6 transition-transform duration-150 group-hover:scale-110"

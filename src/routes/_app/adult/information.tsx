@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { I18nProvider } from 'react-aria';
 import {
     Button,
     Calendar,
@@ -54,7 +55,7 @@ function isoToCalendarDate(iso: string | undefined): CalendarDate | null {
 function calendarDateToIsoDateString(d: CalendarDate): string {
     return dayjs(new Date(d.year, d.month - 1, d.day))
         .startOf('day')
-        .toISOString();
+        .format('YYYY-MM-DD');
 }
 
 const VN_MOBILE_PHONE = /^0(3|5|7|8|9)\d{8}$/;
@@ -102,8 +103,8 @@ function validateInformationForm(values: {
         errors.phone = 'Số điện thoại không hợp lệ (10 số, di động Việt Nam)';
     }
 
-    const birthErr = validateBirthDate(values.birthDate);
-    if (birthErr) errors.birth = birthErr;
+    // const birthErr = validateBirthDate(values.birthDate);
+    // if (birthErr) errors.birth = birthErr;
 
     return errors;
 }
@@ -141,6 +142,7 @@ function AdultInformationPage() {
     const [gender, setGender] = useState<'male' | 'female'>('male');
     const [birthDate, setBirthDate] = useState<CalendarDate | null>(null);
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+    const [isOpenSelectGender, setIsOpenSelectGender] = useState(false);
 
     const { mutateAsync: updateProfile, isPending: isSavingProfile } =
         useUpdateProfile();
@@ -269,14 +271,16 @@ function AdultInformationPage() {
 
     return (
         <div className="flex min-h-full flex-col px-4 pt-2">
-            <div className="flex flex-col gap-6">
-                <section className="rounded-2xl border border-tichtich-black/10 bg-white p-4 shadow-sm">
+            <div className="flex flex-col gap-6 mb-25">
+                <section className="rounded-2xl border border-tichtich-black bg-white p-4 shadow-sm">
                     <div className="mb-6 flex flex-col items-center gap-4">
                         <div className="relative">
                             <div
                                 className={cn(
                                     'flex size-28 items-center justify-center overflow-hidden rounded-2xl',
-                                    'bg-orange-400/90'
+                                    gender === 'male'
+                                        ? 'bg-tichtich-primary-100'
+                                        : 'bg-tichtich-primary-200'
                                 )}
                             >
                                 <img
@@ -295,42 +299,48 @@ function AdultInformationPage() {
                                         'pointer-events-none opacity-60'
                                 )}
                                 aria-label="Đổi ảnh đại diện"
-                                onClick={() => {}}
+                                onClick={() => {
+                                    setIsOpenSelectGender(true);
+                                }}
                             >
                                 <Pencil className="size-4 text-tichtich-black" />
                             </button>
                         </div>
 
-                        <div className="flex gap-4">
-                            {(['male', 'female'] as const).map((g) => (
-                                <button
-                                    key={g}
-                                    type="button"
-                                    disabled={fieldLocked}
-                                    onClick={() => setGender(g)}
-                                    className={cn(
-                                        'flex size-16 items-center justify-center rounded-full border-4 transition',
-                                        gender === g
-                                            ? 'border-amber-400 bg-amber-100'
-                                            : 'border-transparent bg-orange-200/40',
-                                        fieldLocked &&
-                                            'cursor-default opacity-90'
-                                    )}
-                                    aria-pressed={gender === g}
-                                    aria-label={g === 'male' ? 'Nam' : 'Nữ'}
-                                >
-                                    <img
-                                        src={
+                        {isOpenSelectGender && (
+                            <div className="flex gap-4">
+                                {(['male', 'female'] as const).map((g) => (
+                                    <button
+                                        key={g}
+                                        type="button"
+                                        disabled={fieldLocked}
+                                        onClick={() => setGender(g)}
+                                        className={cn(
+                                            'flex size-20 items-center justify-center rounded-full transition border-2 border-tichtich-primary-100',
                                             g === 'male'
-                                                ? '/images/face-icons/male-adult.png'
-                                                : '/images/face-icons/female-adult.png'
-                                        }
-                                        alt=""
-                                        className="size-12 object-contain"
-                                    />
-                                </button>
-                            ))}
-                        </div>
+                                                ? 'bg-tichtich-primary-100'
+                                                : 'bg-tichtich-primary-200',
+                                            // gender === g
+                                            //     ? 'border-tichtich-primary-300'
+                                            //     : 'border-transparent',
+                                            fieldLocked &&
+                                                'cursor-default opacity-90'
+                                        )}
+                                        aria-label={g === 'male' ? 'Nam' : 'Nữ'}
+                                    >
+                                        <img
+                                            src={
+                                                g === 'male'
+                                                    ? '/images/face-icons/male-adult.png'
+                                                    : '/images/face-icons/female-adult.png'
+                                            }
+                                            alt=""
+                                            className="size-12 object-contain"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-4">
@@ -351,146 +361,148 @@ function AdultInformationPage() {
                             isInvalid={!!fieldErrors.fullName}
                             errorMessage={fieldErrors.fullName}
                         />
-                        <DatePicker
-                            value={birthDate}
-                            onChange={(v) => {
-                                setBirthDate(v);
-                                if (fieldErrors.birth) {
-                                    setFieldErrors((e) => ({
-                                        ...e,
-                                        birth: undefined,
-                                    }));
-                                }
-                            }}
-                            minValue={minBirthDate}
-                            maxValue={maxBirthDate}
-                            isDisabled={fieldLocked}
-                            isRequired
-                            isInvalid={!!fieldErrors.birth}
-                            granularity="day"
-                            className="flex flex-col gap-1.5"
-                        >
-                            <Label className="text-base font-bold text-tichtich-black">
-                                Ngày sinh
-                                <span
-                                    className="ml-0.5 text-tichtich-red"
-                                    aria-hidden
-                                >
-                                    *
-                                </span>
-                            </Label>
-                            <Group
-                                className={cn(
-                                    'flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border bg-white transition-shadow outline-none',
-                                    fieldErrors.birth
-                                        ? 'border-tichtich-red focus-within:border-tichtich-red focus-within:ring-2 focus-within:ring-tichtich-red/15'
-                                        : 'border-tichtich-black focus-within:border-tichtich-primary-200 focus-within:ring-2 focus-within:ring-tichtich-primary-200/15',
-                                    fieldLocked &&
-                                        'cursor-not-allowed bg-gray-50'
-                                )}
+                        <I18nProvider locale="vi-VN">
+                            <DatePicker
+                                value={birthDate}
+                                onChange={(v) => {
+                                    setBirthDate(v);
+                                    if (fieldErrors.birth) {
+                                        setFieldErrors((e) => ({
+                                            ...e,
+                                            birth: undefined,
+                                        }));
+                                    }
+                                }}
+                                // minValue={minBirthDate}
+                                // maxValue={maxBirthDate}
+                                isDisabled={fieldLocked}
+                                isRequired
+                                isInvalid={!!fieldErrors.birth}
+                                granularity="day"
+                                className="flex flex-col gap-1.5"
                             >
-                                <DateInput
-                                    className={cn(
-                                        'flex min-w-0 flex-1 flex-wrap items-center gap-0.5 px-4 py-3.5 text-base',
-                                        fieldLocked &&
-                                            'cursor-not-allowed text-gray-400'
-                                    )}
-                                >
-                                    {(segment) => (
-                                        <DateSegment
-                                            segment={segment}
-                                            className={({
-                                                isPlaceholder,
-                                                type,
-                                            }) =>
-                                                cn(
-                                                    'rounded px-0.5 text-tichtich-black outline-none',
-                                                    type === 'literal' &&
-                                                        'text-gray-400',
-                                                    isPlaceholder &&
-                                                        'text-gray-400'
-                                                )
-                                            }
-                                        />
-                                    )}
-                                </DateInput>
-                                <Button
-                                    className={cn(
-                                        'flex shrink-0 items-center justify-center border-l border-tichtich-black/10 px-3.5 outline-none',
-                                        fieldErrors.birth
-                                            ? 'border-tichtich-red bg-white'
-                                            : 'bg-white',
-                                        fieldLocked && 'cursor-not-allowed'
-                                    )}
-                                >
-                                    <CalendarIcon
-                                        className="size-5 text-tichtich-primary-200"
+                                <Label className="text-base font-bold text-tichtich-black">
+                                    Ngày sinh
+                                    <span
+                                        className="ml-0.5 text-tichtich-red"
                                         aria-hidden
-                                    />
-                                </Button>
-                            </Group>
-                            {fieldErrors.birth ? (
-                                <FieldError className="text-xs text-tichtich-red">
-                                    {fieldErrors.birth}
-                                </FieldError>
-                            ) : null}
-                            <Popover
-                                className="rounded-2xl border border-gray-200 bg-white p-2 shadow-lg outline-none"
-                                offset={8}
-                            >
-                                <Dialog className="outline-none">
-                                    <Calendar className="min-w-[280px]">
-                                        <div className="mb-2 flex items-center justify-between gap-2 px-1">
-                                            <Button
-                                                slot="previous"
-                                                className="flex size-9 items-center justify-center rounded-lg text-tichtich-black outline-none hover:bg-gray-100"
-                                            >
-                                                <ChevronLeft
-                                                    className="size-5"
-                                                    aria-hidden
-                                                />
-                                            </Button>
-                                            <Heading className="flex-1 text-center text-sm font-semibold capitalize" />
-                                            <Button
-                                                slot="next"
-                                                className="flex size-9 items-center justify-center rounded-lg text-tichtich-black outline-none hover:bg-gray-100"
-                                            >
-                                                <ChevronRight
-                                                    className="size-5"
-                                                    aria-hidden
-                                                />
-                                            </Button>
-                                        </div>
-                                        <CalendarGrid weekdayStyle="short">
-                                            {(date) => (
-                                                <CalendarCell
-                                                    date={date}
-                                                    className={({
-                                                        isSelected,
-                                                        isFocused,
-                                                        isDisabled,
-                                                    }) =>
-                                                        cn(
-                                                            'flex size-9 items-center justify-center rounded-lg text-sm outline-none',
-                                                            isDisabled &&
-                                                                'cursor-default opacity-40',
-                                                            isSelected &&
-                                                                'bg-tichtich-primary-200 font-semibold text-white',
-                                                            !isSelected &&
-                                                                !isDisabled &&
-                                                                'hover:bg-gray-100',
-                                                            isFocused &&
+                                    >
+                                        *
+                                    </span>
+                                </Label>
+                                <Group
+                                    className={cn(
+                                        'flex w-full min-w-0 flex-row items-stretch overflow-hidden rounded-xl border bg-white transition-shadow outline-none',
+                                        fieldErrors.birth
+                                            ? 'border-tichtich-red focus-within:border-tichtich-red focus-within:ring-2 focus-within:ring-tichtich-red/15'
+                                            : 'border-tichtich-black focus-within:border-tichtich-primary-200 focus-within:ring-2 focus-within:ring-tichtich-primary-200/15',
+                                        fieldLocked &&
+                                            'cursor-not-allowed bg-gray-50'
+                                    )}
+                                >
+                                    <DateInput
+                                        className={cn(
+                                            'flex min-w-0 flex-1 flex-wrap items-center gap-0.5 px-4 py-3.5 text-base',
+                                            fieldLocked &&
+                                                'cursor-not-allowed text-gray-400'
+                                        )}
+                                    >
+                                        {(segment) => (
+                                            <DateSegment
+                                                segment={segment}
+                                                className={({
+                                                    isPlaceholder,
+                                                    type,
+                                                }) =>
+                                                    cn(
+                                                        'rounded px-0.5 text-tichtich-black outline-none',
+                                                        type === 'literal' &&
+                                                            'text-gray-400',
+                                                        isPlaceholder &&
+                                                            'text-gray-400'
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                    </DateInput>
+                                    <Button
+                                        className={cn(
+                                            'flex shrink-0 items-center justify-center border-l border-tichtich-black/10 px-3.5 outline-none',
+                                            fieldErrors.birth
+                                                ? 'border-tichtich-red bg-white'
+                                                : 'bg-white',
+                                            fieldLocked && 'cursor-not-allowed'
+                                        )}
+                                    >
+                                        <CalendarIcon
+                                            className="size-5 text-tichtich-primary-200"
+                                            aria-hidden
+                                        />
+                                    </Button>
+                                </Group>
+                                {fieldErrors.birth ? (
+                                    <FieldError className="text-xs text-tichtich-red">
+                                        {fieldErrors.birth}
+                                    </FieldError>
+                                ) : null}
+                                <Popover
+                                    className="rounded-2xl border border-gray-200 bg-white p-2 shadow-lg outline-none"
+                                    offset={8}
+                                >
+                                    <Dialog className="outline-none">
+                                        <Calendar className="min-w-[280px]">
+                                            <div className="mb-2 flex items-center justify-between gap-2 px-1">
+                                                <Button
+                                                    slot="previous"
+                                                    className="flex size-9 items-center justify-center rounded-lg text-tichtich-black outline-none hover:bg-gray-100"
+                                                >
+                                                    <ChevronLeft
+                                                        className="size-5"
+                                                        aria-hidden
+                                                    />
+                                                </Button>
+                                                <Heading className="flex-1 text-center text-sm font-semibold capitalize" />
+                                                <Button
+                                                    slot="next"
+                                                    className="flex size-9 items-center justify-center rounded-lg text-tichtich-black outline-none hover:bg-gray-100"
+                                                >
+                                                    <ChevronRight
+                                                        className="size-5"
+                                                        aria-hidden
+                                                    />
+                                                </Button>
+                                            </div>
+                                            <CalendarGrid weekdayStyle="short">
+                                                {(date) => (
+                                                    <CalendarCell
+                                                        date={date}
+                                                        className={({
+                                                            isSelected,
+                                                            isFocused,
+                                                            isDisabled,
+                                                        }) =>
+                                                            cn(
+                                                                'flex size-9 items-center  justify-center rounded-lg text-sm outline-none',
+                                                                isDisabled &&
+                                                                    'cursor-default opacity-40',
+                                                                isSelected &&
+                                                                    'bg-tichtich-primary-200 font-semibold text-white',
                                                                 !isSelected &&
-                                                                'ring-2 ring-tichtich-primary-200/15'
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        </CalendarGrid>
-                                    </Calendar>
-                                </Dialog>
-                            </Popover>
-                        </DatePicker>
+                                                                    !isDisabled &&
+                                                                    'hover:bg-gray-100',
+                                                                isFocused &&
+                                                                    !isSelected &&
+                                                                    'ring-2 ring-tichtich-primary-200/15'
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+                                            </CalendarGrid>
+                                        </Calendar>
+                                    </Dialog>
+                                </Popover>
+                            </DatePicker>
+                        </I18nProvider>
                         <TichTichInput
                             label="Số điện thoại"
                             isRequired
@@ -512,7 +524,7 @@ function AdultInformationPage() {
                     </div>
                 </section>
 
-                <section className="rounded-2xl border border-tichtich-black/10 bg-white p-4 shadow-sm">
+                <section className="rounded-2xl border border-tichtich-black bg-white p-4 shadow-sm">
                     <h2 className="mb-4 text-xs font-bold text-tichtich-black">
                         Thông tin đăng nhập
                     </h2>

@@ -19,13 +19,13 @@ export const PROFILE_TYPE_CONFIG: Record<ProfileType, ProfileTypeConfig> = {
         pigPosition: 'right',
     },
     kidBoy: {
-        backgroundColorClass: 'bg-profile-boy',
+        backgroundColorClass: 'bg-tichtich-blue',
         heightPx: 108,
         pigImageSrc: '/images/pig-boy-kid.png',
         pigPosition: 'left',
     },
     kidGirl: {
-        backgroundColorClass: 'bg-tichtich-blue',
+        backgroundColorClass: 'bg-tichtich-pink',
         heightPx: 108,
         pigImageSrc: '/images/pig-gird-kid.png',
         pigPosition: 'right',

@@ -7,14 +7,15 @@ import { ProfileAvatar } from '@/components/profile-pin/ProfileAvatar';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { cn } from '@/utils/cn';
+import { AppBar } from '@/components/layout/AppBar';
 
 export const Route = createFileRoute(
-    '/_app/adult/setting/change-pin-success'
+    '/_app/adult/setting/_layout/change-pin-success'
 )({
-    component: ChangePinSuccessPage,
+    component: RouteComponent,
 });
 
-function ChangePinSuccessPage() {
+function RouteComponent() {
     const navigate = useNavigate();
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
 
@@ -29,28 +30,21 @@ function ChangePinSuccessPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col bg-[url('/images/success-background.png')] bg-contain bg-center bg-no-repeat bg-tichtich-primary-300">
-            <header
-                className={cn(
-                    'sticky top-0 z-50 mx-auto grid min-h-14 w-full max-w-[720px]',
-                    'grid-cols-[40px_1fr_40px] items-center bg-tichtich-primary-300 px-4',
-                    'pt-[max(0px,env(safe-area-inset-top))]'
-                )}
-            >
-                <div className="flex items-center justify-start">
+        <div className="flex min-h-screen flex-col bg-[url('/images/adult/success-background.png')] bg-contain bg-center bg-no-repeat bg-tichtich-primary-300">
+            <AppBar
+                title="Đổi mã PIN"
+                subtitle=""
+                leftAction={
                     <Button
+                        onPress={() => navigate({ to: '/adult/settings' })}
                         className="cursor-pointer p-2 -ml-2"
-                        onPress={() =>
-                            navigate({ to: '/adult/settings', replace: true })
-                        }
-                        aria-label="Quay lại"
                     >
                         <ArrowLeft className="size-6 text-tichtich-black" />
                     </Button>
-                </div>
-                <div aria-hidden className="min-w-0" />
-                <div aria-hidden className="w-10" />
-            </header>
+                }
+                rightAction={null}
+                className="border-b border-tichtich-primary-200 shadow-none bg-tichtich-primary-300"
+            />
 
             <div className="flex flex-1 flex-col items-center justify-start px-5 pb-8 pt-6">
                 <ProfileAvatar profile={selectedProfile} size="sm" />

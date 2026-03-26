@@ -40,10 +40,6 @@ const DEFAULT_TITLE = 'TichTich';
 /** Các route con tự gọi `setAppBar` — không reset app bar theo default khi đổi pathname trong nhánh này (tránh ghi đè sau effect của trang con / sau reload). */
 const PATH_CHILD_MANAGES_APP_BAR = /^\/adult\/setting\//;
 
-/** Màn tự vẽ header trong page — không render `<AppBar />` toàn cục. */
-const PATH_HIDE_GLOBAL_APP_BAR =
-    /^\/adult\/setting\/change-pin(?:-success)?\/?$/;
-
 export function AppLayout({
     defaultTitle = DEFAULT_TITLE,
     defaultSubtitle,
@@ -53,7 +49,6 @@ export function AppLayout({
     appLayoutClassName,
 }: AppLayoutProps) {
     const pathname = useRouterState({ select: (s) => s.location.pathname });
-    const hideGlobalAppBar = PATH_HIDE_GLOBAL_APP_BAR.test(pathname);
     const hideBottomNav =
         pathname === '/adult/information' ||
         pathname.startsWith('/adult/information/') ||
@@ -65,7 +60,9 @@ export function AppLayout({
         useState<React.ReactNode>(defaultLeftAction);
     const [rightAction, setRightAction] =
         useState<React.ReactNode>(defaultRightAction);
-    const [appBarClassName, setAppBarClassName] = useState<string | undefined>();
+    const [appBarClassName, setAppBarClassName] = useState<
+        string | undefined
+    >();
 
     useEffect(() => {
         if (PATH_CHILD_MANAGES_APP_BAR.test(pathname)) {
@@ -84,19 +81,9 @@ export function AppLayout({
         defaultRightAction,
     ]);
 
-    const setAppBar = useCallback((config: AppBarConfig) => {
-        if (config.title !== undefined) setTitle(config.title);
-        if (config.subtitle !== undefined) setSubtitle(config.subtitle);
-        if (config.leftAction !== undefined) setLeftAction(config.leftAction);
-        if (config.rightAction !== undefined)
-            setRightAction(config.rightAction);
-        if (config.appBarClassName !== undefined)
-            setAppBarClassName(config.appBarClassName);
-    }, []);
-
     return (
-        <AppLayoutContext.Provider value={{ setAppBar }}>
-            {!hideGlobalAppBar && (
+        <>
+            {
                 <AppBar
                     title={title}
                     subtitle={subtitle || undefined}
@@ -104,7 +91,7 @@ export function AppLayout({
                     rightAction={rightAction}
                     className={cn(className, appBarClassName)}
                 />
-            )}
+            }
             <div
                 className={cn(
                     'mobile-container bg-white',
@@ -118,14 +105,14 @@ export function AppLayout({
                 </main>
                 {!hideBottomNav && <BottomNav />}
             </div>
-        </AppLayoutContext.Provider>
+        </>
     );
 }
 
-export function useAppLayoutContext(): AppLayoutOutletContext {
-    const ctx = useContext(AppLayoutContext);
-    if (!ctx) {
-        throw new Error('useAppLayoutContext must be used within AppLayout');
-    }
-    return ctx;
-}
+// export function useAppLayoutContext(): AppLayoutOutletContext {
+//     const ctx = useContext(AppLayoutContext);
+//     if (!ctx) {
+//         throw new Error('useAppLayoutContext must be used within AppLayout');
+//     }
+//     return ctx;
+// }

@@ -4,20 +4,23 @@ import { Button } from 'react-aria-components';
 import { ArrowLeft } from 'lucide-react';
 
 import {
-    ProfileAvatar,
-    PinInputDisplay,
     NumericKeypad,
+    PinInputDisplay,
+    ProfileAvatar,
 } from '@/components/profile-pin';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
+import { AppBar } from '@/components/layout/AppBar';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
 import { showError } from '@/lib/toast';
 import { cn } from '@/utils/cn';
 
-export const Route = createFileRoute('/_app/adult/setting/change-pin')({
-    component: ChangePinPage,
-});
+export const Route = createFileRoute('/_app/children/setting/_layout/change-pin')(
+    {
+        component: ChangePinPage,
+    }
+);
 
 const PIN_LENGTH = 4;
 
@@ -35,8 +38,8 @@ function ChangePinPage() {
         useUpdateProfilePinCode();
 
     useEffect(() => {
-        if (!selectedProfile || selectedProfile.profileType !== 'adult') {
-            navigate({ to: '/profiles' });
+        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+            navigate({ to: '/profiles', replace: true });
         }
     }, [selectedProfile, navigate]);
 
@@ -68,7 +71,7 @@ function ChangePinPage() {
                 id: selectedProfile.id,
                 pinCode: firstPin,
             });
-            navigate({ to: '/adult/setting/change-pin-success' });
+            navigate({ to: '/children/setting/change-pin-success' });
         } catch (e) {
             showError(e);
         }
@@ -83,7 +86,7 @@ function ChangePinPage() {
         setPin((prev) => prev.slice(0, -1));
     };
 
-    if (!selectedProfile || selectedProfile.profileType !== 'adult') {
+    if (!selectedProfile || selectedProfile.profileType !== 'kid') {
         return null;
     }
 
@@ -96,27 +99,20 @@ function ChangePinPage() {
                     'bg-tichtich-primary-300 pb-32'
                 )}
             >
-                <header
-                    className={cn(
-                        'sticky top-0 z-50 mx-auto grid min-h-14 w-full max-w-[720px]',
-                        'grid-cols-[40px_1fr_40px] items-center bg-tichtich-primary-300 px-4',
-                        'pt-[max(0px,env(safe-area-inset-top))]'
-                    )}
-                >
-                    <div className="flex items-center justify-start">
+                <AppBar
+                    title="Đổi mã PIN"
+                    subtitle=""
+                    leftAction={
                         <Button
-                            className="cursor-pointer p-2 -ml-2"
-                            onPress={() => navigate({ to: '/adult/settings' })}
-                            aria-label="Quay lại"
+                            onPress={() => navigate({ to: '/children/settings' })}
+                            className="-ml-2 cursor-pointer p-2"
                         >
                             <ArrowLeft className="size-6 text-tichtich-black" />
                         </Button>
-                    </div>
-                    <h1 className="truncate text-center font-display text-lg font-bold leading-tight text-tichtich-black">
-                        Đổi mã PIN
-                    </h1>
-                    <div aria-hidden className="w-10" />
-                </header>
+                    }
+                    rightAction={null}
+                    className="border-b border-tichtich-primary-200 bg-tichtich-primary-300 shadow-none"
+                />
 
                 <div className="flex flex-1 flex-col items-center px-6 pt-4">
                     <ProfileAvatar
@@ -145,7 +141,7 @@ function ChangePinPage() {
                     />
                 </div>
 
-                <div className="fixed bottom-0 left-0 right-0 z-40 max-w-[720px] mx-auto border-t border-gray-200/80 bg-tichtich-primary-300 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <div className="fixed bottom-0 left-0 right-0 z-40 mx-auto max-w-[720px] border-t border-gray-200/80 bg-tichtich-primary-300 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
                     {step === 1 ? (
                         <TichTichButton
                             variant="outline"
@@ -161,9 +157,7 @@ function ChangePinPage() {
                             variant="primary"
                             size="lg"
                             fullWidth
-                            isDisabled={
-                                pin.length < PIN_LENGTH || isUpdatingPin
-                            }
+                            isDisabled={pin.length < PIN_LENGTH || isUpdatingPin}
                             isLoading={isUpdatingPin}
                             className={cn(
                                 pin.length < PIN_LENGTH &&

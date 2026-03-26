@@ -5,7 +5,7 @@ import { createLazyFileRoute } from '@tanstack/react-router';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { cn } from '@/utils/cn';
 
-export const Route = createLazyFileRoute('/_app/adult/')({
+export const Route = createLazyFileRoute('/_app/adult/_layout/')({
     component: HomeAdultPage,
 });
 

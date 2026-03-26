@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 
@@ -11,8 +12,10 @@ import {
 } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { cn } from '@/utils/cn';
+import { TichTichButton } from '@/components/common/TichTichButton';
+import { TichTichConfirmModal } from '@/components/common/TichTichModal';
 
-export const Route = createLazyFileRoute('/_app/adult/settings')({
+export const Route = createLazyFileRoute('/_app/adult/_layout/settings')({
     component: AdultSettingsPage,
 });
 
@@ -40,6 +43,30 @@ function AdultSettingsPage() {
     const showSettingsLoading =
         isAuthenticated &&
         ((!settings && isSettingsQueryPending) || isUpdateSettingsPending);
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+
+    const handleChangeAccount = () => {
+        useAuthStore.setState({
+            selectedProfile: null,
+            managedKidProfileId: null,
+        });
+        navigate({ to: '/profiles' });
+    };
+
+    const openLogoutDialog = () => setIsLogoutDialogOpen(true);
+    const closeLogoutDialog = () => setIsLogoutDialogOpen(false);
+
+    const confirmLogout = () => {
+        useAuthStore.setState({
+            isAuthenticated: false,
+            selectedProfile: null,
+            managedKidProfileId: null,
+            user: null,
+            accessToken: null,
+            profiles: [],
+        });
+        navigate({ to: '/' });
+    };
 
     return (
         <>
@@ -54,7 +81,7 @@ function AdultSettingsPage() {
                     />
                     <TichTichItemSetting
                         label="Chuyển đổi tài khoản"
-                        onClick={() => {}}
+                        onClick={handleChangeAccount}
                     />
                     <TichTichItemSetting
                         label="Đổi mã PIN phụ huynh"
@@ -88,8 +115,8 @@ function AdultSettingsPage() {
                                             className={cn(
                                                 'flex h-22 w-22 p-3 items-center justify-center rounded-lg overflow-hidden',
                                                 isFemale
-                                                    ? 'bg-[#F9CCD7]'
-                                                    : 'bg-[#C0E0F0]',
+                                                    ? 'bg-tichtich-pink'
+                                                    : 'bg-tichtich-blue',
                                                 isActive
                                                     ? isFemale
                                                         ? 'border-2 border-[#f07997]'
@@ -123,7 +150,11 @@ function AdultSettingsPage() {
                             {kidProfiles.length < maxKids && (
                                 <button
                                     type="button"
-                                    onClick={() => {}}
+                                    onClick={() => {
+                                        navigate({
+                                            to: '/adult/setting/create-profile',
+                                        });
+                                    }}
                                     className={cn(
                                         'flex h-22 w-22 shrink-0 items-center justify-center rounded-lg',
                                         'bg-orange-500 hover:bg-orange-600 transition-colors',
@@ -226,10 +257,32 @@ function AdultSettingsPage() {
                                     })
                                 }
                             />
+                            <TichTichButton
+                                variant="outline"
+                                onPress={openLogoutDialog}
+                            >
+                                Đăng xuất
+                            </TichTichButton>
+
+                            <TichTichButton
+                                variant="danger"
+                                // onClick={handleDeleteAccount}
+                            >
+                                Xóa tài khoản
+                            </TichTichButton>
                         </section>
                     </>
                 )}
             </div>
+            <TichTichConfirmModal
+                isOpen={isLogoutDialogOpen}
+                onClose={closeLogoutDialog}
+                onConfirm={confirmLogout}
+                title="Đăng xuất"
+                description="Bạn có chắc chắn muốn đăng xuất?"
+                cancelLabel="Đóng"
+                confirmLabel="Đồng ý"
+            />
         </>
     );
 }

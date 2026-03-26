@@ -32,8 +32,6 @@ import { TichTichInput } from '@/components/common/TichTichInput';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { useAppLayoutContext } from '@/components/layout/AppLayout';
-import { useAdultAppLayoutContext } from '@/routes/_app/adult/-AdultAppLayoutContext';
 // import {
 //     AdultAppBarLeftAvatarButton,
 //     AdultAppBarRightBellButton,
@@ -47,10 +45,13 @@ import {
 } from '@/features/profiles/hooks/useProfiles';
 import { showError } from '@/lib/toast';
 import dayjs from 'dayjs';
+import { AppBar } from '@/components/layout/AppBar';
 
-export const Route = createFileRoute('/_app/adult/setting/information')({
-    component: AdultInformationPage,
-});
+export const Route = createFileRoute('/_app/adult/setting/_layout/information')(
+    {
+        component: AdultInformationPage,
+    }
+);
 
 function isoToCalendarDate(iso: string | undefined): CalendarDate | null {
     if (!iso) return null;
@@ -137,11 +138,6 @@ type AdultInformationFormSubmitted = z.output<typeof adultInformationSchema>;
 
 function AdultInformationPage() {
     const navigate = useNavigate();
-    const { setAppBar } = useAppLayoutContext();
-    const { openAccountSheet } = useAdultAppLayoutContext();
-    const openAccountSheetRef = useRef(openAccountSheet);
-    openAccountSheetRef.current = openAccountSheet;
-
     const user = useAuthStore((s) => s.user);
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
 
@@ -226,25 +222,6 @@ function AdultInformationPage() {
         }
     }, [selectedProfile, navigate]);
 
-    useEffect(() => {
-        setAppBar({
-            title: 'Thông tin tài khoản',
-            subtitle: '',
-            leftAction: (
-                <Button
-                    className="cursor-pointer p-2 -ml-2"
-                    onPress={() => navigate({ to: '/adult/settings' })}
-                    aria-label="Quay lại"
-                >
-                    <ArrowLeft className="size-6 text-tichtich-black" />
-                </Button>
-            ),
-            rightAction: null,
-            appBarClassName:
-                'border-b-2 border-tichtich-primary-200 shadow-none',
-        });
-    }, [navigate, setAppBar]);
-
     if (!user || !adultProfile || !initialFormData) {
         return null;
     }
@@ -289,7 +266,17 @@ function AdultInformationPage() {
     return (
         <>
             <LoadingTichTich isLoading={isProfileDetailPending} />
-            <div className="flex min-h-full flex-col px-4 pt-2">
+            <AppBar
+                title="Thông tin tài khoản"
+                subtitle=""
+                leftAction={
+                    <Button onClick={() => navigate({ to: '/adult/settings' })}>
+                        <ArrowLeft className="size-6 text-tichtich-black" />
+                    </Button>
+                }
+                rightAction={null}
+            />
+            <div className="flex min-h-full flex-col px-4 pt-4">
                 <div className="flex flex-col gap-6">
                     <section className="rounded-2xl border border-tichtich-black bg-white p-4 shadow-sm">
                         <div className="mb-6 flex flex-col items-center gap-4">

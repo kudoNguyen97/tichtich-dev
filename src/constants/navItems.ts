@@ -46,19 +46,19 @@ export const ADULT_NAV_ITEMS: NavItem[] = [
         iconSrc: '/icons/navbar/kid-home.svg',
     },
     {
-        labelKey: 'nav.treasury',
-        to: '/adult/treasury',
-        iconSrc: '/icons/navbar/kid-treasure.svg',
+        labelKey: 'nav.award',
+        to: '/adult/reward',
+        iconSrc: '/icons/navbar/adult-award.svg',
     },
     {
-        labelKey: 'nav.character',
-        to: '/adult/character',
-        iconSrc: '/icons/navbar/kid-figure.svg',
+        labelKey: 'nav.target',
+        to: '/adult/target',
+        iconSrc: '/icons/navbar/adult-target.svg',
     },
     {
         labelKey: 'nav.journey',
         to: '/adult/journey',
-        iconSrc: '/icons/navbar/kid-jouney.svg',
+        iconSrc: '/icons/navbar/adult-journey.svg',
     },
     {
         labelKey: 'nav.settings',

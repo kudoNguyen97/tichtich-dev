@@ -15,14 +15,16 @@ import { auth } from '@/firebase';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
-import { useAppLayoutContext } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { changePasswordSchema } from '@/features/auth/types/auth.schema';
 import type { ChangePasswordFormData } from '@/features/auth/types/auth.schema';
 import { showError } from '@/lib/toast';
 import { cn } from '@/utils/cn';
+import { AppBar } from '@/components/layout/AppBar';
 
-export const Route = createFileRoute('/_app/adult/setting/change-password')({
+export const Route = createFileRoute(
+    '/_app/adult/setting/_layout/change-password'
+)({
     component: ChangePasswordPage,
 });
 
@@ -45,7 +47,6 @@ function mapFirebaseChangePasswordMessage(error: unknown): string {
 
 function ChangePasswordPage() {
     const navigate = useNavigate();
-    const { setAppBar } = useAppLayoutContext();
     const user = useAuthStore((s) => s.user);
 
     const [showCurrent, setShowCurrent] = useState(false);
@@ -65,25 +66,6 @@ function ChangePasswordPage() {
             confirmNewPassword: '',
         },
     });
-
-    useEffect(() => {
-        setAppBar({
-            title: 'Bảo mật & đăng nhập',
-            subtitle: '',
-            leftAction: (
-                <Button
-                    className="cursor-pointer p-2 -ml-2"
-                    onPress={() => navigate({ to: '/adult/settings' })}
-                    aria-label="Quay lại"
-                >
-                    <ArrowLeft className="size-6 text-tichtich-black" />
-                </Button>
-            ),
-            rightAction: null,
-            appBarClassName:
-                'border-b-2 border-tichtich-primary-200 shadow-none',
-        });
-    }, [navigate, setAppBar]);
 
     const onSubmit = async (data: ChangePasswordFormData) => {
         const fbUser = auth.currentUser;
@@ -133,6 +115,19 @@ function ChangePasswordPage() {
     return (
         <>
             <LoadingTichTich isLoading={isSubmitting} />
+            <AppBar
+                title="Đổi mật khẩu"
+                subtitle=""
+                leftAction={
+                    <Button
+                        onPress={() => navigate({ to: '/adult/settings' })}
+                        className="cursor-pointer p-2 -ml-2"
+                    >
+                        <ArrowLeft className="size-6 text-tichtich-black" />
+                    </Button>
+                }
+                rightAction={null}
+            />
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex min-h-full flex-col px-4 pb-28 pt-4"

@@ -4,7 +4,9 @@
         "treasury": "Kho báu",
         "character": "Nhân vật",
         "journey": "Hành trình",
-        "settings": "Cài đặt"
+        "settings": "Cài đặt",
+        "target": "Mục tiêu",
+        "award": "Phần thưởng"
     },
     "common": {
         "home": "Trang chủ",

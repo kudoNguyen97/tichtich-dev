@@ -18,38 +18,49 @@ import { Route as ProfilePinRouteImport } from './routes/profile-pin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
-import { Route as AppChildrenRouteRouteImport } from './routes/_app/children/route'
-import { Route as AppAdultRouteRouteImport } from './routes/_app/adult/route'
-import { Route as AppAdultSettingInformationRouteImport } from './routes/_app/adult/setting/information'
-import { Route as AppAdultSettingChangePinSuccessRouteImport } from './routes/_app/adult/setting/change-pin-success'
-import { Route as AppAdultSettingChangePinRouteImport } from './routes/_app/adult/setting/change-pin'
-import { Route as AppAdultSettingChangePasswordSuccessRouteImport } from './routes/_app/adult/setting/change-password-success'
-import { Route as AppAdultSettingChangePasswordRouteImport } from './routes/_app/adult/setting/change-password'
+import { Route as AppChildrenLayoutRouteImport } from './routes/_app/children/_layout'
+import { Route as AppAdultLayoutRouteImport } from './routes/_app/adult/_layout'
+import { Route as AppChildrenSettingLayoutRouteImport } from './routes/_app/children/setting/_layout'
+import { Route as AppAdultSettingLayoutRouteImport } from './routes/_app/adult/setting/_layout'
+import { Route as AppChildrenSettingLayoutChangePinSuccessRouteImport } from './routes/_app/children/setting/_layout/change-pin-success'
+import { Route as AppChildrenSettingLayoutChangePinRouteImport } from './routes/_app/children/setting/_layout/change-pin'
+import { Route as AppAdultSettingLayoutInformationRouteImport } from './routes/_app/adult/setting/_layout/information'
+import { Route as AppAdultSettingLayoutCreateProfileRouteImport } from './routes/_app/adult/setting/_layout/create-profile'
+import { Route as AppAdultSettingLayoutChangePinSuccessRouteImport } from './routes/_app/adult/setting/_layout/change-pin-success'
+import { Route as AppAdultSettingLayoutChangePinRouteImport } from './routes/_app/adult/setting/_layout/change-pin'
+import { Route as AppAdultSettingLayoutChangePasswordSuccessRouteImport } from './routes/_app/adult/setting/_layout/change-password-success'
+import { Route as AppAdultSettingLayoutChangePasswordRouteImport } from './routes/_app/adult/setting/_layout/change-password'
 
 const CreateSuccessLazyRouteImport = createFileRoute('/create-success')()
-const AppChildrenIndexLazyRouteImport = createFileRoute('/_app/children/')()
-const AppAdultIndexLazyRouteImport = createFileRoute('/_app/adult/')()
-const AppChildrenTreasuryLazyRouteImport = createFileRoute(
-  '/_app/children/treasury',
+const AppChildrenLayoutIndexLazyRouteImport = createFileRoute(
+  '/_app/children/_layout/',
 )()
-const AppChildrenSettingsLazyRouteImport = createFileRoute(
-  '/_app/children/settings',
+const AppAdultLayoutIndexLazyRouteImport = createFileRoute(
+  '/_app/adult/_layout/',
 )()
-const AppChildrenJourneyLazyRouteImport = createFileRoute(
-  '/_app/children/journey',
+const AppChildrenLayoutTreasuryLazyRouteImport = createFileRoute(
+  '/_app/children/_layout/treasury',
 )()
-const AppChildrenCharacterLazyRouteImport = createFileRoute(
-  '/_app/children/character',
+const AppChildrenLayoutSettingsLazyRouteImport = createFileRoute(
+  '/_app/children/_layout/settings',
 )()
-const AppAdultTreasuryLazyRouteImport = createFileRoute(
-  '/_app/adult/treasury',
+const AppChildrenLayoutJourneyLazyRouteImport = createFileRoute(
+  '/_app/children/_layout/journey',
 )()
-const AppAdultSettingsLazyRouteImport = createFileRoute(
-  '/_app/adult/settings',
+const AppChildrenLayoutCharacterLazyRouteImport = createFileRoute(
+  '/_app/children/_layout/character',
 )()
-const AppAdultJourneyLazyRouteImport = createFileRoute('/_app/adult/journey')()
-const AppAdultCharacterLazyRouteImport = createFileRoute(
-  '/_app/adult/character',
+const AppAdultLayoutTargetLazyRouteImport = createFileRoute(
+  '/_app/adult/_layout/target',
+)()
+const AppAdultLayoutSettingsLazyRouteImport = createFileRoute(
+  '/_app/adult/_layout/settings',
+)()
+const AppAdultLayoutRewardLazyRouteImport = createFileRoute(
+  '/_app/adult/_layout/reward',
+)()
+const AppAdultLayoutJourneyLazyRouteImport = createFileRoute(
+  '/_app/adult/_layout/journey',
 )()
 
 const CreateSuccessLazyRoute = CreateSuccessLazyRouteImport.update({
@@ -93,116 +104,155 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppChildrenRouteRoute = AppChildrenRouteRouteImport.update({
-  id: '/children',
+const AppChildrenLayoutRoute = AppChildrenLayoutRouteImport.update({
+  id: '/children/_layout',
   path: '/children',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppAdultRouteRoute = AppAdultRouteRouteImport.update({
-  id: '/adult',
+const AppAdultLayoutRoute = AppAdultLayoutRouteImport.update({
+  id: '/adult/_layout',
   path: '/adult',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppChildrenIndexLazyRoute = AppChildrenIndexLazyRouteImport.update({
+const AppChildrenLayoutIndexLazyRoute =
+  AppChildrenLayoutIndexLazyRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppChildrenLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/children/_layout/index.lazy').then((d) => d.Route),
+  )
+const AppAdultLayoutIndexLazyRoute = AppAdultLayoutIndexLazyRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AppChildrenRouteRoute,
+  getParentRoute: () => AppAdultLayoutRoute,
 } as any).lazy(() =>
-  import('./routes/_app/children/index.lazy').then((d) => d.Route),
+  import('./routes/_app/adult/_layout/index.lazy').then((d) => d.Route),
 )
-const AppAdultIndexLazyRoute = AppAdultIndexLazyRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/adult/index.lazy').then((d) => d.Route),
-)
-const AppChildrenTreasuryLazyRoute = AppChildrenTreasuryLazyRouteImport.update({
-  id: '/treasury',
-  path: '/treasury',
-  getParentRoute: () => AppChildrenRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/children/treasury.lazy').then((d) => d.Route),
-)
-const AppChildrenSettingsLazyRoute = AppChildrenSettingsLazyRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppChildrenRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/children/settings.lazy').then((d) => d.Route),
-)
-const AppChildrenJourneyLazyRoute = AppChildrenJourneyLazyRouteImport.update({
-  id: '/journey',
-  path: '/journey',
-  getParentRoute: () => AppChildrenRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/children/journey.lazy').then((d) => d.Route),
-)
-const AppChildrenCharacterLazyRoute =
-  AppChildrenCharacterLazyRouteImport.update({
+const AppChildrenLayoutTreasuryLazyRoute =
+  AppChildrenLayoutTreasuryLazyRouteImport.update({
+    id: '/treasury',
+    path: '/treasury',
+    getParentRoute: () => AppChildrenLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/children/_layout/treasury.lazy').then((d) => d.Route),
+  )
+const AppChildrenLayoutSettingsLazyRoute =
+  AppChildrenLayoutSettingsLazyRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppChildrenLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/children/_layout/settings.lazy').then((d) => d.Route),
+  )
+const AppChildrenLayoutJourneyLazyRoute =
+  AppChildrenLayoutJourneyLazyRouteImport.update({
+    id: '/journey',
+    path: '/journey',
+    getParentRoute: () => AppChildrenLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/children/_layout/journey.lazy').then((d) => d.Route),
+  )
+const AppChildrenLayoutCharacterLazyRoute =
+  AppChildrenLayoutCharacterLazyRouteImport.update({
     id: '/character',
     path: '/character',
-    getParentRoute: () => AppChildrenRouteRoute,
+    getParentRoute: () => AppChildrenLayoutRoute,
   } as any).lazy(() =>
-    import('./routes/_app/children/character.lazy').then((d) => d.Route),
+    import('./routes/_app/children/_layout/character.lazy').then(
+      (d) => d.Route,
+    ),
   )
-const AppAdultTreasuryLazyRoute = AppAdultTreasuryLazyRouteImport.update({
-  id: '/treasury',
-  path: '/treasury',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/adult/treasury.lazy').then((d) => d.Route),
-)
-const AppAdultSettingsLazyRoute = AppAdultSettingsLazyRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/adult/settings.lazy').then((d) => d.Route),
-)
-const AppAdultJourneyLazyRoute = AppAdultJourneyLazyRouteImport.update({
-  id: '/journey',
-  path: '/journey',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/adult/journey.lazy').then((d) => d.Route),
-)
-const AppAdultCharacterLazyRoute = AppAdultCharacterLazyRouteImport.update({
-  id: '/character',
-  path: '/character',
-  getParentRoute: () => AppAdultRouteRoute,
-} as any).lazy(() =>
-  import('./routes/_app/adult/character.lazy').then((d) => d.Route),
-)
-const AppAdultSettingInformationRoute =
-  AppAdultSettingInformationRouteImport.update({
-    id: '/setting/information',
-    path: '/setting/information',
-    getParentRoute: () => AppAdultRouteRoute,
+const AppAdultLayoutTargetLazyRoute =
+  AppAdultLayoutTargetLazyRouteImport.update({
+    id: '/target',
+    path: '/target',
+    getParentRoute: () => AppAdultLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/_layout/target.lazy').then((d) => d.Route),
+  )
+const AppAdultLayoutSettingsLazyRoute =
+  AppAdultLayoutSettingsLazyRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppAdultLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/_layout/settings.lazy').then((d) => d.Route),
+  )
+const AppAdultLayoutRewardLazyRoute =
+  AppAdultLayoutRewardLazyRouteImport.update({
+    id: '/reward',
+    path: '/reward',
+    getParentRoute: () => AppAdultLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/_layout/reward.lazy').then((d) => d.Route),
+  )
+const AppAdultLayoutJourneyLazyRoute =
+  AppAdultLayoutJourneyLazyRouteImport.update({
+    id: '/journey',
+    path: '/journey',
+    getParentRoute: () => AppAdultLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/_layout/journey.lazy').then((d) => d.Route),
+  )
+const AppChildrenSettingLayoutRoute =
+  AppChildrenSettingLayoutRouteImport.update({
+    id: '/children/setting/_layout',
+    path: '/children/setting',
+    getParentRoute: () => AppRouteRoute,
   } as any)
-const AppAdultSettingChangePinSuccessRoute =
-  AppAdultSettingChangePinSuccessRouteImport.update({
-    id: '/setting/change-pin-success',
-    path: '/setting/change-pin-success',
-    getParentRoute: () => AppAdultRouteRoute,
+const AppAdultSettingLayoutRoute = AppAdultSettingLayoutRouteImport.update({
+  id: '/adult/setting/_layout',
+  path: '/adult/setting',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppChildrenSettingLayoutChangePinSuccessRoute =
+  AppChildrenSettingLayoutChangePinSuccessRouteImport.update({
+    id: '/change-pin-success',
+    path: '/change-pin-success',
+    getParentRoute: () => AppChildrenSettingLayoutRoute,
   } as any)
-const AppAdultSettingChangePinRoute =
-  AppAdultSettingChangePinRouteImport.update({
-    id: '/setting/change-pin',
-    path: '/setting/change-pin',
-    getParentRoute: () => AppAdultRouteRoute,
+const AppChildrenSettingLayoutChangePinRoute =
+  AppChildrenSettingLayoutChangePinRouteImport.update({
+    id: '/change-pin',
+    path: '/change-pin',
+    getParentRoute: () => AppChildrenSettingLayoutRoute,
   } as any)
-const AppAdultSettingChangePasswordSuccessRoute =
-  AppAdultSettingChangePasswordSuccessRouteImport.update({
-    id: '/setting/change-password-success',
-    path: '/setting/change-password-success',
-    getParentRoute: () => AppAdultRouteRoute,
+const AppAdultSettingLayoutInformationRoute =
+  AppAdultSettingLayoutInformationRouteImport.update({
+    id: '/information',
+    path: '/information',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
   } as any)
-const AppAdultSettingChangePasswordRoute =
-  AppAdultSettingChangePasswordRouteImport.update({
-    id: '/setting/change-password',
-    path: '/setting/change-password',
-    getParentRoute: () => AppAdultRouteRoute,
+const AppAdultSettingLayoutCreateProfileRoute =
+  AppAdultSettingLayoutCreateProfileRouteImport.update({
+    id: '/create-profile',
+    path: '/create-profile',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
+  } as any)
+const AppAdultSettingLayoutChangePinSuccessRoute =
+  AppAdultSettingLayoutChangePinSuccessRouteImport.update({
+    id: '/change-pin-success',
+    path: '/change-pin-success',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
+  } as any)
+const AppAdultSettingLayoutChangePinRoute =
+  AppAdultSettingLayoutChangePinRouteImport.update({
+    id: '/change-pin',
+    path: '/change-pin',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
+  } as any)
+const AppAdultSettingLayoutChangePasswordSuccessRoute =
+  AppAdultSettingLayoutChangePasswordSuccessRouteImport.update({
+    id: '/change-password-success',
+    path: '/change-password-success',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
+  } as any)
+const AppAdultSettingLayoutChangePasswordRoute =
+  AppAdultSettingLayoutChangePasswordRouteImport.update({
+    id: '/change-password',
+    path: '/change-password',
+    getParentRoute: () => AppAdultSettingLayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -213,23 +263,28 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
-  '/adult': typeof AppAdultRouteRouteWithChildren
-  '/children': typeof AppChildrenRouteRouteWithChildren
-  '/adult/character': typeof AppAdultCharacterLazyRoute
-  '/adult/journey': typeof AppAdultJourneyLazyRoute
-  '/adult/settings': typeof AppAdultSettingsLazyRoute
-  '/adult/treasury': typeof AppAdultTreasuryLazyRoute
-  '/children/character': typeof AppChildrenCharacterLazyRoute
-  '/children/journey': typeof AppChildrenJourneyLazyRoute
-  '/children/settings': typeof AppChildrenSettingsLazyRoute
-  '/children/treasury': typeof AppChildrenTreasuryLazyRoute
-  '/adult/': typeof AppAdultIndexLazyRoute
-  '/children/': typeof AppChildrenIndexLazyRoute
-  '/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
-  '/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
-  '/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
-  '/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
-  '/adult/setting/information': typeof AppAdultSettingInformationRoute
+  '/adult': typeof AppAdultLayoutRouteWithChildren
+  '/children': typeof AppChildrenLayoutRouteWithChildren
+  '/adult/setting': typeof AppAdultSettingLayoutRouteWithChildren
+  '/children/setting': typeof AppChildrenSettingLayoutRouteWithChildren
+  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
+  '/adult/reward': typeof AppAdultLayoutRewardLazyRoute
+  '/adult/settings': typeof AppAdultLayoutSettingsLazyRoute
+  '/adult/target': typeof AppAdultLayoutTargetLazyRoute
+  '/children/character': typeof AppChildrenLayoutCharacterLazyRoute
+  '/children/journey': typeof AppChildrenLayoutJourneyLazyRoute
+  '/children/settings': typeof AppChildrenLayoutSettingsLazyRoute
+  '/children/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
+  '/adult/': typeof AppAdultLayoutIndexLazyRoute
+  '/children/': typeof AppChildrenLayoutIndexLazyRoute
+  '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
+  '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
+  '/adult/setting/change-pin': typeof AppAdultSettingLayoutChangePinRoute
+  '/adult/setting/change-pin-success': typeof AppAdultSettingLayoutChangePinSuccessRoute
+  '/adult/setting/create-profile': typeof AppAdultSettingLayoutCreateProfileRoute
+  '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
+  '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
+  '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
@@ -239,21 +294,26 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
-  '/adult/character': typeof AppAdultCharacterLazyRoute
-  '/adult/journey': typeof AppAdultJourneyLazyRoute
-  '/adult/settings': typeof AppAdultSettingsLazyRoute
-  '/adult/treasury': typeof AppAdultTreasuryLazyRoute
-  '/children/character': typeof AppChildrenCharacterLazyRoute
-  '/children/journey': typeof AppChildrenJourneyLazyRoute
-  '/children/settings': typeof AppChildrenSettingsLazyRoute
-  '/children/treasury': typeof AppChildrenTreasuryLazyRoute
-  '/adult': typeof AppAdultIndexLazyRoute
-  '/children': typeof AppChildrenIndexLazyRoute
-  '/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
-  '/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
-  '/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
-  '/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
-  '/adult/setting/information': typeof AppAdultSettingInformationRoute
+  '/adult/setting': typeof AppAdultSettingLayoutRouteWithChildren
+  '/children/setting': typeof AppChildrenSettingLayoutRouteWithChildren
+  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
+  '/adult/reward': typeof AppAdultLayoutRewardLazyRoute
+  '/adult/settings': typeof AppAdultLayoutSettingsLazyRoute
+  '/adult/target': typeof AppAdultLayoutTargetLazyRoute
+  '/children/character': typeof AppChildrenLayoutCharacterLazyRoute
+  '/children/journey': typeof AppChildrenLayoutJourneyLazyRoute
+  '/children/settings': typeof AppChildrenLayoutSettingsLazyRoute
+  '/children/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
+  '/adult': typeof AppAdultLayoutIndexLazyRoute
+  '/children': typeof AppChildrenLayoutIndexLazyRoute
+  '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
+  '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
+  '/adult/setting/change-pin': typeof AppAdultSettingLayoutChangePinRoute
+  '/adult/setting/change-pin-success': typeof AppAdultSettingLayoutChangePinSuccessRoute
+  '/adult/setting/create-profile': typeof AppAdultSettingLayoutCreateProfileRoute
+  '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
+  '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
+  '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -264,24 +324,29 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
-  '/_app/adult': typeof AppAdultRouteRouteWithChildren
-  '/_app/children': typeof AppChildrenRouteRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
-  '/_app/adult/character': typeof AppAdultCharacterLazyRoute
-  '/_app/adult/journey': typeof AppAdultJourneyLazyRoute
-  '/_app/adult/settings': typeof AppAdultSettingsLazyRoute
-  '/_app/adult/treasury': typeof AppAdultTreasuryLazyRoute
-  '/_app/children/character': typeof AppChildrenCharacterLazyRoute
-  '/_app/children/journey': typeof AppChildrenJourneyLazyRoute
-  '/_app/children/settings': typeof AppChildrenSettingsLazyRoute
-  '/_app/children/treasury': typeof AppChildrenTreasuryLazyRoute
-  '/_app/adult/': typeof AppAdultIndexLazyRoute
-  '/_app/children/': typeof AppChildrenIndexLazyRoute
-  '/_app/adult/setting/change-password': typeof AppAdultSettingChangePasswordRoute
-  '/_app/adult/setting/change-password-success': typeof AppAdultSettingChangePasswordSuccessRoute
-  '/_app/adult/setting/change-pin': typeof AppAdultSettingChangePinRoute
-  '/_app/adult/setting/change-pin-success': typeof AppAdultSettingChangePinSuccessRoute
-  '/_app/adult/setting/information': typeof AppAdultSettingInformationRoute
+  '/_app/adult/_layout': typeof AppAdultLayoutRouteWithChildren
+  '/_app/children/_layout': typeof AppChildrenLayoutRouteWithChildren
+  '/_app/adult/setting/_layout': typeof AppAdultSettingLayoutRouteWithChildren
+  '/_app/children/setting/_layout': typeof AppChildrenSettingLayoutRouteWithChildren
+  '/_app/adult/_layout/journey': typeof AppAdultLayoutJourneyLazyRoute
+  '/_app/adult/_layout/reward': typeof AppAdultLayoutRewardLazyRoute
+  '/_app/adult/_layout/settings': typeof AppAdultLayoutSettingsLazyRoute
+  '/_app/adult/_layout/target': typeof AppAdultLayoutTargetLazyRoute
+  '/_app/children/_layout/character': typeof AppChildrenLayoutCharacterLazyRoute
+  '/_app/children/_layout/journey': typeof AppChildrenLayoutJourneyLazyRoute
+  '/_app/children/_layout/settings': typeof AppChildrenLayoutSettingsLazyRoute
+  '/_app/children/_layout/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
+  '/_app/adult/_layout/': typeof AppAdultLayoutIndexLazyRoute
+  '/_app/children/_layout/': typeof AppChildrenLayoutIndexLazyRoute
+  '/_app/adult/setting/_layout/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
+  '/_app/adult/setting/_layout/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
+  '/_app/adult/setting/_layout/change-pin': typeof AppAdultSettingLayoutChangePinRoute
+  '/_app/adult/setting/_layout/change-pin-success': typeof AppAdultSettingLayoutChangePinSuccessRoute
+  '/_app/adult/setting/_layout/create-profile': typeof AppAdultSettingLayoutCreateProfileRoute
+  '/_app/adult/setting/_layout/information': typeof AppAdultSettingLayoutInformationRoute
+  '/_app/children/setting/_layout/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
+  '/_app/children/setting/_layout/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -295,10 +360,12 @@ export interface FileRouteTypes {
     | '/create-success'
     | '/adult'
     | '/children'
-    | '/adult/character'
+    | '/adult/setting'
+    | '/children/setting'
     | '/adult/journey'
+    | '/adult/reward'
     | '/adult/settings'
-    | '/adult/treasury'
+    | '/adult/target'
     | '/children/character'
     | '/children/journey'
     | '/children/settings'
@@ -309,7 +376,10 @@ export interface FileRouteTypes {
     | '/adult/setting/change-password-success'
     | '/adult/setting/change-pin'
     | '/adult/setting/change-pin-success'
+    | '/adult/setting/create-profile'
     | '/adult/setting/information'
+    | '/children/setting/change-pin'
+    | '/children/setting/change-pin-success'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -319,10 +389,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
-    | '/adult/character'
+    | '/adult/setting'
+    | '/children/setting'
     | '/adult/journey'
+    | '/adult/reward'
     | '/adult/settings'
-    | '/adult/treasury'
+    | '/adult/target'
     | '/children/character'
     | '/children/journey'
     | '/children/settings'
@@ -333,7 +405,10 @@ export interface FileRouteTypes {
     | '/adult/setting/change-password-success'
     | '/adult/setting/change-pin'
     | '/adult/setting/change-pin-success'
+    | '/adult/setting/create-profile'
     | '/adult/setting/information'
+    | '/children/setting/change-pin'
+    | '/children/setting/change-pin-success'
   id:
     | '__root__'
     | '/_app'
@@ -343,24 +418,29 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
-    | '/_app/adult'
-    | '/_app/children'
     | '/_auth/'
-    | '/_app/adult/character'
-    | '/_app/adult/journey'
-    | '/_app/adult/settings'
-    | '/_app/adult/treasury'
-    | '/_app/children/character'
-    | '/_app/children/journey'
-    | '/_app/children/settings'
-    | '/_app/children/treasury'
-    | '/_app/adult/'
-    | '/_app/children/'
-    | '/_app/adult/setting/change-password'
-    | '/_app/adult/setting/change-password-success'
-    | '/_app/adult/setting/change-pin'
-    | '/_app/adult/setting/change-pin-success'
-    | '/_app/adult/setting/information'
+    | '/_app/adult/_layout'
+    | '/_app/children/_layout'
+    | '/_app/adult/setting/_layout'
+    | '/_app/children/setting/_layout'
+    | '/_app/adult/_layout/journey'
+    | '/_app/adult/_layout/reward'
+    | '/_app/adult/_layout/settings'
+    | '/_app/adult/_layout/target'
+    | '/_app/children/_layout/character'
+    | '/_app/children/_layout/journey'
+    | '/_app/children/_layout/settings'
+    | '/_app/children/_layout/treasury'
+    | '/_app/adult/_layout/'
+    | '/_app/children/_layout/'
+    | '/_app/adult/setting/_layout/change-password'
+    | '/_app/adult/setting/_layout/change-password-success'
+    | '/_app/adult/setting/_layout/change-pin'
+    | '/_app/adult/setting/_layout/change-pin-success'
+    | '/_app/adult/setting/_layout/create-profile'
+    | '/_app/adult/setting/_layout/information'
+    | '/_app/children/setting/_layout/change-pin'
+    | '/_app/children/setting/_layout/change-pin-success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -432,186 +512,259 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/children': {
-      id: '/_app/children'
+    '/_app/children/_layout': {
+      id: '/_app/children/_layout'
       path: '/children'
       fullPath: '/children'
-      preLoaderRoute: typeof AppChildrenRouteRouteImport
+      preLoaderRoute: typeof AppChildrenLayoutRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/adult': {
-      id: '/_app/adult'
+    '/_app/adult/_layout': {
+      id: '/_app/adult/_layout'
       path: '/adult'
       fullPath: '/adult'
-      preLoaderRoute: typeof AppAdultRouteRouteImport
+      preLoaderRoute: typeof AppAdultLayoutRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/children/': {
-      id: '/_app/children/'
+    '/_app/children/_layout/': {
+      id: '/_app/children/_layout/'
       path: '/'
       fullPath: '/children/'
-      preLoaderRoute: typeof AppChildrenIndexLazyRouteImport
-      parentRoute: typeof AppChildrenRouteRoute
+      preLoaderRoute: typeof AppChildrenLayoutIndexLazyRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/adult/': {
-      id: '/_app/adult/'
+    '/_app/adult/_layout/': {
+      id: '/_app/adult/_layout/'
       path: '/'
       fullPath: '/adult/'
-      preLoaderRoute: typeof AppAdultIndexLazyRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultLayoutIndexLazyRouteImport
+      parentRoute: typeof AppAdultLayoutRoute
     }
-    '/_app/children/treasury': {
-      id: '/_app/children/treasury'
+    '/_app/children/_layout/treasury': {
+      id: '/_app/children/_layout/treasury'
       path: '/treasury'
       fullPath: '/children/treasury'
-      preLoaderRoute: typeof AppChildrenTreasuryLazyRouteImport
-      parentRoute: typeof AppChildrenRouteRoute
+      preLoaderRoute: typeof AppChildrenLayoutTreasuryLazyRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/children/settings': {
-      id: '/_app/children/settings'
+    '/_app/children/_layout/settings': {
+      id: '/_app/children/_layout/settings'
       path: '/settings'
       fullPath: '/children/settings'
-      preLoaderRoute: typeof AppChildrenSettingsLazyRouteImport
-      parentRoute: typeof AppChildrenRouteRoute
+      preLoaderRoute: typeof AppChildrenLayoutSettingsLazyRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/children/journey': {
-      id: '/_app/children/journey'
+    '/_app/children/_layout/journey': {
+      id: '/_app/children/_layout/journey'
       path: '/journey'
       fullPath: '/children/journey'
-      preLoaderRoute: typeof AppChildrenJourneyLazyRouteImport
-      parentRoute: typeof AppChildrenRouteRoute
+      preLoaderRoute: typeof AppChildrenLayoutJourneyLazyRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/children/character': {
-      id: '/_app/children/character'
+    '/_app/children/_layout/character': {
+      id: '/_app/children/_layout/character'
       path: '/character'
       fullPath: '/children/character'
-      preLoaderRoute: typeof AppChildrenCharacterLazyRouteImport
-      parentRoute: typeof AppChildrenRouteRoute
+      preLoaderRoute: typeof AppChildrenLayoutCharacterLazyRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/adult/treasury': {
-      id: '/_app/adult/treasury'
-      path: '/treasury'
-      fullPath: '/adult/treasury'
-      preLoaderRoute: typeof AppAdultTreasuryLazyRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+    '/_app/adult/_layout/target': {
+      id: '/_app/adult/_layout/target'
+      path: '/target'
+      fullPath: '/adult/target'
+      preLoaderRoute: typeof AppAdultLayoutTargetLazyRouteImport
+      parentRoute: typeof AppAdultLayoutRoute
     }
-    '/_app/adult/settings': {
-      id: '/_app/adult/settings'
+    '/_app/adult/_layout/settings': {
+      id: '/_app/adult/_layout/settings'
       path: '/settings'
       fullPath: '/adult/settings'
-      preLoaderRoute: typeof AppAdultSettingsLazyRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultLayoutSettingsLazyRouteImport
+      parentRoute: typeof AppAdultLayoutRoute
     }
-    '/_app/adult/journey': {
-      id: '/_app/adult/journey'
+    '/_app/adult/_layout/reward': {
+      id: '/_app/adult/_layout/reward'
+      path: '/reward'
+      fullPath: '/adult/reward'
+      preLoaderRoute: typeof AppAdultLayoutRewardLazyRouteImport
+      parentRoute: typeof AppAdultLayoutRoute
+    }
+    '/_app/adult/_layout/journey': {
+      id: '/_app/adult/_layout/journey'
       path: '/journey'
       fullPath: '/adult/journey'
-      preLoaderRoute: typeof AppAdultJourneyLazyRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultLayoutJourneyLazyRouteImport
+      parentRoute: typeof AppAdultLayoutRoute
     }
-    '/_app/adult/character': {
-      id: '/_app/adult/character'
-      path: '/character'
-      fullPath: '/adult/character'
-      preLoaderRoute: typeof AppAdultCharacterLazyRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+    '/_app/children/setting/_layout': {
+      id: '/_app/children/setting/_layout'
+      path: '/children/setting'
+      fullPath: '/children/setting'
+      preLoaderRoute: typeof AppChildrenSettingLayoutRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/_app/adult/setting/information': {
-      id: '/_app/adult/setting/information'
-      path: '/setting/information'
+    '/_app/adult/setting/_layout': {
+      id: '/_app/adult/setting/_layout'
+      path: '/adult/setting'
+      fullPath: '/adult/setting'
+      preLoaderRoute: typeof AppAdultSettingLayoutRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/children/setting/_layout/change-pin-success': {
+      id: '/_app/children/setting/_layout/change-pin-success'
+      path: '/change-pin-success'
+      fullPath: '/children/setting/change-pin-success'
+      preLoaderRoute: typeof AppChildrenSettingLayoutChangePinSuccessRouteImport
+      parentRoute: typeof AppChildrenSettingLayoutRoute
+    }
+    '/_app/children/setting/_layout/change-pin': {
+      id: '/_app/children/setting/_layout/change-pin'
+      path: '/change-pin'
+      fullPath: '/children/setting/change-pin'
+      preLoaderRoute: typeof AppChildrenSettingLayoutChangePinRouteImport
+      parentRoute: typeof AppChildrenSettingLayoutRoute
+    }
+    '/_app/adult/setting/_layout/information': {
+      id: '/_app/adult/setting/_layout/information'
+      path: '/information'
       fullPath: '/adult/setting/information'
-      preLoaderRoute: typeof AppAdultSettingInformationRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultSettingLayoutInformationRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
     }
-    '/_app/adult/setting/change-pin-success': {
-      id: '/_app/adult/setting/change-pin-success'
-      path: '/setting/change-pin-success'
+    '/_app/adult/setting/_layout/create-profile': {
+      id: '/_app/adult/setting/_layout/create-profile'
+      path: '/create-profile'
+      fullPath: '/adult/setting/create-profile'
+      preLoaderRoute: typeof AppAdultSettingLayoutCreateProfileRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
+    }
+    '/_app/adult/setting/_layout/change-pin-success': {
+      id: '/_app/adult/setting/_layout/change-pin-success'
+      path: '/change-pin-success'
       fullPath: '/adult/setting/change-pin-success'
-      preLoaderRoute: typeof AppAdultSettingChangePinSuccessRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultSettingLayoutChangePinSuccessRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
     }
-    '/_app/adult/setting/change-pin': {
-      id: '/_app/adult/setting/change-pin'
-      path: '/setting/change-pin'
+    '/_app/adult/setting/_layout/change-pin': {
+      id: '/_app/adult/setting/_layout/change-pin'
+      path: '/change-pin'
       fullPath: '/adult/setting/change-pin'
-      preLoaderRoute: typeof AppAdultSettingChangePinRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultSettingLayoutChangePinRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
     }
-    '/_app/adult/setting/change-password-success': {
-      id: '/_app/adult/setting/change-password-success'
-      path: '/setting/change-password-success'
+    '/_app/adult/setting/_layout/change-password-success': {
+      id: '/_app/adult/setting/_layout/change-password-success'
+      path: '/change-password-success'
       fullPath: '/adult/setting/change-password-success'
-      preLoaderRoute: typeof AppAdultSettingChangePasswordSuccessRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultSettingLayoutChangePasswordSuccessRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
     }
-    '/_app/adult/setting/change-password': {
-      id: '/_app/adult/setting/change-password'
-      path: '/setting/change-password'
+    '/_app/adult/setting/_layout/change-password': {
+      id: '/_app/adult/setting/_layout/change-password'
+      path: '/change-password'
       fullPath: '/adult/setting/change-password'
-      preLoaderRoute: typeof AppAdultSettingChangePasswordRouteImport
-      parentRoute: typeof AppAdultRouteRoute
+      preLoaderRoute: typeof AppAdultSettingLayoutChangePasswordRouteImport
+      parentRoute: typeof AppAdultSettingLayoutRoute
     }
   }
 }
 
-interface AppAdultRouteRouteChildren {
-  AppAdultCharacterLazyRoute: typeof AppAdultCharacterLazyRoute
-  AppAdultJourneyLazyRoute: typeof AppAdultJourneyLazyRoute
-  AppAdultSettingsLazyRoute: typeof AppAdultSettingsLazyRoute
-  AppAdultTreasuryLazyRoute: typeof AppAdultTreasuryLazyRoute
-  AppAdultIndexLazyRoute: typeof AppAdultIndexLazyRoute
-  AppAdultSettingChangePasswordRoute: typeof AppAdultSettingChangePasswordRoute
-  AppAdultSettingChangePasswordSuccessRoute: typeof AppAdultSettingChangePasswordSuccessRoute
-  AppAdultSettingChangePinRoute: typeof AppAdultSettingChangePinRoute
-  AppAdultSettingChangePinSuccessRoute: typeof AppAdultSettingChangePinSuccessRoute
-  AppAdultSettingInformationRoute: typeof AppAdultSettingInformationRoute
+interface AppAdultLayoutRouteChildren {
+  AppAdultLayoutJourneyLazyRoute: typeof AppAdultLayoutJourneyLazyRoute
+  AppAdultLayoutRewardLazyRoute: typeof AppAdultLayoutRewardLazyRoute
+  AppAdultLayoutSettingsLazyRoute: typeof AppAdultLayoutSettingsLazyRoute
+  AppAdultLayoutTargetLazyRoute: typeof AppAdultLayoutTargetLazyRoute
+  AppAdultLayoutIndexLazyRoute: typeof AppAdultLayoutIndexLazyRoute
 }
 
-const AppAdultRouteRouteChildren: AppAdultRouteRouteChildren = {
-  AppAdultCharacterLazyRoute: AppAdultCharacterLazyRoute,
-  AppAdultJourneyLazyRoute: AppAdultJourneyLazyRoute,
-  AppAdultSettingsLazyRoute: AppAdultSettingsLazyRoute,
-  AppAdultTreasuryLazyRoute: AppAdultTreasuryLazyRoute,
-  AppAdultIndexLazyRoute: AppAdultIndexLazyRoute,
-  AppAdultSettingChangePasswordRoute: AppAdultSettingChangePasswordRoute,
-  AppAdultSettingChangePasswordSuccessRoute:
-    AppAdultSettingChangePasswordSuccessRoute,
-  AppAdultSettingChangePinRoute: AppAdultSettingChangePinRoute,
-  AppAdultSettingChangePinSuccessRoute: AppAdultSettingChangePinSuccessRoute,
-  AppAdultSettingInformationRoute: AppAdultSettingInformationRoute,
+const AppAdultLayoutRouteChildren: AppAdultLayoutRouteChildren = {
+  AppAdultLayoutJourneyLazyRoute: AppAdultLayoutJourneyLazyRoute,
+  AppAdultLayoutRewardLazyRoute: AppAdultLayoutRewardLazyRoute,
+  AppAdultLayoutSettingsLazyRoute: AppAdultLayoutSettingsLazyRoute,
+  AppAdultLayoutTargetLazyRoute: AppAdultLayoutTargetLazyRoute,
+  AppAdultLayoutIndexLazyRoute: AppAdultLayoutIndexLazyRoute,
 }
 
-const AppAdultRouteRouteWithChildren = AppAdultRouteRoute._addFileChildren(
-  AppAdultRouteRouteChildren,
+const AppAdultLayoutRouteWithChildren = AppAdultLayoutRoute._addFileChildren(
+  AppAdultLayoutRouteChildren,
 )
 
-interface AppChildrenRouteRouteChildren {
-  AppChildrenCharacterLazyRoute: typeof AppChildrenCharacterLazyRoute
-  AppChildrenJourneyLazyRoute: typeof AppChildrenJourneyLazyRoute
-  AppChildrenSettingsLazyRoute: typeof AppChildrenSettingsLazyRoute
-  AppChildrenTreasuryLazyRoute: typeof AppChildrenTreasuryLazyRoute
-  AppChildrenIndexLazyRoute: typeof AppChildrenIndexLazyRoute
+interface AppChildrenLayoutRouteChildren {
+  AppChildrenLayoutCharacterLazyRoute: typeof AppChildrenLayoutCharacterLazyRoute
+  AppChildrenLayoutJourneyLazyRoute: typeof AppChildrenLayoutJourneyLazyRoute
+  AppChildrenLayoutSettingsLazyRoute: typeof AppChildrenLayoutSettingsLazyRoute
+  AppChildrenLayoutTreasuryLazyRoute: typeof AppChildrenLayoutTreasuryLazyRoute
+  AppChildrenLayoutIndexLazyRoute: typeof AppChildrenLayoutIndexLazyRoute
 }
 
-const AppChildrenRouteRouteChildren: AppChildrenRouteRouteChildren = {
-  AppChildrenCharacterLazyRoute: AppChildrenCharacterLazyRoute,
-  AppChildrenJourneyLazyRoute: AppChildrenJourneyLazyRoute,
-  AppChildrenSettingsLazyRoute: AppChildrenSettingsLazyRoute,
-  AppChildrenTreasuryLazyRoute: AppChildrenTreasuryLazyRoute,
-  AppChildrenIndexLazyRoute: AppChildrenIndexLazyRoute,
+const AppChildrenLayoutRouteChildren: AppChildrenLayoutRouteChildren = {
+  AppChildrenLayoutCharacterLazyRoute: AppChildrenLayoutCharacterLazyRoute,
+  AppChildrenLayoutJourneyLazyRoute: AppChildrenLayoutJourneyLazyRoute,
+  AppChildrenLayoutSettingsLazyRoute: AppChildrenLayoutSettingsLazyRoute,
+  AppChildrenLayoutTreasuryLazyRoute: AppChildrenLayoutTreasuryLazyRoute,
+  AppChildrenLayoutIndexLazyRoute: AppChildrenLayoutIndexLazyRoute,
 }
 
-const AppChildrenRouteRouteWithChildren =
-  AppChildrenRouteRoute._addFileChildren(AppChildrenRouteRouteChildren)
+const AppChildrenLayoutRouteWithChildren =
+  AppChildrenLayoutRoute._addFileChildren(AppChildrenLayoutRouteChildren)
+
+interface AppAdultSettingLayoutRouteChildren {
+  AppAdultSettingLayoutChangePasswordRoute: typeof AppAdultSettingLayoutChangePasswordRoute
+  AppAdultSettingLayoutChangePasswordSuccessRoute: typeof AppAdultSettingLayoutChangePasswordSuccessRoute
+  AppAdultSettingLayoutChangePinRoute: typeof AppAdultSettingLayoutChangePinRoute
+  AppAdultSettingLayoutChangePinSuccessRoute: typeof AppAdultSettingLayoutChangePinSuccessRoute
+  AppAdultSettingLayoutCreateProfileRoute: typeof AppAdultSettingLayoutCreateProfileRoute
+  AppAdultSettingLayoutInformationRoute: typeof AppAdultSettingLayoutInformationRoute
+}
+
+const AppAdultSettingLayoutRouteChildren: AppAdultSettingLayoutRouteChildren = {
+  AppAdultSettingLayoutChangePasswordRoute:
+    AppAdultSettingLayoutChangePasswordRoute,
+  AppAdultSettingLayoutChangePasswordSuccessRoute:
+    AppAdultSettingLayoutChangePasswordSuccessRoute,
+  AppAdultSettingLayoutChangePinRoute: AppAdultSettingLayoutChangePinRoute,
+  AppAdultSettingLayoutChangePinSuccessRoute:
+    AppAdultSettingLayoutChangePinSuccessRoute,
+  AppAdultSettingLayoutCreateProfileRoute:
+    AppAdultSettingLayoutCreateProfileRoute,
+  AppAdultSettingLayoutInformationRoute: AppAdultSettingLayoutInformationRoute,
+}
+
+const AppAdultSettingLayoutRouteWithChildren =
+  AppAdultSettingLayoutRoute._addFileChildren(
+    AppAdultSettingLayoutRouteChildren,
+  )
+
+interface AppChildrenSettingLayoutRouteChildren {
+  AppChildrenSettingLayoutChangePinRoute: typeof AppChildrenSettingLayoutChangePinRoute
+  AppChildrenSettingLayoutChangePinSuccessRoute: typeof AppChildrenSettingLayoutChangePinSuccessRoute
+}
+
+const AppChildrenSettingLayoutRouteChildren: AppChildrenSettingLayoutRouteChildren =
+  {
+    AppChildrenSettingLayoutChangePinRoute:
+      AppChildrenSettingLayoutChangePinRoute,
+    AppChildrenSettingLayoutChangePinSuccessRoute:
+      AppChildrenSettingLayoutChangePinSuccessRoute,
+  }
+
+const AppChildrenSettingLayoutRouteWithChildren =
+  AppChildrenSettingLayoutRoute._addFileChildren(
+    AppChildrenSettingLayoutRouteChildren,
+  )
 
 interface AppRouteRouteChildren {
-  AppAdultRouteRoute: typeof AppAdultRouteRouteWithChildren
-  AppChildrenRouteRoute: typeof AppChildrenRouteRouteWithChildren
+  AppAdultLayoutRoute: typeof AppAdultLayoutRouteWithChildren
+  AppChildrenLayoutRoute: typeof AppChildrenLayoutRouteWithChildren
+  AppAdultSettingLayoutRoute: typeof AppAdultSettingLayoutRouteWithChildren
+  AppChildrenSettingLayoutRoute: typeof AppChildrenSettingLayoutRouteWithChildren
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppAdultRouteRoute: AppAdultRouteRouteWithChildren,
-  AppChildrenRouteRoute: AppChildrenRouteRouteWithChildren,
+  AppAdultLayoutRoute: AppAdultLayoutRouteWithChildren,
+  AppChildrenLayoutRoute: AppChildrenLayoutRouteWithChildren,
+  AppAdultSettingLayoutRoute: AppAdultSettingLayoutRouteWithChildren,
+  AppChildrenSettingLayoutRoute: AppChildrenSettingLayoutRouteWithChildren,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

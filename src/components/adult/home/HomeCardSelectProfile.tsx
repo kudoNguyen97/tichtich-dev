@@ -15,7 +15,10 @@ function HomeCardSelectProfile({
         <div
             className={cn(
                 'flex items-center justify-end gap-6 h-[140px]',
-                'bg-[#B8EAF2] rounded-lg px-6 py-4 w-full relative overflow-hidden'
+                ' rounded-lg px-6 py-4 w-full relative overflow-hidden',
+                profile.gender === 'male'
+                    ? 'bg-tichtich-blue'
+                    : 'bg-tichtich-pink'
             )}
         >
             {/* Pig Illustration */}

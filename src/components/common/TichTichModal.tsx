@@ -163,7 +163,7 @@ export function TichTichConfirmModal({
                     <button
                         onClick={onClose}
                         className={cn(
-                            'flex-1 h-12 rounded-pill border-2 border-tichtich-black',
+                            'flex-1 h-12 rounded-full border-2 border-tichtich-black',
                             'bg-white text-sm font-semibold text-tichtich-black',
                             'transition-all active:scale-[0.97] cursor-pointer'
                         )}
@@ -174,7 +174,7 @@ export function TichTichConfirmModal({
                         onClick={onConfirm}
                         disabled={isLoading}
                         className={cn(
-                            'flex-1 h-12 rounded-pill text-sm font-semibold',
+                            'flex-1 h-12 rounded-full text-sm font-semibold',
                             'transition-all active:scale-[0.97] cursor-pointer border-none',
                             'disabled:opacity-50 disabled:cursor-not-allowed',
                             confirmVariant === 'danger'

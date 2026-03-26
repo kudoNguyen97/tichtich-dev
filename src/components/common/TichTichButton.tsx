@@ -52,7 +52,7 @@ const buttonVariants = cva(
                     'focus-visible:ring-tichtich-red',
                 ],
                 disabled: [
-                    'bg-gray-900 text-white hover:bg-gray-700 active:scale-[0.98]',
+                    'bg-[#BFBFBF] text-white hover:bg-[#BFBFBF] active:scale-[0.98]',
                 ],
             },
             size: {

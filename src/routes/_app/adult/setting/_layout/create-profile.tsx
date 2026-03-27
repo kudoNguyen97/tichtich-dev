@@ -32,6 +32,8 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichInput } from '@/components/common/TichTichInput';
 import { AppBar } from '@/components/layout/AppBar';
 import { cn } from '@/utils/cn';
+import { useCreateProfile } from '@/features/profiles/hooks/useProfiles';
+import dayjs from 'dayjs';
 
 export const Route = createFileRoute(
     '/_app/adult/setting/_layout/create-profile'
@@ -117,6 +119,8 @@ function getChildCardTheme(gender: ChildGender): {
 
 function RouteComponent() {
     const navigate = useNavigate();
+    const { mutate: createProfileMutation, isPending } = useCreateProfile();
+
     const {
         control,
         handleSubmit,
@@ -141,7 +145,16 @@ function RouteComponent() {
     const canSubmit = isValid && fields.length > 0 && !isSubmitting;
 
     const onSubmit = (data: CreateProfileFormInput) => {
-        console.log('Create child profiles:', data);
+        createProfileMutation(
+            data.children.map((child) => ({
+                fullName: child.fullName,
+                birthDate: dayjs(child.birthDate?.toString()).format(
+                    'YYYY-MM-DD'
+                ),
+                profileType: 'kid',
+                gender: child.gender ?? undefined,
+            }))
+        );
     };
 
     return (

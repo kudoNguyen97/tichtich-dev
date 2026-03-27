@@ -5,6 +5,7 @@ import { queryClient } from '@/lib/queryClient';
 import { profileKeys } from '@/features/profiles/api/profile.keys';
 import { profileService } from '../api/profile.serivce';
 import type { Profile } from '@/features/auth/types/auth.type';
+import { showError } from '@/lib/toast';
 
 export function useProfiles() {
     return useQuery({
@@ -65,6 +66,19 @@ export function useUpdateProfile() {
             queryClient.invalidateQueries({
                 queryKey: profileKeys.profileDetail(id),
             });
+        },
+    });
+}
+
+export function useCreateProfile() {
+    return useMutation({
+        mutationFn: (data: Array<Partial<Profile>>) =>
+            profileService.createProfile(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: profileKeys.profile });
+        },
+        onError: (error) => {
+            showError(error.message);
         },
     });
 }

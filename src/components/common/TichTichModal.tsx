@@ -26,7 +26,7 @@ import { cn } from '@/utils/cn';
  */
 
 interface TichTichModalProps extends DialogProps {
-    title?: string;
+    title?: React.ReactNode;
     size?: 'sm' | 'md' | 'lg' | 'full';
     isDismissable?: boolean;
     children?: React.ReactNode;
@@ -82,20 +82,26 @@ export function TichTichModal({
             >
                 <Dialog
                     className={cn(
-                        'relative mx-4 rounded-2xl bg-tichtich-primary-300 shadow-modal outline-none',
+                        'relative mx-4 rounded-2xl bg-tichtich-primary-300 border border-[#F06724] shadow-modal outline-none',
                         'flex flex-col',
                         className
                     )}
+                    aria-label='tich-tich-modal'
                     {...props}
                 >
                     {title && (
                         <div className="px-6 pt-6 pb-2 text-center">
-                            <Heading
-                                slot="title"
-                                className="text-base font-semibold text-tichtich-black"
-                            >
-                                {title}
-                            </Heading>
+                            {typeof title === 'string' ? (
+                                <Heading
+                                    slot="title"
+                                    aria-label={title}
+                                    className="text-base font-semibold text-tichtich-black"
+                                >
+                                    {title}
+                                </Heading>
+                            ) : (
+                                title
+                            )}
                         </div>
                     )}
 

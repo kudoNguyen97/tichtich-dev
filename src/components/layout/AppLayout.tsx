@@ -98,7 +98,7 @@ export function AppLayout({
                     hideBottomNav ? 'mb-0' : appLayoutClassName
                 )}
             >
-                <main className="min-h-screen">
+                <main className="min-h-[calc(100vh-140px)]">
                     <PageTransition>
                         <Outlet />
                     </PageTransition>

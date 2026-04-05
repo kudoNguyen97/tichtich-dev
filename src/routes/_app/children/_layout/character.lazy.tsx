@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
-import { Gift, User } from 'lucide-react';
+import { User } from 'lucide-react';
 
 export const Route = createLazyFileRoute('/_app/children/_layout/character')({
     component: RouteComponent,

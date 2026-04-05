@@ -1,13 +1,11 @@
 import { create } from 'zustand';
 
-interface LoadingState {
-    isLoading: boolean;
-    show: () => void;
-    hide: () => void;
-}
+type LoadingStore = {
+    globalLoading: boolean;
+    setGlobalLoading: (val: boolean) => void;
+};
 
-export const useLoadingStore = create<LoadingState>((set) => ({
-    isLoading: false,
-    show: () => set({ isLoading: true }),
-    hide: () => set({ isLoading: false }),
+export const useLoadingStore = create<LoadingStore>((set) => ({
+    globalLoading: false,
+    setGlobalLoading: (val) => set({ globalLoading: val }),
 }));

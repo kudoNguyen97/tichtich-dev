@@ -1,10 +1,4 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    useCallback,
-} from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useRouterState } from '@tanstack/react-router';
 import { BottomNav } from './BottomNav';
 import { PageTransition } from '@/components/ui/PageTransition';
@@ -23,8 +17,6 @@ export interface AppBarConfig {
 export interface AppLayoutOutletContext {
     setAppBar: (config: AppBarConfig) => void;
 }
-
-const AppLayoutContext = createContext<AppLayoutOutletContext | null>(null);
 
 interface AppLayoutProps {
     defaultTitle?: string;

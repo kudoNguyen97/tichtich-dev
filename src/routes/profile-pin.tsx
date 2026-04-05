@@ -16,7 +16,6 @@ import { cn } from '@/utils/cn';
 import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { showError } from '@/lib/toast';
-import { useLoadingStore } from '@/stores/useLoadingStore';
 import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
 
 const PIN_LENGTH = 4;
@@ -40,12 +39,14 @@ function ProfilePinPage() {
     const search = useSearch({ from: '/profile-pin' });
     const profiles = useAuthStore((s) => s.profiles);
     const setSelectedProfile = useAuthStore((s) => s.setSelectedProfile);
-    const { show: showLoading, hide: hideLoading } = useLoadingStore();
 
     const { mutateAsync: updateProfilePinCode } = useUpdateProfilePinCode();
 
     const selectedProfile = useMemo(
-        () => profiles.find((p) => p.id === (search as { profileId?: string }).profileId),
+        () =>
+            profiles.find(
+                (p) => p.id === (search as { profileId?: string }).profileId
+            ),
         [profiles, search]
     );
 
@@ -105,7 +106,6 @@ function ProfilePinPage() {
             }
 
             try {
-                showLoading();
                 await updateProfilePinCode({
                     id: selectedProfile.id,
                     pinCode: firstPin,
@@ -117,20 +117,9 @@ function ProfilePinPage() {
                 navigate({ to: '/create-success', replace: true });
             } catch (err) {
                 showError(err);
-            } finally {
-                hideLoading();
             }
         },
-        [
-            selectedProfile,
-            hasPin,
-            step,
-            firstPin,
-            navigate,
-            setSelectedProfile,
-            showLoading,
-            hideLoading,
-        ]
+        [selectedProfile, hasPin, step, firstPin, navigate, setSelectedProfile]
     );
 
     useEffect(() => {

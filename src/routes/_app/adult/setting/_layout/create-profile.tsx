@@ -119,7 +119,7 @@ function getChildCardTheme(gender: ChildGender): {
 
 function RouteComponent() {
     const navigate = useNavigate();
-    const { mutate: createProfileMutation, isPending } = useCreateProfile();
+    const { mutate: createProfileMutation } = useCreateProfile();
 
     const {
         control,

@@ -5,7 +5,6 @@ import { useLogin } from '@/features/auth/hooks/useAuth';
 import { auth } from '@/firebase';
 import { useCountDown } from '@/hooks/useCountDown';
 import { showError, showSuccess } from '@/lib/toast';
-import { useLoadingStore } from '@/stores/useLoadingStore';
 import { cn } from '@/utils/cn';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { reload, sendEmailVerification } from 'firebase/auth';
@@ -24,7 +23,6 @@ function VerifyAccountPage() {
     const { email } = Route.useSearch();
     const navigate = useNavigate();
     const { mutateAsync: login } = useLogin();
-    const { show, hide } = useLoadingStore();
     const { formatted, isExpired, isRunning, start, reset } = useCountDown({
         initialSeconds: 10,
         autoStart: true,
@@ -47,15 +45,12 @@ function VerifyAccountPage() {
         if (!currentUser) return;
 
         try {
-            show();
             await sendEmailVerification(currentUser);
             reset();
             start();
             showSuccess('success.updated', 'Vui lòng kiểm tra email của bạn.');
         } catch (error) {
             showError(error);
-        } finally {
-            hide();
         }
     };
 
@@ -64,7 +59,6 @@ function VerifyAccountPage() {
         if (!currentUser) return;
 
         try {
-            show();
             await reload(currentUser);
 
             if (!currentUser.emailVerified) {
@@ -84,8 +78,6 @@ function VerifyAccountPage() {
             navigate({ to: '/profiles', replace: true });
         } catch (error) {
             showError(error);
-        } finally {
-            hide();
         }
     };
 

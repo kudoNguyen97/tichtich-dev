@@ -18,7 +18,6 @@ import { TichTichInput } from '@/components/common/TichTichInput';
 import { showError } from '@/lib/toast';
 import type { LoginFormData } from '@/features/auth/types/auth.schema';
 import { loginSchema } from '@/features/auth/types/auth.schema';
-import { useLoadingStore } from '@/stores/useLoadingStore';
 import { useLogin } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 
@@ -40,7 +39,6 @@ function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const { mutateAsync: login } = useLogin();
 
-    const { show, hide } = useLoadingStore();
     const navigate = useNavigate();
     const {
         control,
@@ -54,8 +52,6 @@ function LoginPage() {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            show();
-
             const credential = await signInWithEmailAndPassword(
                 auth,
                 data.email,
@@ -105,8 +101,6 @@ function LoginPage() {
             }
 
             showError(error);
-        } finally {
-            hide();
         }
     };
 

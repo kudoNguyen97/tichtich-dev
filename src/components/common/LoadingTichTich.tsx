@@ -2,8 +2,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useLoadingStore } from '@/stores/useLoadingStore';
 
 export function LoadingTichTich({ isLoading }: { isLoading?: boolean }) {
-    const storeLoading = useLoadingStore((s) => s.isLoading);
-    const visible = isLoading ?? storeLoading;
+    const globalLoading = useLoadingStore((s) => s.globalLoading);
+    const visible = isLoading ?? globalLoading;
 
     return (
         <AnimatePresence>

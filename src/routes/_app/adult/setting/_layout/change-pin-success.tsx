@@ -6,7 +6,6 @@ import { ArrowLeft, Check } from 'lucide-react';
 import { ProfileAvatar } from '@/components/profile-pin/ProfileAvatar';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { cn } from '@/utils/cn';
 import { AppBar } from '@/components/layout/AppBar';
 
 export const Route = createFileRoute(

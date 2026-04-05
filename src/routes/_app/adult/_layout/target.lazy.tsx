@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { Gift, Target } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 export const Route = createLazyFileRoute('/_app/adult/_layout/target')({
     component: RouteComponent,

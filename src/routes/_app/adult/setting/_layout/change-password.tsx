@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Button } from 'react-aria-components';
 import { ArrowLeft, Eye, EyeOff, Lock } from 'lucide-react';

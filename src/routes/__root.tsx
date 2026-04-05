@@ -6,6 +6,7 @@ import { useSplash } from '@/hooks/useSplash';
 import { SplashScreen } from '@/components/SplashScreen';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { authService } from '@/features/auth/api/auth.service';
+import { GlobalLoadingSync } from '@/components/common/GlobalLoadingSync';
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
@@ -29,6 +30,7 @@ function RootComponent() {
     const { visible, dismiss } = useSplash();
     return (
         <>
+            <GlobalLoadingSync />
             <LoadingTichTich />
             <HeadContent />
             <AppNotificationModal />

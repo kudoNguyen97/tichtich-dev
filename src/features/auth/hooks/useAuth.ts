@@ -22,6 +22,9 @@ export function useLogin() {
 
     return useMutation({
         mutationFn: authService.login,
+        meta: {
+            globalLoading: true,
+        },
         onSuccess: (data) => {
             setAuth(data.user, data.sessionToken, data.user.profiles);
             queryClient.invalidateQueries({ queryKey: authKeys.me() });

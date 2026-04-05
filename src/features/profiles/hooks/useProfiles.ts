@@ -40,6 +40,9 @@ export function useUpdateProfilePinCode() {
     return useMutation({
         mutationFn: (payload: { id: string; pinCode: string }) =>
             profileService.updateProfilePinCode(payload.id, payload.pinCode),
+        meta: {
+            globalLoading: true,
+        },
         onSuccess: (_void, { id, pinCode }) => {
             applyProfilePatchToStore(id, { pinCode });
             queryClient.invalidateQueries({ queryKey: profileKeys.profile });

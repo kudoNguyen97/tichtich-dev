@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { cn } from '@/utils/cn';
 import { AllocationChart } from '@/components/children/treasury/AllocationChart';
 import { CategorySlider } from '@/components/children/treasury/CategorySlider';
+import { TichTichButton } from '@/components/common/TichTichButton';
 
 const formatMoney = (n: any) => n.toLocaleString('vi-VN') + ' đ';
 
@@ -691,33 +692,12 @@ function RouteComponent() {
                                         key={label}
                                         type="button"
                                         onClick={() => applyPreset(ratios)}
-                                        className="preset-btn"
-                                        style={{
-                                            backgroundColor: '#fff',
-                                            border: '1.5px solid #E8DECE',
-                                            borderRadius: 18,
-                                            padding: '16px 12px',
-                                            textAlign: 'center',
-                                        }}
+                                        className="preset-btn cursor-pointer bg-white border border-[#E8DECE] rounded-[18px] px-3 py-4 text-center"
                                     >
-                                        <p
-                                            style={{
-                                                fontSize: 15,
-                                                fontWeight: 900,
-                                                color: '#1a1a1a',
-                                                margin: 0,
-                                            }}
-                                        >
+                                        <p className="text-base font-semibold text-tichtich-black">
                                             {label}
                                         </p>
-                                        <p
-                                            style={{
-                                                fontSize: 11,
-                                                color: '#aaa',
-                                                marginTop: 4,
-                                                marginBottom: 0,
-                                            }}
-                                        >
+                                        <p className="text-xs text-muted-foreground font-medium mt-1 whitespace-nowrap">
                                             {sub}
                                         </p>
                                     </button>
@@ -725,31 +705,28 @@ function RouteComponent() {
                             </div>
 
                             {/* Submit */}
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={!isFullyAllocated}
-                                className="submit-btn"
-                                style={{
-                                    width: '100%',
-                                    padding: '16px 0',
-                                    borderRadius: 18,
-                                    border: 'none',
-                                    backgroundColor: '#E8E0D0',
-                                    color: isFullyAllocated
-                                        ? '#1a1a1a'
-                                        : '#bbb',
-                                    fontSize: 15,
-                                    fontWeight: 800,
-                                    cursor: isFullyAllocated
-                                        ? 'pointer'
-                                        : 'not-allowed',
-                                }}
+                                className={`submit-btn w-full py-4 rounded-[18px] border-none text-[15px] font-extrabold transition-colors ${
+                                    isFullyAllocated
+                                        ? 'bg-[#E8E0D0] text-[#1a1a1a] cursor-pointer'
+                                        : 'bg-[#E8E0D0] text-[#bbb] cursor-not-allowed'
+                                }`}
                             >
-                                {isFullyAllocated
-                                    ? '✅ Lưu kho báu'
-                                    : 'Lưu kho báu'}
-                            </button>
+                                lưu kho báu
+                            </button> */}
+
+                            <TichTichButton
+                                variant="primary"
+                                size="lg"
+                                fullWidth
+                                isDisabled={!isFullyAllocated}
+                                onClick={handleSubmit}
+                            >
+                                lưu kho báu
+                            </TichTichButton>
 
                             {/* Remaining hint */}
                             {!isFullyAllocated && total > 0 && (

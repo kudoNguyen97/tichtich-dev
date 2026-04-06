@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import React from 'react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -77,12 +78,12 @@ export function AllocationChart({
     // Top labels: Học tập (1), Tiêu vặt (3)
     const TOP_INDICES = [1, 3];
     // Bottom labels: Tiết kiệm (0), Từ thiện (2)
-    const BOTTOM_INDICES = [0, 2];
+    // const BOTTOM_INDICES = [0, 2];
 
     return (
-        <div className="relative">
+        <div className="relative my-[100px]">
             {/* ── Top labels (Học tập, Tiêu vặt) ── */}
-            <div className="flex h-20 mb-2">
+            {/* <div className="flex h-20 mb-2">
                 {categories.map((c, i) => {
                     if (!TOP_INDICES.includes(i)) return null;
                     // const leftPos = getLabelPosition(i);
@@ -133,20 +134,44 @@ export function AllocationChart({
                         </div>
                     );
                 })}
-            </div>
+            </div> */}
 
             {/* ── Horizontal bar ── */}
-            <div className="flex gap-2 h-20 overflow-hidden rounded-xl">
+            <div className="flex gap-2 h-20 rounded-xl">
                 {categories.map((c, i) => (
                     <div
                         key={c.id}
-                        className="flex items-end bg-tichtich-primary-100 justify-start rounded-lg p-2 transition-all duration-200 ease-out "
+                        className="relative flex items-end bg-tichtich-primary-100 justify-start rounded-lg p-2 transition-all duration-200 ease-out "
                         style={{
                             width: `${barWidths[i]}%`,
                             // minWidth: barWidths[i] > 0 ? '40px' : '0',
                             minWidth: '40px',
                         }}
                     >
+                        <div
+                            className={cn(
+                                'absolute left-0  flex flex-col items-start justify-start transition-all duration-300 ease-out',
+                                TOP_INDICES.includes(i)
+                                    ? 'top-[-80px]'
+                                    : 'bottom-[-80px]'
+                            )}
+                            style={{ width: `${barWidths[i]}%` }}
+                        >
+                            <div className="flex flex-col items-start">
+                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-md">
+                                    <img
+                                        src={c.icon as string}
+                                        className="size-full object-contain"
+                                    />
+                                </div>
+                                <span className="text-xs text-muted-foreground font-medium mt-1 whitespace-nowrap">
+                                    {c.label}
+                                </span>
+                                <span className="text-xs font-semibold whitespace-nowrap">
+                                    {formatMoney(c.amount)}
+                                </span>
+                            </div>
+                        </div>
                         <span className="text-sm font-semibold text-black">
                             {displayPercentages[i]}%
                         </span>
@@ -155,7 +180,7 @@ export function AllocationChart({
             </div>
 
             {/* ── Bottom labels (Tiết kiệm, Từ thiện) ── */}
-            <div className="flex h-20 mt-2">
+            {/* <div className="flex h-20 mt-2">
                 {categories.map((c, i) => {
                     if (!BOTTOM_INDICES.includes(i)) return null;
 
@@ -183,7 +208,7 @@ export function AllocationChart({
                         </div>
                     );
                 })}
-            </div>
+            </div> */}
         </div>
     );
 }

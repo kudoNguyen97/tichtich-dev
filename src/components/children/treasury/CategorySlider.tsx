@@ -84,7 +84,7 @@ export function CategorySlider({
                         <>
                             {/* Progress fill */}
                             <div
-                                className="absolute top-0 left-0 h-full bg-tichtich-primary-100 rounded-full"
+                                className="absolute top-0 left-0 h-full bg-tichtich-primary-200 rounded-full"
                                 style={{ width: `${pct}%` }}
                             />
 

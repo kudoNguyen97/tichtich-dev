@@ -141,7 +141,7 @@ export function AllocationChart({
                 {categories.map((c, i) => (
                     <div
                         key={c.id}
-                        className="relative flex items-end bg-tichtich-primary-200 justify-start rounded-lg p-2 transition-all duration-200 ease-out "
+                        className="relative flex items-end bg-tichtich-primary-100 justify-start rounded-lg p-2 transition-all duration-200 ease-out "
                         style={{
                             width: `${barWidths[i]}%`,
                             // minWidth: barWidths[i] > 0 ? '40px' : '0',

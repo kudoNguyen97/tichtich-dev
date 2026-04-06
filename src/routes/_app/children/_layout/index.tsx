@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
 // import type { ProfileWallet } from '@/features/auth/types/auth.type';
 import { useGetReceivedTransactions } from '@/features/profile-transactions/hooks/useProfileTransactions';
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/_app/children/_layout/')({
 // }
 
 function RouteComponent() {
+    const navigate = useNavigate();
     const profile = useSelectedChildProfile();
     const { data: transactions } = useGetReceivedTransactions(
         profile?.id ?? ''
@@ -62,7 +63,11 @@ function RouteComponent() {
                     isOpen={true}
                     totalAmount={totalAmount}
                     rewards={rewards}
-                    onShare={() => {}}
+                    onShare={(reward, index) => {
+                        navigate({
+                            to: `/children/treasury?share=${reward.id}&index=${index}`,
+                        });
+                    }}
                     onClose={() => {}}
                     navigateTo="/adult/journey"
                 />

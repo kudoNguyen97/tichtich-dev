@@ -110,7 +110,7 @@ export function RewardTransactionDialog({
                         variant="outline"
                         size="sm"
                         onClick={handleShare}
-                        className="w-[50%]"
+                        className="w-[80%]"
                     >
                         Chia tiền ngay
                     </TichTichButton>

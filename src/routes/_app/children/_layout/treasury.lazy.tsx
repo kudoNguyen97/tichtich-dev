@@ -374,7 +374,7 @@ function RouteComponent() {
     //     </div>
     // );
     return (
-        <div className=" mx-auto min-h-screen bg-background">
+        <div className=" mx-auto  bg-background mb-20">
             <div className="p-4">
                 {/* ── Top bar ── */}
                 <div className="flex items-center justify-between mb-3">
@@ -404,7 +404,7 @@ function RouteComponent() {
                                         isSelected
                                             ? 'border-2 border-tichtich-black'
                                             : 'border-1.5 border-tichtich-primary-200',
-                                        'rounded-2xl p-3'
+                                        'rounded-2xl p-3 flex items-center justify-center flex-col cursor-pointer'
                                     )
                                 }
                             >

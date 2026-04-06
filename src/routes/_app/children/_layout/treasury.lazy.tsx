@@ -1,19 +1,19 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
+// import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
 import { useState, useCallback, useMemo } from 'react';
 import {
-    Button,
-    Slider,
-    SliderTrack,
-    SliderThumb,
-    SliderOutput,
-    Label,
+    // Button,
+    // Slider,
+    // SliderTrack,
+    // SliderThumb,
+    // SliderOutput,
+    // Label,
     Tab,
     TabList,
     TabPanel,
     Tabs,
-    TextField,
-    Input,
+    // TextField,
+    // Input,
 } from 'react-aria-components';
 import dayjs from 'dayjs';
 import { cn } from '@/utils/cn';
@@ -40,17 +40,17 @@ const DEFAULT_CATEGORIES = [
 ];
 
 // Soft pastel-accent palette mapped to each category
-const CAT_COLORS = {
-    savings: { track: '#10b981', thumb: '#059669' }, // emerald
-    learning: '#6366f1', // indigo
-    charity: '#f43f5e', // rose
-    spending: '#f59e0b', // amber
-};
+// const CAT_COLORS = {
+//     savings: { track: '#10b981', thumb: '#059669' }, // emerald
+//     learning: '#6366f1', // indigo
+//     charity: '#f43f5e', // rose
+//     spending: '#f59e0b', // amber
+// };
 
-const getColor = (id: any) => {
-    const c = CAT_COLORS[id as keyof typeof CAT_COLORS];
-    return typeof c === 'string' ? c : c.track;
-};
+// const getColor = (id: any) => {
+//     const c = CAT_COLORS[id as keyof typeof CAT_COLORS];
+//     return typeof c === 'string' ? c : c.track;
+// };
 
 export const Route = createLazyFileRoute('/_app/children/_layout/treasury')({
     component: RouteComponent,
@@ -103,8 +103,8 @@ function RouteComponent() {
         );
     };
 
-    const percentOf = (amount: any) =>
-        total > 0 ? Math.round((amount / total) * 100) : 0;
+    // const percentOf = (amount: any) =>
+    //     total > 0 ? Math.round((amount / total) * 100) : 0;
 
     const handleSubmit = () => {
         if (!isFullyAllocated) return;
@@ -525,7 +525,7 @@ function RouteComponent() {
                                 <AllocationChart
                                     categories={categories}
                                     total={total}
-                                    allocated={allocated}
+                                    // allocated={allocated}
                                 />
 
                                 {/* Bar */}

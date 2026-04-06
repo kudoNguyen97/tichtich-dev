@@ -12,21 +12,19 @@ interface Category {
 interface AllocationChartProps {
     categories: readonly Category[];
     total: number;
-    allocated: number;
+    // allocated: number;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const formatMoney = (n: number) => n.toLocaleString('vi-VN') + ' đ';
 
-const OPACITY_LEVELS = [1, 0.8, 0.6, 0.4];
-
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function AllocationChart({
     categories,
     total,
-    allocated,
+    // allocated,
 }: AllocationChartProps) {
     // ── Bar width logic (from AllocationChart reference) ──
     const totalAllocated = categories.reduce((sum, cat) => sum + cat.amount, 0);
@@ -57,24 +55,24 @@ export function AllocationChart({
     });
 
     // ── Label position logic (from original SplitMoney inline code) ──
-    const percentOf = (amount: number) =>
-        total > 0 ? Math.round((amount / total) * 100) : 0;
+    // const percentOf = (amount: number) =>
+    //     total > 0 ? Math.round((amount / total) * 100) : 0;
 
-    const getLabelPosition = (index: number) => {
-        const leftPct = categories
-            .slice(0, index)
-            .reduce((s, x) => s + Math.max(percentOf(x.amount), 1), 0);
-        const myPct = Math.max(percentOf(categories[index].amount), 1);
-        const totalFlex =
-            categories.reduce(
-                (s, x) => s + Math.max(percentOf(x.amount), 1),
-                0
-            ) +
-            (allocated < total ? Math.max(100 - percentOf(allocated), 1) : 0);
-        const leftActual = (leftPct / totalFlex) * 100;
-        const widthActual = (myPct / totalFlex) * 100;
-        return leftActual + widthActual / 2;
-    };
+    // const getLabelPosition = (index: number) => {
+    //     const leftPct = categories
+    //         .slice(0, index)
+    //         .reduce((s, x) => s + Math.max(percentOf(x.amount), 1), 0);
+    //     const myPct = Math.max(percentOf(categories[index].amount), 1);
+    //     const totalFlex =
+    //         categories.reduce(
+    //             (s, x) => s + Math.max(percentOf(x.amount), 1),
+    //             0
+    //         ) +
+    //         (allocated < total ? Math.max(100 - percentOf(allocated), 1) : 0);
+    //     const leftActual = (leftPct / totalFlex) * 100;
+    //     const widthActual = (myPct / totalFlex) * 100;
+    //     return leftActual + widthActual / 2;
+    // };
 
     // Top labels: Học tập (1), Tiêu vặt (3)
     const TOP_INDICES = [1, 3];
@@ -87,8 +85,7 @@ export function AllocationChart({
             <div className="flex h-20 mb-2">
                 {categories.map((c, i) => {
                     if (!TOP_INDICES.includes(i)) return null;
-                    const leftPos = getLabelPosition(i);
-                    console.log(i);
+                    // const leftPos = getLabelPosition(i);
 
                     return (
                         // <div
@@ -162,7 +159,7 @@ export function AllocationChart({
                 {categories.map((c, i) => {
                     if (!BOTTOM_INDICES.includes(i)) return null;
 
-                    const leftPos = getLabelPosition(i);
+                    // const leftPos = getLabelPosition(i);
                     return (
                         <div
                             key={`bottom-${c.id}`}

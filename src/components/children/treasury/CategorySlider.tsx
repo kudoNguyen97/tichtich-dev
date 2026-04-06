@@ -1,6 +1,5 @@
 import { Slider, SliderTrack, SliderThumb, Label } from 'react-aria-components';
 import { Sparkles } from 'lucide-react';
-import { img } from 'motion/react-client';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -41,8 +40,6 @@ export function CategorySlider({
     totalAmount,
     onChange,
 }: CategorySliderProps) {
-    const Icon = category.icon;
-
     /**
      * React Aria's <Slider> nhận value theo đơn vị thực.
      * step=1000 → bước nhảy 1.000 đ cho gọn.

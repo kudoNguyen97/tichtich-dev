@@ -669,13 +669,7 @@ function RouteComponent() {
                             ))}
 
                             {/* Presets */}
-                            <div
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '1fr 1fr',
-                                    gap: 12,
-                                }}
-                            >
+                            <div className="grid grid-cols-2 gap-2">
                                 {[
                                     {
                                         label: '40-30-20-10',

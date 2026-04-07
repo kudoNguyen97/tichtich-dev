@@ -6,13 +6,26 @@ import {
     useNavigate,
 } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AdultAppBarLeftAvatarButton } from '@/components/adult/AdultAppBarActions';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { RefreshCw, User } from 'lucide-react';
 import { AppBar } from '@/components/layout/AppBar';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { RewardTransactionDialog } from '@/components/children/home/RewardTransactionDialog';
+import { useGetReceivedTransactions } from '@/features/profile-transactions/hooks/useProfileTransactions';
+import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
+
+export const Route = createFileRoute('/_app/children/_layout')({
+    beforeLoad: () => {
+        const { selectedProfile } = useAuthStore.getState();
+        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+            throw redirect({ to: '/profiles' });
+        }
+    },
+    component: ChildrenAppLayout,
+});
 
 function ChildrenAppLayout() {
     const navigate = useNavigate();
@@ -37,20 +50,32 @@ function ChildrenAppLayout() {
         setIsSheetOpen(false);
         navigate({ to: '/children/settings' });
     };
+    const profile = useSelectedChildProfile();
+    const { data: transactions } = useGetReceivedTransactions(
+        profile?.id ?? ''
+    );
+
+    const pending = useMemo(
+        () => (transactions ?? []).filter((t) => t.status === 'pending'),
+        [transactions]
+    );
+
+    const rewards = useMemo(
+        () =>
+            pending.map((t) => ({
+                id: t.id,
+                amount: t.amount,
+                message: t.title,
+            })),
+        [pending]
+    );
+
+    const totalAmount = useMemo(
+        () => pending.reduce((sum, t) => sum + t.amount, 0),
+        [pending]
+    );
     return (
         <>
-            {/* <AppLayout
-                    defaultTitle={titlePrefix}
-                    defaultSubtitle={subtitleKidName}
-                    defaultLeftAction={
-                        <AdultAppBarLeftAvatarButton
-                            selectedProfile={selectedProfile}
-                            onPress={() => setIsSheetOpen(true)}
-                        />
-                    }
-                    // defaultRightAction={<AdultAppBarRightBellButton />}
-                    appLayoutClassName="mb-20"
-                ></AppLayout> */}
             <AppBar
                 title={titlePrefix}
                 subtitle={subtitleKidName}
@@ -64,6 +89,20 @@ function ChildrenAppLayout() {
             />
             <div className="bg-[url('/images/background-illustration-desktop.png')] bg-cover bg-center min-h-screen">
                 <Outlet />
+                {pending.length > 0 && (
+                    <RewardTransactionDialog
+                        isOpen={true}
+                        totalAmount={totalAmount}
+                        rewards={rewards}
+                        onShare={(reward, index) => {
+                            navigate({
+                                to: `/children/treasury?share=${reward.id}&index=${index}`,
+                            });
+                        }}
+                        onClose={() => {}}
+                        navigateTo="/adult/journey"
+                    />
+                )}
             </div>
             <BottomNav />
             <BottomSheet
@@ -95,13 +134,3 @@ function ChildrenAppLayout() {
         </>
     );
 }
-
-export const Route = createFileRoute('/_app/children/_layout')({
-    beforeLoad: () => {
-        const { selectedProfile } = useAuthStore.getState();
-        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
-            throw redirect({ to: '/profiles' });
-        }
-    },
-    component: ChildrenAppLayout,
-});

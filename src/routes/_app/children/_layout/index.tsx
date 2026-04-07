@@ -28,50 +28,5 @@ export const Route = createFileRoute('/_app/children/_layout/')({
 // }
 
 function RouteComponent() {
-    const navigate = useNavigate();
-    const profile = useSelectedChildProfile();
-    const { data: transactions } = useGetReceivedTransactions(
-        profile?.id ?? ''
-    );
-
-    const pending = useMemo(
-        () => (transactions ?? []).filter((t) => t.status === 'pending'),
-        [transactions]
-    );
-
-    const rewards = useMemo(
-        () =>
-            pending.map((t) => ({
-                id: t.id,
-                amount: t.amount,
-                message: t.title,
-            })),
-        [pending]
-    );
-
-    const totalAmount = useMemo(
-        () => pending.reduce((sum, t) => sum + t.amount, 0),
-        [pending]
-    );
-
-    if (!profile) return null;
-
-    return (
-        <div>
-            {pending.length > 0 && (
-                <RewardTransactionDialog
-                    isOpen={true}
-                    totalAmount={totalAmount}
-                    rewards={rewards}
-                    onShare={(reward, index) => {
-                        navigate({
-                            to: `/children/treasury?share=${reward.id}&index=${index}`,
-                        });
-                    }}
-                    onClose={() => {}}
-                    navigateTo="/adult/journey"
-                />
-            )}
-        </div>
-    );
+    return <div>Home Page</div>;
 }

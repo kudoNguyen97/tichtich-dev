@@ -65,10 +65,13 @@ export const Route = createLazyFileRoute('/_app/children/_layout/treasury')({
 //     );
 // }
 
+type TreasuryTabKey = 'add' | 'spend';
+
 function RouteComponent() {
     const [totalInput, setTotalInput] = useState('200000');
     const total = Number(totalInput) || 0;
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+    const [treasuryTab, setTreasuryTab] = useState<TreasuryTabKey>('add');
 
     const allocated = useMemo(
         () => categories.reduce((s, c) => s + c.amount, 0),
@@ -386,36 +389,78 @@ function RouteComponent() {
                     </span>
                 </div>
 
-                <Tabs defaultSelectedKey="add" className="flex flex-col gap-4">
+                <Tabs
+                    selectedKey={treasuryTab}
+                    onSelectionChange={(key) =>
+                        setTreasuryTab(key as TreasuryTabKey)
+                    }
+                    className="flex flex-col gap-4"
+                >
                     <TabList
                         aria-label="Chức năng"
-                        className="grid grid-cols-2 gap-3"
+                        className="flex min-w-0 gap-2"
                     >
-                        {[
-                            { key: 'add', symbol: '+', label: 'Thêm tiền' },
-                            { key: 'spend', symbol: '−', label: 'Chi tiền' },
-                        ].map(({ key, symbol, label }) => (
-                            <Tab
-                                key={key}
-                                id={key}
-                                className={({ isSelected }) =>
-                                    cn(
-                                        'bg-tichtich-primary-300',
+                        {(
+                            [
+                                {
+                                    key: 'add' as const,
+                                    symbol: '+',
+                                    label: 'Thêm tiền',
+                                    badgeClass:
+                                        'bg-tichtich-green text-tichtich-black',
+                                },
+                                {
+                                    key: 'spend' as const,
+                                    symbol: '−',
+                                    label: 'Chi tiền',
+                                    badgeClass: 'bg-[#e85a4a] text-white',
+                                },
+                            ] as const
+                        ).map(({ key, symbol, label, badgeClass }) => {
+                            const isSelected = treasuryTab === key;
+                            return (
+                                <Tab
+                                    key={key}
+                                    id={key}
+                                    className={cn(
+                                        'min-w-0 rounded-2xl px-2 py-3 flex flex-col items-center justify-center cursor-pointer outline-none transition-all duration-300 ease-out',
+                                        'focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
                                         isSelected
-                                            ? 'border-2 border-tichtich-black'
-                                            : 'border-1.5 border-tichtich-primary-200',
-                                        'rounded-2xl p-3 flex items-center justify-center flex-col cursor-pointer'
-                                    )
-                                }
-                            >
-                                <div className="size-11 rounded-full bg-tichtich-primary-200 flex items-center justify-center text-2xl text-white font-bold leading-none">
-                                    {symbol}
-                                </div>
-                                <span className="text-sm font-bold text-tichtich-black">
-                                    {label}
-                                </span>
-                            </Tab>
-                        ))}
+                                            ? 'flex-[2.15] shrink-0 border-2 border-tichtich-black bg-tichtich-primary-300 opacity-100 shadow-sm'
+                                            : 'flex-1 shrink-0 border border-[#c9b896] bg-tichtich-primary-300 opacity-[0.7]'
+                                    )}
+                                >
+                                    <div
+                                        className={cn(
+                                            'relative mb-1.5 size-11 shrink-0 transition-opacity duration-300',
+                                            isSelected
+                                                ? 'opacity-100'
+                                                : 'opacity-50'
+                                        )}
+                                    >
+                                        <div className="size-11 rounded-full bg-tichtich-primary-200" />
+                                        <span
+                                            className={cn(
+                                                'absolute -right-0.5 -top-0.5 flex size-4.5 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold leading-none shadow-sm',
+                                                badgeClass
+                                            )}
+                                        >
+                                            {symbol}
+                                        </span>
+                                    </div>
+                                    <span
+                                        className={cn(
+                                            'text-sm leading-tight text-center transition-colors duration-300',
+                                            isSelected
+                                                ? 'font-bold text-tichtich-black'
+                                                : 'font-medium text-tichtich-black/45'
+                                        )}
+                                    >
+                                        {label}
+                                    </span>
+                                </Tab>
+                            );
+                        })}
                     </TabList>
 
                     <TabPanel id="add" className="flex flex-col gap-4">

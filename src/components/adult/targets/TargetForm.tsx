@@ -42,12 +42,23 @@ const getDaysBetween = (start: string, end: string) => {
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 };
 
+/** Gợi ý: chữ số đã gõ × 1.000 và × 10.000 (giống màn thưởng), trong khoảng hợp lệ. */
+const MAX_TARGET_AMOUNT = 10_000_000;
+
+function getTargetAmountSuggestions(typedDigits: string): number[] {
+    const n = parseInt(typedDigits, 10);
+    if (!n || isNaN(n)) return [];
+    const candidates = [n * 1_000, n * 10_000];
+    return candidates.filter((v) => v >= 1 && v <= MAX_TARGET_AMOUNT);
+}
+
 const GoalForm = () => {
     const {
         register,
         handleSubmit,
         control,
         setValue,
+        clearErrors,
         watch,
         formState: { errors },
     } = useForm<GoalFormData>({
@@ -63,6 +74,12 @@ const GoalForm = () => {
     });
 
     const [amountDisplay, setAmountDisplay] = useState('');
+    const [typedDigits, setTypedDigits] = useState('');
+    const [currentAmount, setCurrentAmount] = useState<number | undefined>(
+        undefined
+    );
+    const [suggestionTagsDismissed, setSuggestionTagsDismissed] =
+        useState(false);
     const messageVal = watch('message') || '';
     const startDate = watch('startDate') || '';
     const endDate = watch('endDate') || '';
@@ -73,14 +90,18 @@ const GoalForm = () => {
     };
 
     const handleAmountChange = (val: string) => {
+        setSuggestionTagsDismissed(false);
         const digits = val.replace(/\D/g, '');
         const num = digits ? parseInt(digits, 10) : NaN;
+        setTypedDigits(digits);
+        setCurrentAmount(isNaN(num) ? undefined : num);
         setAmountDisplay(isNaN(num) ? '' : formatVndAmount(num));
         if (isNaN(num)) {
             setValue('amount', undefined as unknown as number, {
-                shouldValidate: true,
+                shouldValidate: false,
                 shouldDirty: true,
             });
+            clearErrors('amount');
         } else {
             setValue('amount', num, {
                 shouldValidate: true,
@@ -88,6 +109,18 @@ const GoalForm = () => {
             });
         }
     };
+
+    const pickSuggestion = (amount: number) => {
+        setAmountDisplay(formatVndAmount(amount));
+        setTypedDigits(String(amount / 1000));
+        setCurrentAmount(amount);
+        setValue('amount', amount, { shouldValidate: true, shouldDirty: true });
+        setSuggestionTagsDismissed(true);
+    };
+
+    const suggestions = getTargetAmountSuggestions(typedDigits);
+    const amountFieldError =
+        typedDigits.length > 0 ? errors.amount?.message : undefined;
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="">
@@ -157,8 +190,12 @@ const GoalForm = () => {
                             value={amountDisplay}
                             onChange={handleAmountChange}
                             onBlur={onBlur}
-                            error={errors.amount?.message}
-                            suggestions={[]}
+                            error={amountFieldError}
+                            suggestions={
+                                suggestionTagsDismissed ? [] : suggestions
+                            }
+                            selectedAmount={currentAmount}
+                            onPickSuggestion={pickSuggestion}
                             placeholder="0"
                         />
                     )}

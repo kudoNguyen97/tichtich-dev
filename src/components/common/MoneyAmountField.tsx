@@ -13,7 +13,8 @@ export interface MoneyAmountFieldProps {
     placeholder?: string;
     suggestions: number[];
     selectedAmount?: number;
-    onPickSuggestion: (amount: number) => void;
+    /** Bắt buộc khi `suggestions` có phần tử (chip gọi callback). */
+    onPickSuggestion?: (amount: number) => void;
     suggestionGroupLabel?: string;
     className?: string;
 }
@@ -109,7 +110,7 @@ export function MoneyAmountField({
                             <button
                                 key={amount}
                                 type="button"
-                                onClick={() => onPickSuggestion(amount)}
+                                onClick={() => onPickSuggestion?.(amount)}
                                 aria-pressed={isSelected}
                                 className={[
                                     'px-4 py-2 rounded-xl border text-sm font-bold transition-colors',

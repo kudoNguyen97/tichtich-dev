@@ -1,9 +1,4 @@
-import { useMemo } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
-// import type { ProfileWallet } from '@/features/auth/types/auth.type';
-import { useGetReceivedTransactions } from '@/features/profile-transactions/hooks/useProfileTransactions';
-import { RewardTransactionDialog } from '@/components/children/home/RewardTransactionDialog';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/children/_layout/')({
     component: RouteComponent,

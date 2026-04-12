@@ -16,5 +16,5 @@ dist-ssr
 .claude
 __unconfig*
 todos.json
-
-
+.cursor/
+docs/

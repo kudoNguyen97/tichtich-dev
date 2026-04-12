@@ -29,6 +29,24 @@ function validManagedKidId(
     return p?.profileType === 'kid' ? id : null;
 }
 
+/** Kid đầu tiên theo thứ tự mảng `profiles` (filter kid). */
+function firstKidProfileId(profiles: Profile[]): string | null {
+    const first = profiles.find((p) => p.profileType === 'kid');
+    return first?.id ?? null;
+}
+
+/**
+ * Ưu tiên `preferredId` nếu còn là kid hợp lệ; không thì kid đầu tiên nếu có.
+ */
+function resolveManagedKidProfileId(
+    profiles: Profile[],
+    preferredId: string | null
+): string | null {
+    const valid = validManagedKidId(profiles, preferredId);
+    if (valid !== null) return valid;
+    return firstKidProfileId(profiles);
+}
+
 export const useAuthStore = create<AuthState>()(
     devtools(
         persist(
@@ -54,7 +72,7 @@ export const useAuthStore = create<AuthState>()(
                         profiles,
                         isAuthenticated: true,
                         selectedProfile: matched,
-                        managedKidProfileId: validManagedKidId(
+                        managedKidProfileId: resolveManagedKidProfileId(
                             profiles,
                             prevManaged
                         ),
@@ -71,7 +89,7 @@ export const useAuthStore = create<AuthState>()(
                 setProfiles: (profiles) =>
                     set((state) => ({
                         profiles,
-                        managedKidProfileId: validManagedKidId(
+                        managedKidProfileId: resolveManagedKidProfileId(
                             profiles,
                             state.managedKidProfileId
                         ),
@@ -82,10 +100,13 @@ export const useAuthStore = create<AuthState>()(
 
                 setManagedKidProfileId: (id) =>
                     set((state) => ({
-                        managedKidProfileId: validManagedKidId(
-                            state.profiles,
-                            id
-                        ),
+                        managedKidProfileId:
+                            id === null
+                                ? null
+                                : resolveManagedKidProfileId(
+                                      state.profiles,
+                                      id
+                                  ),
                     })),
 
                 clearSelectedProfile: () =>

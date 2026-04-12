@@ -23,7 +23,7 @@ const inputClassName = [
     'w-full h-[52px] rounded-xl border bg-white',
     'pl-4 pr-10 text-lg font-bold text-orange-500',
     'outline-none transition-colors placeholder:text-gray-300',
-    'focus:ring-2 focus:ring-orange-300',
+    'focus:ring-1 focus:ring-orange-300',
 ].join(' ');
 
 export function MoneyAmountField({
@@ -60,7 +60,7 @@ export function MoneyAmountField({
             <div className="mb-5">
                 <label
                     {...labelProps}
-                    className="flex items-center gap-1 text-sm font-bold text-gray-700 mb-2"
+                    className="flex items-center gap-1 text-base font-bold text-gray-700 mb-2"
                 >
                     {label}{' '}
                     {isRequired && (
@@ -79,7 +79,7 @@ export function MoneyAmountField({
                             inputClassName,
                             error
                                 ? 'border-red-400 focus:ring-red-200'
-                                : 'border-amber-300 hover:border-amber-400 focus:border-orange-400'
+                                : 'border-tichtich-black hover:border-tichtich-primary-200 focus:border-tichtich-primary-200'
                         )}
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-orange-400 pointer-events-none select-none">
@@ -113,10 +113,10 @@ export function MoneyAmountField({
                                 onClick={() => onPickSuggestion?.(amount)}
                                 aria-pressed={isSelected}
                                 className={[
-                                    'px-4 py-2 rounded-xl border text-sm font-bold transition-colors',
+                                    'px-4 py-2 cursor-pointer rounded-lg border text-sm font-bold transition-colors',
                                     isSelected
-                                        ? 'bg-orange-500 border-orange-500 text-white'
-                                        : 'bg-white border-amber-300 text-orange-500 hover:bg-amber-50 hover:border-amber-400',
+                                        ? 'bg-tichtich-primary-200 border-tichtich-primary-200 text-white'
+                                        : 'bg-white border-tichtich-black text-tichtich-black hover:bg-tichtich-primary-300/40 hover:border-tichtich-primary-200',
                                 ].join(' ')}
                             >
                                 {formatRewardAmountDisplay(amount)}

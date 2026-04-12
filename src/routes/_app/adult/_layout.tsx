@@ -31,6 +31,7 @@ function AdultAppLayout() {
         selectedProfile?.gender === 'male' ? 'Chào ba của' : 'Chào mẹ của';
 
     const kidProfiles = allProfiles.filter((p) => p.profileType === 'kid');
+    // Store đã set managedKidProfileId mặc định; ?? kidProfiles[0] phòng dữ liệu lệch.
     const subtitleKidName =
         kidProfiles.find((p) => p.id === managedKidProfileId)?.fullName ??
         kidProfiles[0]?.fullName;

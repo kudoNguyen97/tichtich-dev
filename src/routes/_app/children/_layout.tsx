@@ -6,7 +6,7 @@ import {
     useNavigate,
 } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AdultAppBarLeftAvatarButton } from '@/components/adult/AdultAppBarActions';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { TichTichButton } from '@/components/common/TichTichButton';
@@ -33,6 +33,8 @@ function ChildrenAppLayout() {
     const allProfiles = useAuthStore((s) => s.profiles);
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [isRewardTransactionDialogOpen, setIsRewardTransactionDialogOpen] =
+        useState(false);
 
     const titlePrefix = 'Xin chào';
 
@@ -70,6 +72,12 @@ function ChildrenAppLayout() {
         [pending]
     );
 
+    useEffect(() => {
+        if (pending.length > 0) {
+            setIsRewardTransactionDialogOpen(true);
+        }
+    }, [pending]);
+
     const totalAmount = useMemo(
         () => pending.reduce((sum, t) => sum + t.amount, 0),
         [pending]
@@ -91,10 +99,12 @@ function ChildrenAppLayout() {
                 <Outlet />
                 {pending.length > 0 && (
                     <RewardTransactionDialog
-                        isOpen={true}
+                        isOpen={isRewardTransactionDialogOpen}
                         totalAmount={totalAmount}
                         rewards={rewards}
                         onShare={(reward, index) => {
+                            setIsRewardTransactionDialogOpen(false);
+
                             navigate({
                                 to: `/children/treasury?share=${reward.id}&index=${index}`,
                             });

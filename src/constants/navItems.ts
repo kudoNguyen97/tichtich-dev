@@ -52,7 +52,7 @@ export const ADULT_NAV_ITEMS: NavItem[] = [
     },
     {
         labelKey: 'nav.target',
-        to: '/adult/target',
+        to: '/adult/mission',
         iconSrc: '/icons/navbar/adult-target.svg',
     },
     {

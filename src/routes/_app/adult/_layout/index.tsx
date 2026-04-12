@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import HomeCardSelectProfile from '@/components/adult/home/HomeCardSelectProfile';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { cn } from '@/utils/cn';
 
-export const Route = createLazyFileRoute('/_app/adult/_layout/')({
+export const Route = createFileRoute('/_app/adult/_layout/')({
     component: HomeAdultPage,
+    head: () => ({
+        meta: [{ title: 'Tích Tích - Phụ huynh' }],
+    }),
 });
 
 function HomeAdultPage() {
@@ -37,6 +40,7 @@ function HomeAdultPage() {
 
     let cardProfile = selectedProfile;
     if (kidProfiles.length > 0) {
+        // Store đã resolve kid mặc định; ?? kidProfiles[0] phòng dữ liệu lệch tạm thời.
         const resolved =
             kidProfiles.find((p) => p.id === managedKidProfileId) ??
             kidProfiles[0];

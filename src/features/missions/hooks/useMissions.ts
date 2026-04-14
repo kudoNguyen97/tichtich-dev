@@ -9,10 +9,13 @@ import type {
 import { queryClient } from '@/lib/queryClient';
 import { showError } from '@/lib/toast';
 
-export function useMissionsByProfileIdKid(profileId: string) {
+export function useMissionsByProfileIdKid(
+    profileId: string,
+    statuses?: string[]
+) {
     return useQuery({
-        queryKey: missionKeys.listByProfileIdKid(profileId),
-        queryFn: () => missionService.getListByProfileIdKid(profileId),
+        queryKey: missionKeys.listByProfileIdKid(profileId, statuses),
+        queryFn: () => missionService.getListByProfileIdKid(profileId, statuses),
         enabled: !!profileId,
         refetchOnMount: 'always',
     });

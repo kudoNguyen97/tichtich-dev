@@ -3,6 +3,6 @@ export const missionKeys = {
     create: () => [...missionKeys.all, 'create'] as const,
     listsByProfileIdKid: () =>
         [...missionKeys.all, 'listByProfileIdKid'] as const,
-    listByProfileIdKid: (profileId: string) =>
-        [...missionKeys.listsByProfileIdKid(), profileId] as const,
+    listByProfileIdKid: (profileId: string, statuses?: string[]) =>
+        [...missionKeys.listsByProfileIdKid(), profileId, statuses ?? []] as const,
 };

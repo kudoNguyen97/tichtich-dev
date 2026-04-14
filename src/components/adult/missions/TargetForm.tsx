@@ -25,6 +25,8 @@ import {
 } from '@/utils/targetGoalDates';
 import { calendarYmdToMissionUtcBounds } from '@/utils/missionDatePayload';
 import { MissionDatePickerDialog } from '@/components/adult/missions/MissionDatePickerDialog';
+import { MissionCarouselSection } from './MissionCarouselSection';
+import type { Mission } from '@/features/missions/types/mission.type';
 
 const formatDateLabel = (dateStr: string) => {
     if (!dateStr) return '';
@@ -73,7 +75,11 @@ function getTargetAmountSuggestions(typedDigits: string): number[] {
     return candidates.filter((v) => v >= 1 && v <= MAX_TARGET_AMOUNT);
 }
 
-const MissionForm = () => {
+interface MissionFormProps {
+    existingMissions: Mission[];
+}
+
+const MissionForm = ({ existingMissions }: MissionFormProps) => {
     const {
         register,
         handleSubmit,
@@ -261,6 +267,7 @@ const MissionForm = () => {
             className=""
             noValidate
         >
+            <MissionCarouselSection missions={existingMissions} />
             <div className="space-y-5 p-4 rounded-lg bg-tichtich-primary-300  mb-4">
                 {/* Tên mục tiêu */}
                 <div className="space-y-1.5">

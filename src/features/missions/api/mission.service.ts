@@ -14,8 +14,21 @@ export const missionService = {
             headers: { 'x-profile-id': profileAdultId },
         }),
 
-    getListByProfileIdKid: (profileId: string) =>
-        apiClient.get<Mission[]>(`/missions?profileId=${profileId}`),
+    getListByProfileIdKid: (profileId: string, statuses?: string[]) => {
+        return apiClient.get<Mission[]>('/missions', {
+            params: {
+                profileId,
+                ...(statuses && statuses.length > 0
+                    ? { status: statuses.join(',') }
+                    : {}),
+            },
+        });
+    },
+
+    getDetailMission: (missionId: string, profileId: string) =>
+        apiClient.get<Mission>(`/missions/${missionId}`, {
+            headers: { 'x-profile-id': profileId },
+        }),
 
     remove: (missionId: string) =>
         apiClient.delete<DeleteMissionData>(`/missions/${missionId}`),

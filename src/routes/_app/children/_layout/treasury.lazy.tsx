@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 // import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
 import { useState, useCallback, useMemo } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-aria-components';
@@ -7,18 +7,26 @@ import { cn } from '@/utils/cn';
 import { AllocationChart } from '@/components/children/treasury/AllocationChart';
 import { CategorySlider } from '@/components/children/treasury/CategorySlider';
 import { KidMissionCarouselSection } from '../../../../components/children/treasury/KidMissionCarouselSection';
+import { SpendPreviewChart } from '../../../../components/children/treasury/SpendPreviewChart';
 import { TichTichButton } from '@/components/common/TichTichButton';
+import { TichTichTextArea } from '@/components/common/TichTichTextArea';
+import { TichTichModal } from '@/components/common/TichTichModal';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useMeSettings } from '@/features/auth/hooks/useAuth';
 import { useMissionsByProfileIdKid } from '@/features/missions/hooks/useMissions';
+import { missionKeys } from '@/features/missions/api/mission.keys';
+import { walletKeys } from '@/features/wallets/api/wallet.keys';
 import {
     useBatchDeposit,
+    useBatchWithdraw,
     useWalletsByProfileId,
 } from '@/features/wallets/hooks/useWallets';
 import type {
     BatchDepositPayload,
+    BatchWithdrawPayload,
     Wallet,
 } from '@/features/wallets/types/wallet.type';
+import { queryClient } from '@/lib/queryClient';
 
 const formatMoney = (n: any) => n.toLocaleString('vi-VN');
 const toSafeNumber = (value: unknown, fallback = 0) => {
@@ -88,6 +96,41 @@ function buildDepositPayload(
     };
 }
 
+function buildWithdrawPayload({
+    selectedCategoryId,
+    spendAmount,
+    spendReason,
+    wallets,
+    spendCategories,
+}: {
+    selectedCategoryId: CategoryId;
+    spendAmount: number;
+    spendReason: string;
+    wallets: Wallet[];
+    spendCategories: CategoryItem[];
+}): BatchWithdrawPayload | null {
+    const walletType = CATEGORY_TO_WALLET_TYPE[selectedCategoryId];
+    const selectedWallet = wallets.find(
+        (wallet) => wallet.walletType === walletType
+    );
+    if (!selectedWallet) return null;
+
+    const selectedCategory = spendCategories.find(
+        (category) => category.id === selectedCategoryId
+    );
+    if (!selectedCategory) return null;
+
+    const safeAmount = Math.max(0, toSafeNumber(spendAmount, 0));
+    if (safeAmount <= 0) return null;
+
+    return {
+        walletUpdates: [{ walletId: selectedWallet.id, amount: safeAmount }],
+        type: 'withdraw',
+        title: `Rút tiền từ ví ${selectedCategory.label}`,
+        description: spendReason.trim(),
+    };
+}
+
 export const Route = createLazyFileRoute('/_app/children/_layout/treasury')({
     component: RouteComponent,
 });
@@ -96,10 +139,12 @@ type TreasuryTabKey = 'add' | 'spend';
 
 function RouteComponent() {
     useMeSettings();
+    const navigate = useNavigate();
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
     const { data: wallets } = useWalletsByProfileId(managedKidProfileId ?? '');
     const batchDeposit = useBatchDeposit();
+    const batchWithdraw = useBatchWithdraw();
     const {
         data: missions,
         isLoading: isMissionsLoading,
@@ -113,6 +158,11 @@ function RouteComponent() {
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
     const [treasuryTab, setTreasuryTab] = useState<TreasuryTabKey>('add');
     const [sliderResetKey, setSliderResetKey] = useState(0);
+    const [spendAmountInput, setSpendAmountInput] = useState('0');
+    const [selectedSpendCategoryId, setSelectedSpendCategoryId] =
+        useState<CategoryId | null>(null);
+    const [spendReason, setSpendReason] = useState('');
+    const [isTreasureOverviewOpen, setIsTreasureOverviewOpen] = useState(false);
 
     const allocated = useMemo(
         () =>
@@ -124,6 +174,44 @@ function RouteComponent() {
     );
 
     const isFullyAllocated = total > 0 && allocated === total;
+    const spendAmount = Math.max(0, toSafeNumber(spendAmountInput, 0));
+    const spendCategories = useMemo(
+        () =>
+            DEFAULT_CATEGORIES.map((category) => {
+                const walletType = CATEGORY_TO_WALLET_TYPE[category.id];
+                const matchedWallet = (wallets ?? []).find(
+                    (wallet) => wallet.walletType === walletType
+                );
+                return {
+                    ...category,
+                    amount: Math.max(
+                        0,
+                        toSafeNumber(matchedWallet?.balance, 0)
+                    ),
+                };
+            }),
+        [wallets]
+    );
+    const selectedSpendCategory = useMemo(
+        () =>
+            spendCategories.find(
+                (category) => category.id === selectedSpendCategoryId
+            ) ?? null,
+        [selectedSpendCategoryId, spendCategories]
+    );
+    const selectedWalletBalance = Math.max(
+        0,
+        toSafeNumber(selectedSpendCategory?.amount, 0)
+    );
+    const isInsufficient =
+        !!selectedSpendCategory &&
+        spendAmount > 0 &&
+        spendAmount > selectedWalletBalance;
+    const canSubmitSpend =
+        spendAmount > 0 &&
+        !!selectedSpendCategory &&
+        !isInsufficient &&
+        spendReason.trim().length > 0;
     const displayMissions = useMemo(() => {
         if (!managedKidProfileId || isMissionsLoading || isMissionsError) {
             return [];
@@ -180,13 +268,67 @@ function RouteComponent() {
                 payload,
             },
             {
-                onSuccess: () => {
+                onSuccess: async () => {
                     setTotalInput('0');
                     setCategories(DEFAULT_CATEGORIES);
                     setSliderResetKey((k) => k + 1);
+                    await queryClient.invalidateQueries({
+                        queryKey:
+                            walletKeys.listByProfileId(managedKidProfileId),
+                    });
+                    await queryClient.refetchQueries({
+                        queryKey:
+                            walletKeys.listByProfileId(managedKidProfileId),
+                        type: 'active',
+                    });
+                    setIsTreasureOverviewOpen(true);
                 },
             }
         );
+    };
+    const handleSpendSubmit = () => {
+        if (!canSubmitSpend) return;
+        if (!managedKidProfileId || !selectedSpendCategoryId) return;
+        const walletList = wallets ?? [];
+        if (walletList.length === 0) return;
+
+        const payload = buildWithdrawPayload({
+            selectedCategoryId: selectedSpendCategoryId,
+            spendAmount,
+            spendReason,
+            wallets: walletList,
+            spendCategories,
+        });
+        if (!payload) return;
+
+        batchWithdraw.mutate(
+            {
+                profileId: managedKidProfileId,
+                payload,
+            },
+            {
+                onSuccess: () => {
+                    setSpendAmountInput('0');
+                    setSelectedSpendCategoryId(null);
+                    setSpendReason('');
+                    queryClient.invalidateQueries({
+                        queryKey: missionKeys.listByProfileIdKid(
+                            managedKidProfileId,
+                            ['in_progress', 'completed']
+                        ),
+                    });
+                },
+            }
+        );
+    };
+
+    const handleCloseTreasureOverview = () => {
+        setIsTreasureOverviewOpen(false);
+    };
+
+    const handleGoToCharacter = () => {
+        setIsTreasureOverviewOpen(false);
+        navigate({ to: '/children/character' });
     };
 
     return (
@@ -432,47 +574,163 @@ function RouteComponent() {
                         </TichTichButton>
                     </TabPanel>
 
-                    <TabPanel id="spend">
-                        <div
-                            style={{
-                                backgroundColor: '#FDEBC7',
-                                border: '1px solid #EDD9A8',
-                                borderRadius: 20,
-                                padding: 24,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: 12,
-                                minHeight: 220,
-                            }}
-                        >
-                            <span style={{ fontSize: 40 }}>🚧</span>
-                            <p
-                                style={{
-                                    fontSize: 15,
-                                    fontWeight: 800,
-                                    color: '#1a1a1a',
-                                    margin: 0,
-                                }}
-                            >
-                                Chức năng chi tiền
-                            </p>
-                            <p
-                                style={{
-                                    fontSize: 13,
-                                    color: '#aaa',
-                                    textAlign: 'center',
-                                    maxWidth: 220,
-                                    margin: 0,
-                                }}
-                            >
-                                Đang được phát triển, sẽ ra mắt sớm thôi!
-                            </p>
+                    <TabPanel id="spend" className="flex flex-col gap-4">
+                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
+                            <label className="text-base font-bold text-tichtich-black">
+                                Hôm nay mình chi{' '}
+                                <span className="text-tichtich-red">*</span>
+                            </label>
+                            <div className="bg-white border border-tichtich-primary-200 rounded-xl h-13 flex items-center gap-2 p-3">
+                                <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={formatMoney(spendAmount)}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(
+                                            /\D/g,
+                                            ''
+                                        );
+                                        setSpendAmountInput(raw || '0');
+                                    }}
+                                    className="flex-1 border-none outline-none text-base font-bold text-tichtich-black bg-transparent"
+                                />
+                                <span className="text-sm font-bold text-muted-foreground">
+                                    đ
+                                </span>
+                            </div>
+                            {isInsufficient && (
+                                <p className="text-sm font-medium text-tichtich-red">
+                                    số tiền hiện tại trong ví không đủ
+                                </p>
+                            )}
                         </div>
+
+                        <div className="flex flex-col gap-2">
+                            <div>
+                                <p className="text-base font-bold text-tichtich-black mb-0">
+                                    Chọn túi tiền đã tiêu{' '}
+                                    <span className="text-tichtich-red">*</span>
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                {spendCategories.map((category) => {
+                                    const isSelected =
+                                        selectedSpendCategoryId === category.id;
+
+                                    return (
+                                        <button
+                                            key={category.id}
+                                            type="button"
+                                            onClick={() =>
+                                                setSelectedSpendCategoryId(
+                                                    category.id
+                                                )
+                                            }
+                                            className={cn(
+                                                'cursor-pointer border rounded-lg  py-4 transition-all duration-150 active:scale-95 border-tichtich-black',
+                                                isSelected
+                                                    ? 'bg-tichtich-primary-100'
+                                                    : 'bg-tichtich-primary-300'
+                                            )}
+                                        >
+                                            <div className="flex items-center justify-center gap-3">
+                                                <img
+                                                    src={category.icon}
+                                                    alt={category.label}
+                                                    className="size-8 object-contain"
+                                                />
+                                                <span className="text-base font-semibold text-tichtich-black">
+                                                    {category.label}
+                                                </span>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-4">
+                            <p className="text-base font-bold text-tichtich-black mb-0">
+                                Xem trước
+                            </p>
+                            <SpendPreviewChart
+                                categories={spendCategories}
+                                selectedCategoryId={selectedSpendCategoryId}
+                                spendAmount={spendAmount}
+                            />
+                        </div>
+
+                        <TichTichTextArea
+                            label="Bạn chi tiền để làm gì"
+                            isRequired
+                            value={spendReason}
+                            onChange={setSpendReason}
+                            placeholder="Mua một cuốn sách yêu thích"
+                            maxLength={80}
+                            className="flex flex-col gap-2"
+                            textAreaClassName="h-24"
+                        />
+
+                        <KidMissionCarouselSection missions={displayMissions} />
+
+                        <TichTichButton
+                            variant="primary"
+                            size="lg"
+                            fullWidth
+                            className={cn(
+                                !canSubmitSpend || batchWithdraw.isPending
+                                    ? 'bg-gray-400 hover:brightness-100'
+                                    : ''
+                            )}
+                            isDisabled={
+                                !canSubmitSpend || batchWithdraw.isPending
+                            }
+                            onClick={handleSpendSubmit}
+                        >
+                            Lưu chi tiêu
+                        </TichTichButton>
                     </TabPanel>
                 </Tabs>
             </div>
+            <TichTichModal
+                isOpen={isTreasureOverviewOpen}
+                onClose={handleCloseTreasureOverview}
+                title="Cập nhật thành công"
+                size="xl"
+                isDismissable={false}
+                footer={
+                    <>
+                        <TichTichButton
+                            variant="outline"
+                            size="md"
+                            fullWidth
+                            onClick={handleCloseTreasureOverview}
+                        >
+                            Đóng
+                        </TichTichButton>
+                        <TichTichButton
+                            variant="primary"
+                            size="md"
+                            fullWidth
+                            onClick={handleGoToCharacter}
+                        >
+                            Nhân vật
+                        </TichTichButton>
+                    </>
+                }
+            >
+                <div className="rounded-xl border border-[#C79244] p-3">
+                    <p className="text-base font-semibold text-tichtich-black mb-2">
+                        Tổng quan kho báu
+                    </p>
+                    <SpendPreviewChart
+                        categories={spendCategories}
+                        selectedCategoryId={null}
+                        spendAmount={0}
+                    />
+                </div>
+            </TichTichModal>
         </div>
     );
 }

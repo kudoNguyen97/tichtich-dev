@@ -19,3 +19,10 @@ export interface BatchDepositPayload {
     title: string;
     description: string;
 }
+
+export interface BatchWithdrawPayload {
+    walletUpdates: WalletUpdateItem[];
+    type: 'withdraw';
+    title: string;
+    description: string;
+}

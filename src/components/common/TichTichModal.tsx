@@ -27,7 +27,7 @@ import { cn } from '@/utils/cn';
 
 interface TichTichModalProps extends DialogProps {
     title?: React.ReactNode;
-    size?: 'sm' | 'md' | 'lg' | 'full';
+    size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
     isDismissable?: boolean;
     children?: React.ReactNode;
     footer?: React.ReactNode;
@@ -51,6 +51,7 @@ export function TichTichModal({
         sm: 'max-w-xs',
         md: 'max-w-sm',
         lg: 'max-w-lg',
+        xl: 'max-w-xl',
         full: 'max-w-full mx-4',
     }[size];
 
@@ -86,7 +87,7 @@ export function TichTichModal({
                         'flex flex-col',
                         className
                     )}
-                    aria-label='tich-tich-modal'
+                    aria-label="tich-tich-modal"
                     {...props}
                 >
                     {title && (

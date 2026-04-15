@@ -20,7 +20,7 @@ import type {
     Wallet,
 } from '@/features/wallets/types/wallet.type';
 
-const formatMoney = (n: any) => n.toLocaleString('vi-VN') + ' đ';
+const formatMoney = (n: any) => n.toLocaleString('vi-VN');
 const toSafeNumber = (value: unknown, fallback = 0) => {
     const parsed =
         typeof value === 'number'
@@ -96,6 +96,7 @@ type TreasuryTabKey = 'add' | 'spend';
 
 function RouteComponent() {
     useMeSettings();
+    const selectedProfile = useAuthStore((s) => s.selectedProfile);
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
     const { data: wallets } = useWalletsByProfileId(managedKidProfileId ?? '');
     const batchDeposit = useBatchDeposit();
@@ -193,11 +194,11 @@ function RouteComponent() {
             <div className="p-4">
                 {/* ── Top bar ── */}
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-base text-muted-foreground">
                         {dayjs().format('DD/MM/YYYY')}
                     </span>
-                    <span className="text-sm font-medium text-foreground">
-                        Hôm nay conan làm gì ?
+                    <span className="text-base font-bold text-foreground">
+                        Hôm nay {selectedProfile?.fullName} làm gì ?
                     </span>
                 </div>
 
@@ -216,19 +217,16 @@ function RouteComponent() {
                             [
                                 {
                                     key: 'add' as const,
-                                    symbol: '+',
                                     label: 'Thêm tiền',
-                                    badgeClass:
-                                        'bg-tichtich-green text-tichtich-black',
+                                    icon: '/icons/add-money.svg',
                                 },
                                 {
                                     key: 'spend' as const,
-                                    symbol: '−',
                                     label: 'Chi tiền',
-                                    badgeClass: 'bg-[#e85a4a] text-white',
+                                    icon: '/icons/spend-money.svg',
                                 },
                             ] as const
-                        ).map(({ key, symbol, label, badgeClass }) => {
+                        ).map(({ key, label, icon }) => {
                             const isSelected = treasuryTab === key;
                             return (
                                 <Tab
@@ -238,31 +236,27 @@ function RouteComponent() {
                                         'min-w-0 rounded-2xl px-2 py-3 flex flex-col items-center justify-center cursor-pointer outline-none transition-all duration-300 ease-out',
                                         'focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
                                         isSelected
-                                            ? 'flex-[2.15] shrink-0 border-2 border-tichtich-black bg-tichtich-primary-300 opacity-100 shadow-sm'
+                                            ? 'flex-[2.15] shrink-0 border border-tichtich-black bg-tichtich-primary-300 opacity-100 shadow-sm'
                                             : 'flex-1 shrink-0 border border-[#c9b896] bg-tichtich-primary-300 opacity-[0.7]'
                                     )}
                                 >
                                     <div
                                         className={cn(
-                                            'relative mb-1.5 size-11 shrink-0 transition-opacity duration-300',
+                                            'relative w-11 h-11 shrink-0 transition-opacity duration-300',
                                             isSelected
                                                 ? 'opacity-100'
                                                 : 'opacity-50'
                                         )}
                                     >
-                                        <div className="size-11 rounded-full bg-tichtich-primary-200" />
-                                        <span
-                                            className={cn(
-                                                'absolute -right-0.5 -top-0.5 flex size-4.5 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold leading-none shadow-sm',
-                                                badgeClass
-                                            )}
-                                        >
-                                            {symbol}
-                                        </span>
+                                        <img
+                                            src={icon}
+                                            alt={label}
+                                            className="object-contain"
+                                        />
                                     </div>
                                     <span
                                         className={cn(
-                                            'text-sm leading-tight text-center transition-colors duration-300',
+                                            'text-base leading-tight text-center transition-colors duration-300',
                                             isSelected
                                                 ? 'font-bold text-tichtich-black'
                                                 : 'font-medium text-tichtich-black/45'
@@ -311,7 +305,13 @@ function RouteComponent() {
                                 </p>
                                 <p className="text-sm text-muted-foreground mt-1 mb-0">
                                     Đã chia:{' '}
-                                    <span className="text-tichtich-red font-bold">
+                                    <span
+                                        className={cn(
+                                            'text-tichtich-red font-bold',
+                                            allocated === total &&
+                                                'text-green-500'
+                                        )}
+                                    >
                                         {formatMoney(allocated)}
                                     </span>
                                     /{formatMoney(total)}
@@ -326,7 +326,6 @@ function RouteComponent() {
                                 <AllocationChart
                                     categories={categories}
                                     total={total}
-                                    // allocated={allocated}
                                 />
                             </div>
 
@@ -369,7 +368,7 @@ function RouteComponent() {
                             </div>
 
                             {/* Presets */}
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-4">
                                 {[
                                     {
                                         label: '40-30-20-10',
@@ -386,7 +385,7 @@ function RouteComponent() {
                                         key={label}
                                         type="button"
                                         onClick={() => applyPreset(ratios)}
-                                        className="preset-btn cursor-pointer bg-white border border-[#E8DECE] rounded-[18px] px-3 py-4 text-center"
+                                        className="preset-btn cursor-pointer bg-tichtich-primary-300 border border-tichtich-black rounded-[18px] px-3 py-4 text-center transition-all duration-150 active:scale-95 active:bg-tichtich-primary-400"
                                     >
                                         <p className="text-base font-semibold text-tichtich-black">
                                             {label}
@@ -398,38 +397,8 @@ function RouteComponent() {
                                 ))}
                             </div>
 
-                            <KidMissionCarouselSection
-                                missions={displayMissions}
-                            />
-
-                            {/* Submit */}
-                            {/* <button
-                                type="button"
-                                onClick={handleSubmit}
-                                disabled={!isFullyAllocated}
-                                className={`submit-btn w-full py-4 rounded-[18px] border-none text-[15px] font-extrabold transition-colors ${
-                                    isFullyAllocated
-                                        ? 'bg-[#E8E0D0] text-[#1a1a1a] cursor-pointer'
-                                        : 'bg-[#E8E0D0] text-[#bbb] cursor-not-allowed'
-                                }`}
-                            >
-                                lưu kho báu
-                            </button> */}
-
-                            <TichTichButton
-                                variant="primary"
-                                size="lg"
-                                fullWidth
-                                isDisabled={
-                                    !isFullyAllocated || batchDeposit.isPending
-                                }
-                                onClick={handleSubmit}
-                            >
-                                lưu kho báu
-                            </TichTichButton>
-
                             {/* Remaining hint */}
-                            {!isFullyAllocated && total > 0 && (
+                            {/* {!isFullyAllocated && total > 0 && (
                                 <p
                                     style={{
                                         fontSize: 12,
@@ -441,11 +410,28 @@ function RouteComponent() {
                                     Còn {formatMoney(total - allocated)}đ chưa
                                     phân bổ
                                 </p>
-                            )}
+                            )} */}
                         </div>
+                        <KidMissionCarouselSection missions={displayMissions} />
+
+                        <TichTichButton
+                            variant="primary"
+                            size="lg"
+                            fullWidth
+                            className={cn(
+                                !isFullyAllocated || batchDeposit.isPending
+                                    ? 'bg-gray-400 hover:brightness-100'
+                                    : ''
+                            )}
+                            isDisabled={
+                                !isFullyAllocated || batchDeposit.isPending
+                            }
+                            onClick={handleSubmit}
+                        >
+                            lưu kho báu
+                        </TichTichButton>
                     </TabPanel>
 
-                    {/* ── Tab: Chi tiền ── */}
                     <TabPanel id="spend">
                         <div
                             style={{

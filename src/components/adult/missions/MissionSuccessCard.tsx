@@ -2,12 +2,12 @@ import { useProgressBar } from '@react-aria/progress';
 import { Star } from 'lucide-react';
 import type { Mission } from '@/features/missions/types/mission.type';
 import { cn } from '@/utils/cn';
-import { missionWalletIconSrc } from '@/components/adult/missions/missionWalletIconSrc';
+import { missionWalletIconSrc } from '@/helpers/adult/missions/missionWalletIconSrc';
 import {
     formatMissionEndDayVi,
     getMissionStatusBadge,
     missionStatusBadgeClassName,
-} from '@/components/adult/missions/missionSuccessDisplay';
+} from '@/helpers/adult/missions/missionSuccessDisplay';
 
 function MissionProgressRow({ percent }: { percent: number }) {
     const clamped = Math.min(100, Math.max(0, percent));

@@ -55,87 +55,10 @@ export function AllocationChart({
         return Math.round((cat.amount / total) * 100);
     });
 
-    // ── Label position logic (from original SplitMoney inline code) ──
-    // const percentOf = (amount: number) =>
-    //     total > 0 ? Math.round((amount / total) * 100) : 0;
-
-    // const getLabelPosition = (index: number) => {
-    //     const leftPct = categories
-    //         .slice(0, index)
-    //         .reduce((s, x) => s + Math.max(percentOf(x.amount), 1), 0);
-    //     const myPct = Math.max(percentOf(categories[index].amount), 1);
-    //     const totalFlex =
-    //         categories.reduce(
-    //             (s, x) => s + Math.max(percentOf(x.amount), 1),
-    //             0
-    //         ) +
-    //         (allocated < total ? Math.max(100 - percentOf(allocated), 1) : 0);
-    //     const leftActual = (leftPct / totalFlex) * 100;
-    //     const widthActual = (myPct / totalFlex) * 100;
-    //     return leftActual + widthActual / 2;
-    // };
-
-    // Top labels: Học tập (1), Tiêu vặt (3)
     const TOP_INDICES = [1, 3];
-    // Bottom labels: Tiết kiệm (0), Từ thiện (2)
-    // const BOTTOM_INDICES = [0, 2];
 
     return (
         <div className="relative my-[100px]">
-            {/* ── Top labels (Học tập, Tiêu vặt) ── */}
-            {/* <div className="flex h-20 mb-2">
-                {categories.map((c, i) => {
-                    if (!TOP_INDICES.includes(i)) return null;
-                    // const leftPos = getLabelPosition(i);
-
-                    return (
-                        // <div
-                        //     key={`top-${c.id}`}
-                        //     className="absolute top-0 flex flex-col items-center gap-0.5 transition-[left] duration-300"
-                        //     style={{
-                        //         left: `${leftPos}%`,
-                        //         transform: 'translateX(-50%)',
-                        //     }}
-                        // >
-                        //     <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">
-                        //         {c.label}
-                        //     </span>
-                        //     <span className="text-xs font-semibold whitespace-nowrap">
-                        //         {formatMoney(c.amount)}
-                        //     </span>
-                        //     <div className="w-7 h-7 rounded-lg flex items-center justify-center mt-1 shadow-md">
-                        //         <img
-                        //             src={c.icon as string}
-                        //             className="size-full object-contain"
-                        //         />
-                        //     </div>
-                        // </div>
-                        <div
-                            key={`top-${c.id}`}
-                            className="flex flex-col items-start justify-end transition-all duration-300 ease-out"
-                            style={{
-                                width: `${barWidths[i]}%`,
-                            }}
-                        >
-                            <div className="flex flex-col items-start justify-start">
-                                <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">
-                                    {c.label}
-                                </span>
-                                <span className="text-xs font-semibold whitespace-nowrap">
-                                    {formatMoney(c.amount)}
-                                </span>
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center mt-1 shadow-md">
-                                    <img
-                                        src={c.icon as string}
-                                        className="size-full object-contain"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div> */}
-
             {/* ── Horizontal bar ── */}
             <div className="flex gap-2 h-20 rounded-xl">
                 {categories.map((c, i) => (
@@ -150,26 +73,35 @@ export function AllocationChart({
                     >
                         <div
                             className={cn(
-                                'absolute left-0  flex flex-col items-start justify-start transition-all duration-300 ease-out',
+                                'absolute left-0 flex flex-col items-start justify-start transition-all duration-300 ease-out',
                                 TOP_INDICES.includes(i)
                                     ? 'top-[-80px]'
                                     : 'bottom-[-80px]'
                             )}
                             style={{ width: `${barWidths[i]}%` }}
                         >
-                            <div className="flex flex-col items-start">
+                            <div
+                                className={cn(
+                                    'flex flex-col items-start gap-1',
+                                    TOP_INDICES.includes(i)
+                                        ? 'flex-col-reverse'
+                                        : ''
+                                )}
+                            >
                                 <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-md">
                                     <img
                                         src={c.icon as string}
                                         className="size-full object-contain"
                                     />
                                 </div>
-                                <span className="text-xs text-muted-foreground font-medium mt-1 whitespace-nowrap">
-                                    {c.label}
-                                </span>
-                                <span className="text-xs font-semibold whitespace-nowrap">
-                                    {formatMoney(c.amount)}
-                                </span>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-xs text-muted-foreground font-medium mt-1 whitespace-nowrap">
+                                        {c.label}
+                                    </span>
+                                    <span className="text-xs font-semibold whitespace-nowrap">
+                                        {formatMoney(c.amount)}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <span className="text-sm font-semibold text-black">
@@ -178,37 +110,6 @@ export function AllocationChart({
                     </div>
                 ))}
             </div>
-
-            {/* ── Bottom labels (Tiết kiệm, Từ thiện) ── */}
-            {/* <div className="flex h-20 mt-2">
-                {categories.map((c, i) => {
-                    if (!BOTTOM_INDICES.includes(i)) return null;
-
-                    // const leftPos = getLabelPosition(i);
-                    return (
-                        <div
-                            key={`bottom-${c.id}`}
-                            className="flex flex-col items-start justify-start transition-all duration-300 ease-out"
-                            style={{ width: `${barWidths[i]}%` }}
-                        >
-                            <div className="flex flex-col items-start">
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-md">
-                                    <img
-                                        src={c.icon as string}
-                                        className="size-full object-contain"
-                                    />
-                                </div>
-                                <span className="text-xs text-muted-foreground font-medium mt-1 whitespace-nowrap">
-                                    {c.label}
-                                </span>
-                                <span className="text-xs font-semibold whitespace-nowrap">
-                                    {formatMoney(c.amount)}
-                                </span>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div> */}
         </div>
     );
 }

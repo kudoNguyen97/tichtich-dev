@@ -4,11 +4,11 @@ export interface WalletFormOption {
     id: string;
     label: string;
     icon: string;
-    /** Giá trị gửi API missions */
+    /** Gia tri gui API missions */
     walletType: WalletType;
 }
 
-/** Id lưu trong form (TargetForm `wallet`) — khác tên API một số chỗ */
+/** Id luu trong form (TargetForm `wallet`) — khac ten API mot so cho */
 export const WALLET_FORM_OPTIONS: WalletFormOption[] = [
     {
         id: 'savings',

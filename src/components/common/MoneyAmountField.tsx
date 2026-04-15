@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useTextField } from '@react-aria/textfield';
 import { cn } from '@/utils/cn';
-import { formatRewardAmountDisplay } from '@/components/adult/reward/rewardFormat';
+import { formatRewardAmountDisplay } from '@/helpers/adult/reward/rewardFormat';
 
 export interface MoneyAmountFieldProps {
     label: string;

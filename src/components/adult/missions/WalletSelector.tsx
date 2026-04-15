@@ -1,4 +1,4 @@
-import { WALLET_FORM_OPTIONS } from '@/components/adult/missions/walletOptions';
+import { WALLET_FORM_OPTIONS } from '@/helpers/adult/missions/walletOptions';
 
 interface WalletSelectorProps {
     value: string;

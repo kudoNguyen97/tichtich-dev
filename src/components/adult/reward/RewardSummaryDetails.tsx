@@ -1,4 +1,4 @@
-import { formatRewardAmountDisplay } from './rewardFormat';
+import { formatRewardAmountDisplay } from '@/helpers/adult/reward/rewardFormat';
 
 interface RewardSummaryDetailsProps {
     amount: number;

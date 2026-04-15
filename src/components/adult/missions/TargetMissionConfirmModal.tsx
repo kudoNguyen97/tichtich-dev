@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { TichTichModal } from '@/components/common/TichTichModal';
-import { formatRewardAmountDisplay } from '@/components/adult/reward/rewardFormat';
+import { formatRewardAmountDisplay } from '@/helpers/adult/reward/rewardFormat';
 import { cn } from '@/utils/cn';
 import { useManagedKidFullName } from '@/hooks/useManagedKidFullName';
-import { getWalletLabel } from '@/components/adult/missions/walletOptions';
-import type { GoalFormData } from '@/components/adult/missions/targetGoalFormSchema';
+import { getWalletLabel } from '@/helpers/adult/missions/walletOptions';
+import type { GoalFormData } from '@/helpers/adult/missions/targetGoalFormSchema';
 
 function getDaysBetween(start: string, end: string) {
     if (!start || !end) return 0;

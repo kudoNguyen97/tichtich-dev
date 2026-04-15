@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { MoneyAmountField } from '@/components/common/MoneyAmountField';
 import { RewardSummaryModal } from '@/components/adult/reward/RewardSummaryModal';
-import { formatVndAmount } from '@/components/adult/reward/rewardFormat';
+import { formatVndAmount } from '@/helpers/adult/reward/rewardFormat';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useCreateProfileTransaction } from '@/features/profile-transactions/hooks/useProfileTransactions';
 import { showError } from '@/lib/toast';

@@ -15,9 +15,7 @@ export const Route = createFileRoute('/_app/children/_layout/')({
 function RouteComponent() {
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
 
-    const { data: wallets } = useWalletsByProfileId(
-        managedKidProfileId ?? ''
-    );
+    const { data: wallets } = useWalletsByProfileId(managedKidProfileId ?? '');
 
     const {
         data: missions,
@@ -42,7 +40,7 @@ function RouteComponent() {
             return (
                 <TichTichButton
                     variant="primary"
-                    size="lg"
+                    size="md"
                     fullWidth
                     onClick={() => {}}
                 >

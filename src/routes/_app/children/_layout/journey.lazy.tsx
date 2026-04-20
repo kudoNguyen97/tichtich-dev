@@ -1,6 +1,10 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { useMemo } from 'react';
+import { TodayJourneySection } from '@/components/children/journey/TodayJourneySection';
+import { ActivityCalendar } from '@/components/ui/ActivityCalendar';
+import { useRecentActivities } from '@/features/activity-logs/hooks/useActivityLogs';
+import { filterActivitiesForToday } from '@/helpers/journey/activityLogDisplay';
 import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
-import { RouteIcon } from 'lucide-react';
 
 export const Route = createLazyFileRoute('/_app/children/_layout/journey')({
     component: RouteComponent,
@@ -8,18 +12,25 @@ export const Route = createLazyFileRoute('/_app/children/_layout/journey')({
 
 function RouteComponent() {
     const profile = useSelectedChildProfile();
+
+    const { data: activitiesRes, isLoading } = useRecentActivities({
+        profileId: profile?.id ?? '',
+    });
+
+    const todayItems = useMemo(
+        () => filterActivitiesForToday(activitiesRes?.data ?? []),
+        [activitiesRes]
+    );
+
     if (!profile) return null;
+
     return (
-        <div className="flex flex-col items-center justify-center px-6 py-12">
-            <div className="size-20 rounded-full bg-tichtich-primary-200/10 flex items-center justify-center mb-4">
-                <RouteIcon size={40} className="text-tichtich-primary-200" />
-            </div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                Quản lý hành trình
-            </h2>
-            <p className="text-gray-600 text-center">
-                Tính năng đang phát triển
-            </p>
+        <div className="w-full max-w-[720px] mx-auto px-4 py-4 pb-20">
+            <ActivityCalendar profileId={profile.id} />
+            <TodayJourneySection
+                items={todayItems}
+                isLoading={isLoading}
+            />
         </div>
     );
 }

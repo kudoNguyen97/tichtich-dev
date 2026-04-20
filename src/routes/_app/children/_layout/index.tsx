@@ -4,6 +4,7 @@ import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useWalletsByProfileId } from '@/features/wallets/hooks/useWallets';
 import { useMissionsByProfileIdKid } from '@/features/missions/hooks/useMissions';
 import type { Mission } from '@/features/missions/types/mission.type';
+import { KidHeroBanner } from '@/components/children/home/KidHeroBanner';
 import { WalletOverviewSection } from '@/components/children/home/WalletOverviewSection';
 import { MissionTargetListSection } from '@/components/children/home/MissionTargetListSection';
 import { TichTichButton } from '@/components/common/TichTichButton';
@@ -14,8 +15,19 @@ export const Route = createFileRoute('/_app/children/_layout/')({
 
 function RouteComponent() {
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
+    const profiles = useAuthStore((s) => s.profiles);
+
+    const kidProfile = useMemo(
+        () => profiles.find((p) => p.id === managedKidProfileId) ?? null,
+        [profiles, managedKidProfileId]
+    );
 
     const { data: wallets } = useWalletsByProfileId(managedKidProfileId ?? '');
+
+    const totalBalance = useMemo(
+        () => wallets?.reduce((sum, w) => sum + w.balance, 0) ?? 0,
+        [wallets]
+    );
 
     const {
         data: missions,
@@ -76,6 +88,11 @@ function RouteComponent() {
 
     return (
         <div className="mx-auto bg-background mb-20">
+            <KidHeroBanner
+                kidName={kidProfile?.fullName ?? ''}
+                totalBalance={totalBalance}
+                gender={kidProfile?.gender ?? 'male'}
+            />
             <div className="p-4 flex flex-col gap-6">
                 <WalletOverviewSection wallets={wallets} />
                 <MissionTargetListSection

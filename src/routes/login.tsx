@@ -59,10 +59,6 @@ function LoginPage() {
             );
             const { user: firebaseUser } = credential;
 
-            const expirationTime = await firebaseUser
-                .getIdTokenResult()
-                .then((result) => result.expirationTime);
-
             // Nếu thông tin đúng nhưng email chưa được xác thực -> chuyển sang verify-account
             if (!firebaseUser.emailVerified) {
                 navigate({
@@ -80,8 +76,6 @@ function LoginPage() {
                 provider: 'firebase',
                 idToken,
             });
-
-            localStorage.setItem('time_expired', expirationTime.toString());
 
             navigate({
                 to: '/profiles',

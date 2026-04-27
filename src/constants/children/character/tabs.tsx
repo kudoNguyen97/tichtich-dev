@@ -1,14 +1,14 @@
 import type { LucideIcon } from 'lucide-react';
 
-import ClothesHangerIcon from '/public/icons/items/clothes-hanger.svg?react';
-import ClothesPantsShortIcon from '/public/icons/items/clothes-pants-short.svg?react';
-import ClothesIcon from '/public/icons/items/clothes-fill.svg?react';
-import SpikedShoesIcon from '/public/icons/items/spikedshoes.svg?react';
-import AccessoryHatIcon from '/public/icons/items/accessory-hat.svg?react';
-import GlassesIcon from '/public/icons/items/glasses.svg?react';
-import DiamondNecklaceIcon from '/public/icons/items/diamond-necklace.svg?react';
-import WatchIcon from '/public/icons/items/watch.svg?react';
-import DiamondIcon from '/public/icons/items/diamond.svg?react';
+import ClothesHangerIcon from '@/assets/icons/items/clothes-hanger.svg?react';
+import ClothesPantsShortIcon from '@/assets/icons/items/clothes-pants-short.svg?react';
+import ClothesIcon from '@/assets/icons/items/clothes-fill.svg?react';
+import SpikedShoesIcon from '@/assets/icons/items/spikedshoes.svg?react';
+import AccessoryHatIcon from '@/assets/icons/items/accessory-hat.svg?react';
+import GlassesIcon from '@/assets/icons/items/glasses.svg?react';
+import DiamondNecklaceIcon from '@/assets/icons/items/diamond-necklace.svg?react';
+import WatchIcon from '@/assets/icons/items/watch.svg?react';
+import DiamondIcon from '@/assets/icons/items/diamond.svg?react';
 
 export interface SubTab {
     key: string;

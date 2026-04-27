@@ -4,8 +4,8 @@ export function formatNumber(value: number, locale = 'en-US'): string {
 
 export function formatCurrency(
     value: number,
-    currency = 'USD',
-    locale = 'en-US'
+    currency = 'VND',
+    locale = 'vi-VN'
 ): string {
     return new Intl.NumberFormat(locale, {
         style: 'currency',

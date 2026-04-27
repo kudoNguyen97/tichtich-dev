@@ -1,9 +1,15 @@
 /** Backend may add new values; keep as string until a stable contract exists. */
 export type ActivityType = string;
 
+export type WalletDistributionType =
+    | 'charity'
+    | 'education'
+    | 'saving'
+    | 'spending';
+
 export interface WalletDistributionEntry {
-    walletType: string;
-    iconSrc: string;
+    walletType?: WalletDistributionType;
+    wallet_type?: WalletDistributionType;
     amount: number;
 }
 
@@ -15,7 +21,9 @@ export interface ActivityLog {
     /** Optional when API returns a human-readable headline */
     title?: string;
     description?: string;
+    amount?: number;
     metadata?: {
+        wallet_distributions?: WalletDistributionEntry[];
         walletDistributions?: WalletDistributionEntry[];
         [key: string]: unknown;
     };

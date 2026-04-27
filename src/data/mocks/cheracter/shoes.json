@@ -1,0 +1,82 @@
+{
+    "success": true,
+    "resultCode": 200,
+    "message": "Items retrieved successfully",
+    "data": [
+        {
+            "id": "5f742921-e128-42d0-95cd-272edd4b4d34",
+            "itemName": "Giày đồng xu",
+            "slug": "shoes_giay_dong_xu",
+            "itemType": null,
+            "category": "shoes",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        },
+        {
+            "id": "354abb27-4da7-4b2c-883f-798f5b8a7322",
+            "itemName": "Giày bale",
+            "slug": "shoes_giay_bale",
+            "itemType": null,
+            "category": "shoes",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        },
+        {
+            "id": "e8ae93ae-d9f6-48c6-a560-cdcac371fa2a",
+            "itemName": "Giày bata vàng",
+            "slug": "shoes_giay_bata_vang",
+            "itemType": null,
+            "category": "shoes",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        },
+        {
+            "id": "ab077557-76a5-4cb6-9116-197c6b8437bb",
+            "itemName": "Giày boot ngầu",
+            "slug": "shoes_giay_boot_ngau",
+            "itemType": null,
+            "category": "shoes",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        },
+        {
+            "id": "607b2086-5fc0-46df-9a9c-e519ce0c57fd",
+            "itemName": "Giày converse cam",
+            "slug": "shoes_giay_converse_cam",
+            "itemType": null,
+            "category": "shoes",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        }
+    ]
+}

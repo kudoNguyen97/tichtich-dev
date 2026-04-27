@@ -95,7 +95,7 @@ function ChildrenAppLayout() {
                     />
                 }
             />
-            <div className="bg-[url('/images/background-illustration-desktop.png')] bg-cover bg-center min-h-screen">
+            <div className="bg-[url('/images/background-illustration-desktop-v2.png')] no-repeat bg-fixed bg-contain bg-start min-h-screen">
                 <Outlet />
                 {pending.length > 0 && (
                     <RewardTransactionDialog

@@ -1,6 +1,12 @@
 /** Backend may add new values; keep as string until a stable contract exists. */
 export type ActivityType = string;
 
+export interface WalletDistributionEntry {
+    walletType: string;
+    iconSrc: string;
+    amount: number;
+}
+
 export interface ActivityLog {
     id: string;
     profileId: string;
@@ -9,6 +15,10 @@ export interface ActivityLog {
     /** Optional when API returns a human-readable headline */
     title?: string;
     description?: string;
+    metadata?: {
+        walletDistributions?: WalletDistributionEntry[];
+        [key: string]: unknown;
+    };
 }
 
 /** Pagination block returned with list endpoints. */

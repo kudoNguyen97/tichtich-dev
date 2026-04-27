@@ -26,9 +26,11 @@ import { Route as AppAdultRewardSuccessIndexRouteImport } from './routes/_app/ad
 import { Route as AppAdultMissionSuccessIndexRouteImport } from './routes/_app/adult/mission-success/index'
 import { Route as AppAdultLayoutIndexRouteImport } from './routes/_app/adult/_layout/index'
 import { Route as AppChildrenSettingLayoutRouteImport } from './routes/_app/children/setting/_layout'
+import { Route as AppChildrenLayoutCharacterRouteImport } from './routes/_app/children/_layout/character'
 import { Route as AppAdultSettingLayoutRouteImport } from './routes/_app/adult/setting/_layout'
 import { Route as AppAdultRewardSuccessLayoutRouteImport } from './routes/_app/adult/reward-success/_layout'
 import { Route as AppAdultMissionSuccessLayoutRouteImport } from './routes/_app/adult/mission-success/_layout'
+import { Route as AppAdultJourneyLayoutRouteImport } from './routes/_app/adult/journey/_layout'
 import { Route as AppAdultLayoutMissionRouteImport } from './routes/_app/adult/_layout/mission'
 import { Route as AppChildrenSettingLayoutChangePinSuccessRouteImport } from './routes/_app/children/setting/_layout/change-pin-success'
 import { Route as AppChildrenSettingLayoutChangePinRouteImport } from './routes/_app/children/setting/_layout/change-pin'
@@ -38,6 +40,7 @@ import { Route as AppAdultSettingLayoutChangePinSuccessRouteImport } from './rou
 import { Route as AppAdultSettingLayoutChangePinRouteImport } from './routes/_app/adult/setting/_layout/change-pin'
 import { Route as AppAdultSettingLayoutChangePasswordSuccessRouteImport } from './routes/_app/adult/setting/_layout/change-password-success'
 import { Route as AppAdultSettingLayoutChangePasswordRouteImport } from './routes/_app/adult/setting/_layout/change-password'
+import { Route as AppAdultJourneyLayoutGoalsRouteImport } from './routes/_app/adult/journey/_layout/goals'
 
 const CreateSuccessLazyRouteImport = createFileRoute('/create-success')()
 const AppChildrenLayoutTreasuryLazyRouteImport = createFileRoute(
@@ -49,9 +52,6 @@ const AppChildrenLayoutSettingsLazyRouteImport = createFileRoute(
 const AppChildrenLayoutJourneyLazyRouteImport = createFileRoute(
   '/_app/children/_layout/journey',
 )()
-const AppChildrenLayoutCharacterLazyRouteImport = createFileRoute(
-  '/_app/children/_layout/character',
-)()
 const AppAdultLayoutSettingsLazyRouteImport = createFileRoute(
   '/_app/adult/_layout/settings',
 )()
@@ -60,6 +60,9 @@ const AppAdultLayoutRewardLazyRouteImport = createFileRoute(
 )()
 const AppAdultLayoutJourneyLazyRouteImport = createFileRoute(
   '/_app/adult/_layout/journey',
+)()
+const AppAdultJourneyLayoutRecentActivitiesLazyRouteImport = createFileRoute(
+  '/_app/adult/journey/_layout/recent-activities',
 )()
 
 const CreateSuccessLazyRoute = CreateSuccessLazyRouteImport.update({
@@ -164,16 +167,6 @@ const AppChildrenLayoutJourneyLazyRoute =
   } as any).lazy(() =>
     import('./routes/_app/children/_layout/journey.lazy').then((d) => d.Route),
   )
-const AppChildrenLayoutCharacterLazyRoute =
-  AppChildrenLayoutCharacterLazyRouteImport.update({
-    id: '/character',
-    path: '/character',
-    getParentRoute: () => AppChildrenLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_app/children/_layout/character.lazy').then(
-      (d) => d.Route,
-    ),
-  )
 const AppAdultLayoutSettingsLazyRoute =
   AppAdultLayoutSettingsLazyRouteImport.update({
     id: '/settings',
@@ -204,6 +197,12 @@ const AppChildrenSettingLayoutRoute =
     path: '/children/setting',
     getParentRoute: () => AppRouteRoute,
   } as any)
+const AppChildrenLayoutCharacterRoute =
+  AppChildrenLayoutCharacterRouteImport.update({
+    id: '/character',
+    path: '/character',
+    getParentRoute: () => AppChildrenLayoutRoute,
+  } as any)
 const AppAdultSettingLayoutRoute = AppAdultSettingLayoutRouteImport.update({
   id: '/adult/setting/_layout',
   path: '/adult/setting',
@@ -221,11 +220,26 @@ const AppAdultMissionSuccessLayoutRoute =
     path: '/adult/mission-success',
     getParentRoute: () => AppRouteRoute,
   } as any)
+const AppAdultJourneyLayoutRoute = AppAdultJourneyLayoutRouteImport.update({
+  id: '/adult/journey/_layout',
+  path: '/adult/journey',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppAdultLayoutMissionRoute = AppAdultLayoutMissionRouteImport.update({
   id: '/mission',
   path: '/mission',
   getParentRoute: () => AppAdultLayoutRoute,
 } as any)
+const AppAdultJourneyLayoutRecentActivitiesLazyRoute =
+  AppAdultJourneyLayoutRecentActivitiesLazyRouteImport.update({
+    id: '/recent-activities',
+    path: '/recent-activities',
+    getParentRoute: () => AppAdultJourneyLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/journey/_layout/recent-activities.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AppChildrenSettingLayoutChangePinSuccessRoute =
   AppChildrenSettingLayoutChangePinSuccessRouteImport.update({
     id: '/change-pin-success',
@@ -274,6 +288,12 @@ const AppAdultSettingLayoutChangePasswordRoute =
     path: '/change-password',
     getParentRoute: () => AppAdultSettingLayoutRoute,
   } as any)
+const AppAdultJourneyLayoutGoalsRoute =
+  AppAdultJourneyLayoutGoalsRouteImport.update({
+    id: '/goals',
+    path: '/goals',
+    getParentRoute: () => AppAdultJourneyLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
@@ -287,14 +307,14 @@ export interface FileRoutesByFullPath {
   '/adult': typeof AppAdultLayoutRouteWithChildren
   '/children': typeof AppChildrenLayoutRouteWithChildren
   '/adult/mission': typeof AppAdultLayoutMissionRoute
+  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/adult/mission-success': typeof AppAdultMissionSuccessLayoutRoute
   '/adult/reward-success': typeof AppAdultRewardSuccessLayoutRoute
   '/adult/setting': typeof AppAdultSettingLayoutRouteWithChildren
+  '/children/character': typeof AppChildrenLayoutCharacterRoute
   '/children/setting': typeof AppChildrenSettingLayoutRouteWithChildren
-  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/adult/reward': typeof AppAdultLayoutRewardLazyRoute
   '/adult/settings': typeof AppAdultLayoutSettingsLazyRoute
-  '/children/character': typeof AppChildrenLayoutCharacterLazyRoute
   '/children/journey': typeof AppChildrenLayoutJourneyLazyRoute
   '/children/settings': typeof AppChildrenLayoutSettingsLazyRoute
   '/children/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
@@ -302,6 +322,7 @@ export interface FileRoutesByFullPath {
   '/adult/mission-success/': typeof AppAdultMissionSuccessIndexRoute
   '/adult/reward-success/': typeof AppAdultRewardSuccessIndexRoute
   '/children/': typeof AppChildrenLayoutIndexRoute
+  '/adult/journey/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
   '/adult/setting/change-pin': typeof AppAdultSettingLayoutChangePinRoute
@@ -310,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
   '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/adult/journey/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
@@ -321,19 +343,20 @@ export interface FileRoutesByTo {
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
   '/adult/mission': typeof AppAdultLayoutMissionRoute
+  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/adult/mission-success': typeof AppAdultMissionSuccessIndexRoute
   '/adult/reward-success': typeof AppAdultRewardSuccessIndexRoute
   '/adult/setting': typeof AppAdultSettingLayoutRouteWithChildren
+  '/children/character': typeof AppChildrenLayoutCharacterRoute
   '/children/setting': typeof AppChildrenSettingLayoutRouteWithChildren
-  '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/adult/reward': typeof AppAdultLayoutRewardLazyRoute
   '/adult/settings': typeof AppAdultLayoutSettingsLazyRoute
-  '/children/character': typeof AppChildrenLayoutCharacterLazyRoute
   '/children/journey': typeof AppChildrenLayoutJourneyLazyRoute
   '/children/settings': typeof AppChildrenLayoutSettingsLazyRoute
   '/children/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
   '/adult': typeof AppAdultLayoutIndexRoute
   '/children': typeof AppChildrenLayoutIndexRoute
+  '/adult/journey/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
   '/adult/setting/change-pin': typeof AppAdultSettingLayoutChangePinRoute
@@ -342,6 +365,7 @@ export interface FileRoutesByTo {
   '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
   '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/adult/journey/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -357,14 +381,15 @@ export interface FileRoutesById {
   '/_app/adult/_layout': typeof AppAdultLayoutRouteWithChildren
   '/_app/children/_layout': typeof AppChildrenLayoutRouteWithChildren
   '/_app/adult/_layout/mission': typeof AppAdultLayoutMissionRoute
+  '/_app/adult/journey/_layout': typeof AppAdultJourneyLayoutRouteWithChildren
   '/_app/adult/mission-success/_layout': typeof AppAdultMissionSuccessLayoutRoute
   '/_app/adult/reward-success/_layout': typeof AppAdultRewardSuccessLayoutRoute
   '/_app/adult/setting/_layout': typeof AppAdultSettingLayoutRouteWithChildren
+  '/_app/children/_layout/character': typeof AppChildrenLayoutCharacterRoute
   '/_app/children/setting/_layout': typeof AppChildrenSettingLayoutRouteWithChildren
   '/_app/adult/_layout/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/_app/adult/_layout/reward': typeof AppAdultLayoutRewardLazyRoute
   '/_app/adult/_layout/settings': typeof AppAdultLayoutSettingsLazyRoute
-  '/_app/children/_layout/character': typeof AppChildrenLayoutCharacterLazyRoute
   '/_app/children/_layout/journey': typeof AppChildrenLayoutJourneyLazyRoute
   '/_app/children/_layout/settings': typeof AppChildrenLayoutSettingsLazyRoute
   '/_app/children/_layout/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
@@ -372,6 +397,7 @@ export interface FileRoutesById {
   '/_app/adult/mission-success/': typeof AppAdultMissionSuccessIndexRoute
   '/_app/adult/reward-success/': typeof AppAdultRewardSuccessIndexRoute
   '/_app/children/_layout/': typeof AppChildrenLayoutIndexRoute
+  '/_app/adult/journey/_layout/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/_app/adult/setting/_layout/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/_app/adult/setting/_layout/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
   '/_app/adult/setting/_layout/change-pin': typeof AppAdultSettingLayoutChangePinRoute
@@ -380,6 +406,7 @@ export interface FileRoutesById {
   '/_app/adult/setting/_layout/information': typeof AppAdultSettingLayoutInformationRoute
   '/_app/children/setting/_layout/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/_app/children/setting/_layout/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/_app/adult/journey/_layout/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -395,14 +422,14 @@ export interface FileRouteTypes {
     | '/adult'
     | '/children'
     | '/adult/mission'
+    | '/adult/journey'
     | '/adult/mission-success'
     | '/adult/reward-success'
     | '/adult/setting'
+    | '/children/character'
     | '/children/setting'
-    | '/adult/journey'
     | '/adult/reward'
     | '/adult/settings'
-    | '/children/character'
     | '/children/journey'
     | '/children/settings'
     | '/children/treasury'
@@ -410,6 +437,7 @@ export interface FileRouteTypes {
     | '/adult/mission-success/'
     | '/adult/reward-success/'
     | '/children/'
+    | '/adult/journey/goals'
     | '/adult/setting/change-password'
     | '/adult/setting/change-password-success'
     | '/adult/setting/change-pin'
@@ -418,6 +446,7 @@ export interface FileRouteTypes {
     | '/adult/setting/information'
     | '/children/setting/change-pin'
     | '/children/setting/change-pin-success'
+    | '/adult/journey/recent-activities'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -429,19 +458,20 @@ export interface FileRouteTypes {
     | '/verify-account'
     | '/create-success'
     | '/adult/mission'
+    | '/adult/journey'
     | '/adult/mission-success'
     | '/adult/reward-success'
     | '/adult/setting'
+    | '/children/character'
     | '/children/setting'
-    | '/adult/journey'
     | '/adult/reward'
     | '/adult/settings'
-    | '/children/character'
     | '/children/journey'
     | '/children/settings'
     | '/children/treasury'
     | '/adult'
     | '/children'
+    | '/adult/journey/goals'
     | '/adult/setting/change-password'
     | '/adult/setting/change-password-success'
     | '/adult/setting/change-pin'
@@ -450,6 +480,7 @@ export interface FileRouteTypes {
     | '/adult/setting/information'
     | '/children/setting/change-pin'
     | '/children/setting/change-pin-success'
+    | '/adult/journey/recent-activities'
   id:
     | '__root__'
     | '/_app'
@@ -464,14 +495,15 @@ export interface FileRouteTypes {
     | '/_app/adult/_layout'
     | '/_app/children/_layout'
     | '/_app/adult/_layout/mission'
+    | '/_app/adult/journey/_layout'
     | '/_app/adult/mission-success/_layout'
     | '/_app/adult/reward-success/_layout'
     | '/_app/adult/setting/_layout'
+    | '/_app/children/_layout/character'
     | '/_app/children/setting/_layout'
     | '/_app/adult/_layout/journey'
     | '/_app/adult/_layout/reward'
     | '/_app/adult/_layout/settings'
-    | '/_app/children/_layout/character'
     | '/_app/children/_layout/journey'
     | '/_app/children/_layout/settings'
     | '/_app/children/_layout/treasury'
@@ -479,6 +511,7 @@ export interface FileRouteTypes {
     | '/_app/adult/mission-success/'
     | '/_app/adult/reward-success/'
     | '/_app/children/_layout/'
+    | '/_app/adult/journey/_layout/goals'
     | '/_app/adult/setting/_layout/change-password'
     | '/_app/adult/setting/_layout/change-password-success'
     | '/_app/adult/setting/_layout/change-pin'
@@ -487,6 +520,7 @@ export interface FileRouteTypes {
     | '/_app/adult/setting/_layout/information'
     | '/_app/children/setting/_layout/change-pin'
     | '/_app/children/setting/_layout/change-pin-success'
+    | '/_app/adult/journey/_layout/recent-activities'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -629,13 +663,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChildrenLayoutJourneyLazyRouteImport
       parentRoute: typeof AppChildrenLayoutRoute
     }
-    '/_app/children/_layout/character': {
-      id: '/_app/children/_layout/character'
-      path: '/character'
-      fullPath: '/children/character'
-      preLoaderRoute: typeof AppChildrenLayoutCharacterLazyRouteImport
-      parentRoute: typeof AppChildrenLayoutRoute
-    }
     '/_app/adult/_layout/settings': {
       id: '/_app/adult/_layout/settings'
       path: '/settings'
@@ -664,6 +691,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChildrenSettingLayoutRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/children/_layout/character': {
+      id: '/_app/children/_layout/character'
+      path: '/character'
+      fullPath: '/children/character'
+      preLoaderRoute: typeof AppChildrenLayoutCharacterRouteImport
+      parentRoute: typeof AppChildrenLayoutRoute
+    }
     '/_app/adult/setting/_layout': {
       id: '/_app/adult/setting/_layout'
       path: '/adult/setting'
@@ -685,12 +719,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdultMissionSuccessLayoutRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/adult/journey/_layout': {
+      id: '/_app/adult/journey/_layout'
+      path: '/adult/journey'
+      fullPath: '/adult/journey'
+      preLoaderRoute: typeof AppAdultJourneyLayoutRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/adult/_layout/mission': {
       id: '/_app/adult/_layout/mission'
       path: '/mission'
       fullPath: '/adult/mission'
       preLoaderRoute: typeof AppAdultLayoutMissionRouteImport
       parentRoute: typeof AppAdultLayoutRoute
+    }
+    '/_app/adult/journey/_layout/recent-activities': {
+      id: '/_app/adult/journey/_layout/recent-activities'
+      path: '/recent-activities'
+      fullPath: '/adult/journey/recent-activities'
+      preLoaderRoute: typeof AppAdultJourneyLayoutRecentActivitiesLazyRouteImport
+      parentRoute: typeof AppAdultJourneyLayoutRoute
     }
     '/_app/children/setting/_layout/change-pin-success': {
       id: '/_app/children/setting/_layout/change-pin-success'
@@ -748,6 +796,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdultSettingLayoutChangePasswordRouteImport
       parentRoute: typeof AppAdultSettingLayoutRoute
     }
+    '/_app/adult/journey/_layout/goals': {
+      id: '/_app/adult/journey/_layout/goals'
+      path: '/goals'
+      fullPath: '/adult/journey/goals'
+      preLoaderRoute: typeof AppAdultJourneyLayoutGoalsRouteImport
+      parentRoute: typeof AppAdultJourneyLayoutRoute
+    }
   }
 }
 
@@ -772,7 +827,7 @@ const AppAdultLayoutRouteWithChildren = AppAdultLayoutRoute._addFileChildren(
 )
 
 interface AppChildrenLayoutRouteChildren {
-  AppChildrenLayoutCharacterLazyRoute: typeof AppChildrenLayoutCharacterLazyRoute
+  AppChildrenLayoutCharacterRoute: typeof AppChildrenLayoutCharacterRoute
   AppChildrenLayoutJourneyLazyRoute: typeof AppChildrenLayoutJourneyLazyRoute
   AppChildrenLayoutSettingsLazyRoute: typeof AppChildrenLayoutSettingsLazyRoute
   AppChildrenLayoutTreasuryLazyRoute: typeof AppChildrenLayoutTreasuryLazyRoute
@@ -780,7 +835,7 @@ interface AppChildrenLayoutRouteChildren {
 }
 
 const AppChildrenLayoutRouteChildren: AppChildrenLayoutRouteChildren = {
-  AppChildrenLayoutCharacterLazyRoute: AppChildrenLayoutCharacterLazyRoute,
+  AppChildrenLayoutCharacterRoute: AppChildrenLayoutCharacterRoute,
   AppChildrenLayoutJourneyLazyRoute: AppChildrenLayoutJourneyLazyRoute,
   AppChildrenLayoutSettingsLazyRoute: AppChildrenLayoutSettingsLazyRoute,
   AppChildrenLayoutTreasuryLazyRoute: AppChildrenLayoutTreasuryLazyRoute,
@@ -789,6 +844,22 @@ const AppChildrenLayoutRouteChildren: AppChildrenLayoutRouteChildren = {
 
 const AppChildrenLayoutRouteWithChildren =
   AppChildrenLayoutRoute._addFileChildren(AppChildrenLayoutRouteChildren)
+
+interface AppAdultJourneyLayoutRouteChildren {
+  AppAdultJourneyLayoutGoalsRoute: typeof AppAdultJourneyLayoutGoalsRoute
+  AppAdultJourneyLayoutRecentActivitiesLazyRoute: typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
+}
+
+const AppAdultJourneyLayoutRouteChildren: AppAdultJourneyLayoutRouteChildren = {
+  AppAdultJourneyLayoutGoalsRoute: AppAdultJourneyLayoutGoalsRoute,
+  AppAdultJourneyLayoutRecentActivitiesLazyRoute:
+    AppAdultJourneyLayoutRecentActivitiesLazyRoute,
+}
+
+const AppAdultJourneyLayoutRouteWithChildren =
+  AppAdultJourneyLayoutRoute._addFileChildren(
+    AppAdultJourneyLayoutRouteChildren,
+  )
 
 interface AppAdultSettingLayoutRouteChildren {
   AppAdultSettingLayoutChangePasswordRoute: typeof AppAdultSettingLayoutChangePasswordRoute
@@ -838,6 +909,7 @@ const AppChildrenSettingLayoutRouteWithChildren =
 interface AppRouteRouteChildren {
   AppAdultLayoutRoute: typeof AppAdultLayoutRouteWithChildren
   AppChildrenLayoutRoute: typeof AppChildrenLayoutRouteWithChildren
+  AppAdultJourneyLayoutRoute: typeof AppAdultJourneyLayoutRouteWithChildren
   AppAdultMissionSuccessLayoutRoute: typeof AppAdultMissionSuccessLayoutRoute
   AppAdultRewardSuccessLayoutRoute: typeof AppAdultRewardSuccessLayoutRoute
   AppAdultSettingLayoutRoute: typeof AppAdultSettingLayoutRouteWithChildren
@@ -849,6 +921,7 @@ interface AppRouteRouteChildren {
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAdultLayoutRoute: AppAdultLayoutRouteWithChildren,
   AppChildrenLayoutRoute: AppChildrenLayoutRouteWithChildren,
+  AppAdultJourneyLayoutRoute: AppAdultJourneyLayoutRouteWithChildren,
   AppAdultMissionSuccessLayoutRoute: AppAdultMissionSuccessLayoutRoute,
   AppAdultRewardSuccessLayoutRoute: AppAdultRewardSuccessLayoutRoute,
   AppAdultSettingLayoutRoute: AppAdultSettingLayoutRouteWithChildren,

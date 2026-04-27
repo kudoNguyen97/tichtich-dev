@@ -31,5 +31,7 @@ export const missionService = {
         }),
 
     remove: (missionId: string) =>
-        apiClient.delete<DeleteMissionData>(`/missions/${missionId}`),
+        apiClient.delete<DeleteMissionData>(`/missions/${missionId}`, {
+            headers: { 'x-profile-id': profileAdultId },
+        }),
 };

@@ -1,5 +1,5 @@
 import { useProgressBar } from '@react-aria/progress';
-import { Star } from 'lucide-react';
+import { Star, Trash2 } from 'lucide-react';
 import type { Mission } from '@/features/missions/types/mission.type';
 import { cn } from '@/utils/cn';
 import { missionWalletIconSrc } from '@/helpers/adult/missions/missionWalletIconSrc';
@@ -39,7 +39,19 @@ function MissionProgressRow({ percent }: { percent: number }) {
     );
 }
 
-export function MissionSuccessCard({ mission }: { mission: Mission }) {
+interface MissionSuccessCardProps {
+    mission: Mission;
+    showDelete?: boolean;
+    isDeleting?: boolean;
+    onDelete?: (missionId: string) => void;
+}
+
+export function MissionSuccessCard({
+    mission,
+    showDelete = false,
+    isDeleting = false,
+    onDelete,
+}: MissionSuccessCardProps) {
     const badge = getMissionStatusBadge(mission);
     const iconSrc = missionWalletIconSrc(mission.walletType);
     const deadline = formatMissionEndDayVi(mission.endDay);
@@ -48,9 +60,25 @@ export function MissionSuccessCard({ mission }: { mission: Mission }) {
     return (
         <article
             className={cn(
-                'rounded-xl border border-tichtich-primary-200 bg-tichtich-primary-300 p-4 shadow-sm'
+                'relative rounded-xl border border-tichtich-primary-200 bg-tichtich-primary-300 p-4 shadow-sm'
             )}
         >
+            {showDelete && (
+                <button
+                    type="button"
+                    onClick={() => onDelete?.(mission.id)}
+                    disabled={isDeleting}
+                    className={cn(
+                        'absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full text-[#F04B4B] transition-opacity',
+                        isDeleting
+                            ? 'cursor-not-allowed opacity-60'
+                            : 'cursor-pointer active:opacity-70'
+                    )}
+                    aria-label="Xóa mục tiêu"
+                >
+                    <Trash2 className="size-5" />
+                </button>
+            )}
             <div className="flex items-center justify-between">
                 <div className="flex-2 gap-1.5">
                     <div className="flex items-center justify-between gap-2">

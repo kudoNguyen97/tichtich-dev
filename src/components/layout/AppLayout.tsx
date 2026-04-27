@@ -44,7 +44,8 @@ export function AppLayout({
     const hideBottomNav =
         pathname === '/adult/information' ||
         pathname.startsWith('/adult/information/') ||
-        pathname.startsWith('/adult/setting/');
+        pathname.startsWith('/adult/setting/') ||
+        pathname.startsWith('/adult/journey/');
 
     const [title, setTitle] = useState(defaultTitle);
     const [subtitle, setSubtitle] = useState(defaultSubtitle ?? '');

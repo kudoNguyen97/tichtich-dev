@@ -1,0 +1,37 @@
+{
+    "success": true,
+    "resultCode": 200,
+    "message": "Items retrieved successfully",
+    "data": [
+        {
+            "id": "2aea3c92-e6f4-4ed3-a1de-68d4703db7b1",
+            "itemName": "Nón dâu",
+            "slug": "accessories_hat_non_dau",
+            "itemType": "hat",
+            "category": "accessory",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        },
+        {
+            "id": "8123ef5d-a10b-4a33-9262-e71690e9abde",
+            "itemName": "Nón tai mèo",
+            "slug": "accessories_hat_non_tai_meo",
+            "itemType": "hat",
+            "category": "accessory",
+            "pricePoints": 30,
+            "rarity": "common",
+            "description": "",
+            "imageUrl": "",
+            "isActive": true,
+            "isUnlocked": false,
+            "createdAt": "2026-03-09T17:25:40Z",
+            "updatedAt": "2026-03-09T17:25:40Z"
+        }
+    ]
+}

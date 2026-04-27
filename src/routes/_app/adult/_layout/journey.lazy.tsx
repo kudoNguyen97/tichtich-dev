@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import { KidProfileSummaryCard } from '@/components/adult/journey/KidProfileSummaryCard';
 import { JourneyNavCard } from '@/components/adult/journey/JourneyNavCard';
@@ -14,6 +14,7 @@ export const Route = createLazyFileRoute('/_app/adult/_layout/journey')({
 });
 
 function RouteComponent() {
+    const navigate = useNavigate();
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
     const profiles = useAuthStore((s) => s.profiles);
 
@@ -53,14 +54,14 @@ function RouteComponent() {
             <JourneyNavCard
                 label="Mục tiêu của con"
                 variant="secondary"
-                onClick={() => {}}
+                onClick={() => navigate({ to: '/adult/journey/goals' })}
             />
             <ActivityCalendar profileId={managedKidProfileId} />
 
             <JourneyNavCard
                 label="Hoạt động gần đây"
                 variant="tertiary"
-                onClick={() => {}}
+                onClick={() => navigate({ to: '/adult/journey/recent-activities' })}
             />
             {/* <TodayJourneySection
                 items={todayItems}

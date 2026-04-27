@@ -8,10 +8,12 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
+import svgr from 'vite-plugin-svgr';
 
 const config = defineConfig({
     plugins: [
         devtools(),
+        svgr(),
         // contentCollections(),
         tsconfigPaths({ projects: ['./tsconfig.json'] }),
         tailwindcss(),

@@ -41,7 +41,7 @@ export function useLogout() {
         mutationFn: authService.logout,
         onSuccess: () => {
             logout();
-            auth.signOut();
+            auth.signOut().catch(() => {});
             queryClient.clear();
             showSuccess('success.logout');
         },

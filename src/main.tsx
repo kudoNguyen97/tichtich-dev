@@ -6,6 +6,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools';
 import { routeTree } from '@/routeTree.gen';
 import { config } from '@/constants/config';
 import { queryClient } from '@/lib/queryClient';
+import { useFirebaseAuthSync } from '@/features/auth/hooks/useFirebaseAuthSync';
 import '@/i18n';
 import '@/styles/styles.css';
 
@@ -23,6 +24,11 @@ declare module '@tanstack/react-router' {
     }
 }
 
+function FirebaseAuthSync() {
+    useFirebaseAuthSync();
+    return null;
+}
+
 const rootElement = document.getElementById('app')!;
 
 if (!rootElement.innerHTML) {
@@ -30,6 +36,7 @@ if (!rootElement.innerHTML) {
     root.render(
         <React.StrictMode>
             <QueryClientProvider client={queryClient}>
+                <FirebaseAuthSync />
                 <RouterProvider router={router} />
                 {config.IS_DEV && <TanStackDevtools />}
             </QueryClientProvider>

@@ -4,6 +4,7 @@ import { authKeys } from '@/features/auth/api/auth.keys';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { showError, showSuccess } from '@/lib/toast';
 import type { User, UserSettings } from '@/features/auth/types/auth.type';
+import { auth } from '@/firebase';
 
 export function useMe() {
     const { isAuthenticated } = useAuthStore();
@@ -40,6 +41,7 @@ export function useLogout() {
         mutationFn: authService.logout,
         onSuccess: () => {
             logout();
+            auth.signOut();
             queryClient.clear();
             showSuccess('success.logout');
         },

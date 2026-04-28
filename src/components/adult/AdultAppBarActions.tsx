@@ -48,9 +48,15 @@ export function AdultAppBarLeftAvatarButton({
     );
 }
 
-export function AdultAppBarRightBellButton() {
+type AdultAppBarRightBellButtonProps = {
+    onPress?: () => void;
+};
+
+export function AdultAppBarRightBellButton({
+    onPress,
+}: AdultAppBarRightBellButtonProps) {
     return (
-        <Button className="cursor-pointer group">
+        <Button className="cursor-pointer group" onPress={onPress}>
             <div className="size-10 rounded-full overflow-hidden flex items-center justify-center transition-transform duration-150 bg-tichtich-primary-300">
                 <Bell
                     className="size-6 text-tichtich-primary-200 font-bold"

@@ -43,6 +43,12 @@ import { Route as AppAdultSettingLayoutChangePasswordRouteImport } from './route
 import { Route as AppAdultJourneyLayoutGoalsRouteImport } from './routes/_app/adult/journey/_layout/goals'
 
 const CreateSuccessLazyRouteImport = createFileRoute('/create-success')()
+const AppChildrenNotificationsIndexLazyRouteImport = createFileRoute(
+  '/_app/children/notifications/',
+)()
+const AppAdultNotificationsIndexLazyRouteImport = createFileRoute(
+  '/_app/adult/notifications/',
+)()
 const AppChildrenLayoutTreasuryLazyRouteImport = createFileRoute(
   '/_app/children/_layout/treasury',
 )()
@@ -127,6 +133,24 @@ const AppAdultLayoutRoute = AppAdultLayoutRouteImport.update({
   path: '/adult',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppChildrenNotificationsIndexLazyRoute =
+  AppChildrenNotificationsIndexLazyRouteImport.update({
+    id: '/children/notifications/',
+    path: '/children/notifications/',
+    getParentRoute: () => AppRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/children/notifications/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AppAdultNotificationsIndexLazyRoute =
+  AppAdultNotificationsIndexLazyRouteImport.update({
+    id: '/adult/notifications/',
+    path: '/adult/notifications/',
+    getParentRoute: () => AppRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/notifications/index.lazy').then((d) => d.Route),
+  )
 const AppChildrenLayoutIndexRoute = AppChildrenLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -348,6 +372,8 @@ export interface FileRoutesByFullPath {
   '/adult/mission-success/': typeof AppAdultMissionSuccessIndexRoute
   '/adult/reward-success/': typeof AppAdultRewardSuccessIndexRoute
   '/children/': typeof AppChildrenLayoutIndexRoute
+  '/adult/notifications/': typeof AppAdultNotificationsIndexLazyRoute
+  '/children/notifications/': typeof AppChildrenNotificationsIndexLazyRoute
   '/adult/journey/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
@@ -384,6 +410,8 @@ export interface FileRoutesByTo {
   '/children/treasury': typeof AppChildrenLayoutTreasuryLazyRoute
   '/adult': typeof AppAdultLayoutIndexRoute
   '/children': typeof AppChildrenLayoutIndexRoute
+  '/adult/notifications': typeof AppAdultNotificationsIndexLazyRoute
+  '/children/notifications': typeof AppChildrenNotificationsIndexLazyRoute
   '/adult/journey/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/adult/setting/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/adult/setting/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
@@ -427,6 +455,8 @@ export interface FileRoutesById {
   '/_app/adult/mission-success/': typeof AppAdultMissionSuccessIndexRoute
   '/_app/adult/reward-success/': typeof AppAdultRewardSuccessIndexRoute
   '/_app/children/_layout/': typeof AppChildrenLayoutIndexRoute
+  '/_app/adult/notifications/': typeof AppAdultNotificationsIndexLazyRoute
+  '/_app/children/notifications/': typeof AppChildrenNotificationsIndexLazyRoute
   '/_app/adult/journey/_layout/goals': typeof AppAdultJourneyLayoutGoalsRoute
   '/_app/adult/setting/_layout/change-password': typeof AppAdultSettingLayoutChangePasswordRoute
   '/_app/adult/setting/_layout/change-password-success': typeof AppAdultSettingLayoutChangePasswordSuccessRoute
@@ -469,6 +499,8 @@ export interface FileRouteTypes {
     | '/adult/mission-success/'
     | '/adult/reward-success/'
     | '/children/'
+    | '/adult/notifications/'
+    | '/children/notifications/'
     | '/adult/journey/goals'
     | '/adult/setting/change-password'
     | '/adult/setting/change-password-success'
@@ -505,6 +537,8 @@ export interface FileRouteTypes {
     | '/children/treasury'
     | '/adult'
     | '/children'
+    | '/adult/notifications'
+    | '/children/notifications'
     | '/adult/journey/goals'
     | '/adult/setting/change-password'
     | '/adult/setting/change-password-success'
@@ -547,6 +581,8 @@ export interface FileRouteTypes {
     | '/_app/adult/mission-success/'
     | '/_app/adult/reward-success/'
     | '/_app/children/_layout/'
+    | '/_app/adult/notifications/'
+    | '/_app/children/notifications/'
     | '/_app/adult/journey/_layout/goals'
     | '/_app/adult/setting/_layout/change-password'
     | '/_app/adult/setting/_layout/change-password-success'
@@ -650,6 +686,20 @@ declare module '@tanstack/react-router' {
       path: '/adult'
       fullPath: '/adult'
       preLoaderRoute: typeof AppAdultLayoutRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/children/notifications/': {
+      id: '/_app/children/notifications/'
+      path: '/children/notifications'
+      fullPath: '/children/notifications/'
+      preLoaderRoute: typeof AppChildrenNotificationsIndexLazyRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/adult/notifications/': {
+      id: '/_app/adult/notifications/'
+      path: '/adult/notifications'
+      fullPath: '/adult/notifications/'
+      preLoaderRoute: typeof AppAdultNotificationsIndexLazyRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/children/_layout/': {
@@ -974,6 +1024,8 @@ interface AppRouteRouteChildren {
   AppChildrenSettingLayoutRoute: typeof AppChildrenSettingLayoutRouteWithChildren
   AppAdultMissionSuccessIndexRoute: typeof AppAdultMissionSuccessIndexRoute
   AppAdultRewardSuccessIndexRoute: typeof AppAdultRewardSuccessIndexRoute
+  AppAdultNotificationsIndexLazyRoute: typeof AppAdultNotificationsIndexLazyRoute
+  AppChildrenNotificationsIndexLazyRoute: typeof AppChildrenNotificationsIndexLazyRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -986,6 +1038,9 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppChildrenSettingLayoutRoute: AppChildrenSettingLayoutRouteWithChildren,
   AppAdultMissionSuccessIndexRoute: AppAdultMissionSuccessIndexRoute,
   AppAdultRewardSuccessIndexRoute: AppAdultRewardSuccessIndexRoute,
+  AppAdultNotificationsIndexLazyRoute: AppAdultNotificationsIndexLazyRoute,
+  AppChildrenNotificationsIndexLazyRoute:
+    AppChildrenNotificationsIndexLazyRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

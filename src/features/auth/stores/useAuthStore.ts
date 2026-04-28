@@ -96,7 +96,16 @@ export const useAuthStore = create<AuthState>()(
                     })),
 
                 setSelectedProfile: (profile) =>
-                    set({ selectedProfile: profile }),
+                    set((state) => ({
+                        selectedProfile: profile,
+                        managedKidProfileId:
+                            profile.profileType === 'kid'
+                                ? profile.id
+                                : resolveManagedKidProfileId(
+                                      state.profiles,
+                                      state.managedKidProfileId
+                                  ),
+                    })),
 
                 setManagedKidProfileId: (id) =>
                     set((state) => ({

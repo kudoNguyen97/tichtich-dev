@@ -57,7 +57,11 @@ function AdultAppLayout() {
                         onPress={() => setIsSheetOpen(true)}
                     />
                 }
-                defaultRightAction={<AdultAppBarRightBellButton />}
+                defaultRightAction={
+                    <AdultAppBarRightBellButton
+                        onPress={() => navigate({ to: '/adult/notifications' })}
+                    />
+                }
                 appLayoutClassName="mb-20"
             />
 

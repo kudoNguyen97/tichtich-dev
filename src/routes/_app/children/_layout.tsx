@@ -7,7 +7,10 @@ import {
 } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useEffect, useMemo, useState } from 'react';
-import { AdultAppBarLeftAvatarButton } from '@/components/adult/AdultAppBarActions';
+import {
+    AdultAppBarLeftAvatarButton,
+    AdultAppBarRightBellButton,
+} from '@/components/adult/AdultAppBarActions';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { RefreshCw, User } from 'lucide-react';
@@ -92,6 +95,13 @@ function ChildrenAppLayout() {
                     <AdultAppBarLeftAvatarButton
                         selectedProfile={selectedProfile}
                         onPress={() => setIsSheetOpen(true)}
+                    />
+                }
+                rightAction={
+                    <AdultAppBarRightBellButton
+                        onPress={() =>
+                            navigate({ to: '/children/notifications' })
+                        }
                     />
                 }
             />

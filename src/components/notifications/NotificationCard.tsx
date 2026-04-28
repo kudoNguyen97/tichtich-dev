@@ -4,7 +4,12 @@ import { cn } from '@/utils/cn';
 import bellIcon from '@/assets/icons/bell.svg';
 import missionIcon from '@/assets/icons/mission-none-bg.svg';
 
-const MISSION_TYPES = new Set(['mission_started', 'mission_completed']);
+const MISSION_TYPES = new Set([
+    'mission_created',
+    'mission_started',
+    'mission_completed',
+    'mission_deleted',
+]);
 
 function getNotificationIcon(notification: Notification): string {
     return MISSION_TYPES.has(notification.dataJson.type)

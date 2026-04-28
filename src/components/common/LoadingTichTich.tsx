@@ -18,7 +18,7 @@ export function LoadingTichTich({ isLoading }: { isLoading?: boolean }) {
                     className="fixed inset-0 z-1000 flex items-center justify-center bg-black/20 backdrop-blur-xs"
                 >
                     <div className="flex flex-col items-center gap-4 px-6 py-8">
-                        <div className="size-[170px]">
+                        <div className="size-[120px]">
                             <img
                                 src="/pig-loading.svg"
                                 alt=""

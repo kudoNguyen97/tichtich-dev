@@ -75,6 +75,7 @@ export function CharacterStage({ equippedItems }: CharacterStageProps) {
             <img
                 src={src}
                 alt=""
+                draggable={false}
                 className={`absolute left-1/2 top-0 h-full -translate-x-1/2 ${SLOT_CLASSNAME[slot]}`}
                 style={{ zIndex: SLOT_Z_INDEX[slot] }}
             />
@@ -87,6 +88,7 @@ export function CharacterStage({ equippedItems }: CharacterStageProps) {
                 <img
                     src="/images/home-kid/land-fly.png"
                     alt=""
+                    draggable={false}
                     className="w-full"
                 />
                 <div className="absolute w-full h-full left-1/2 top-10 -translate-x-1/2 -translate-y-1/2">
@@ -94,6 +96,7 @@ export function CharacterStage({ equippedItems }: CharacterStageProps) {
                     <img
                         src="/icons/items/pig-equip.svg"
                         alt="Heo đất"
+                        draggable={false}
                         className="h-full w-full"
                         style={{ zIndex: 0 }}
                     />
@@ -101,6 +104,7 @@ export function CharacterStage({ equippedItems }: CharacterStageProps) {
                         <img
                             src={fashionSetImage ?? undefined}
                             alt=""
+                            draggable={false}
                             className="absolute w-full h-full top-0 left-0 bottom-0 right-0  object-contain"
                             style={{ zIndex: FASHION_SET_Z }}
                         />

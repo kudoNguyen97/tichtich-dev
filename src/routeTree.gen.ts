@@ -64,6 +64,12 @@ const AppAdultLayoutJourneyLazyRouteImport = createFileRoute(
 const AppAdultJourneyLayoutRecentActivitiesLazyRouteImport = createFileRoute(
   '/_app/adult/journey/_layout/recent-activities',
 )()
+const AppAdultJourneyLayoutProgressLazyRouteImport = createFileRoute(
+  '/_app/adult/journey/_layout/progress',
+)()
+const AppAdultJourneyLayoutFinanceReportLazyRouteImport = createFileRoute(
+  '/_app/adult/journey/_layout/finance-report',
+)()
 
 const CreateSuccessLazyRoute = CreateSuccessLazyRouteImport.update({
   id: '/create-success',
@@ -240,6 +246,26 @@ const AppAdultJourneyLayoutRecentActivitiesLazyRoute =
       (d) => d.Route,
     ),
   )
+const AppAdultJourneyLayoutProgressLazyRoute =
+  AppAdultJourneyLayoutProgressLazyRouteImport.update({
+    id: '/progress',
+    path: '/progress',
+    getParentRoute: () => AppAdultJourneyLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/journey/_layout/progress.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const AppAdultJourneyLayoutFinanceReportLazyRoute =
+  AppAdultJourneyLayoutFinanceReportLazyRouteImport.update({
+    id: '/finance-report',
+    path: '/finance-report',
+    getParentRoute: () => AppAdultJourneyLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_app/adult/journey/_layout/finance-report.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AppChildrenSettingLayoutChangePinSuccessRoute =
   AppChildrenSettingLayoutChangePinSuccessRouteImport.update({
     id: '/change-pin-success',
@@ -331,6 +357,8 @@ export interface FileRoutesByFullPath {
   '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
   '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/adult/journey/finance-report': typeof AppAdultJourneyLayoutFinanceReportLazyRoute
+  '/adult/journey/progress': typeof AppAdultJourneyLayoutProgressLazyRoute
   '/adult/journey/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRoutesByTo {
@@ -365,6 +393,8 @@ export interface FileRoutesByTo {
   '/adult/setting/information': typeof AppAdultSettingLayoutInformationRoute
   '/children/setting/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/children/setting/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/adult/journey/finance-report': typeof AppAdultJourneyLayoutFinanceReportLazyRoute
+  '/adult/journey/progress': typeof AppAdultJourneyLayoutProgressLazyRoute
   '/adult/journey/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRoutesById {
@@ -406,6 +436,8 @@ export interface FileRoutesById {
   '/_app/adult/setting/_layout/information': typeof AppAdultSettingLayoutInformationRoute
   '/_app/children/setting/_layout/change-pin': typeof AppChildrenSettingLayoutChangePinRoute
   '/_app/children/setting/_layout/change-pin-success': typeof AppChildrenSettingLayoutChangePinSuccessRoute
+  '/_app/adult/journey/_layout/finance-report': typeof AppAdultJourneyLayoutFinanceReportLazyRoute
+  '/_app/adult/journey/_layout/progress': typeof AppAdultJourneyLayoutProgressLazyRoute
   '/_app/adult/journey/_layout/recent-activities': typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 export interface FileRouteTypes {
@@ -446,6 +478,8 @@ export interface FileRouteTypes {
     | '/adult/setting/information'
     | '/children/setting/change-pin'
     | '/children/setting/change-pin-success'
+    | '/adult/journey/finance-report'
+    | '/adult/journey/progress'
     | '/adult/journey/recent-activities'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -480,6 +514,8 @@ export interface FileRouteTypes {
     | '/adult/setting/information'
     | '/children/setting/change-pin'
     | '/children/setting/change-pin-success'
+    | '/adult/journey/finance-report'
+    | '/adult/journey/progress'
     | '/adult/journey/recent-activities'
   id:
     | '__root__'
@@ -520,6 +556,8 @@ export interface FileRouteTypes {
     | '/_app/adult/setting/_layout/information'
     | '/_app/children/setting/_layout/change-pin'
     | '/_app/children/setting/_layout/change-pin-success'
+    | '/_app/adult/journey/_layout/finance-report'
+    | '/_app/adult/journey/_layout/progress'
     | '/_app/adult/journey/_layout/recent-activities'
   fileRoutesById: FileRoutesById
 }
@@ -740,6 +778,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdultJourneyLayoutRecentActivitiesLazyRouteImport
       parentRoute: typeof AppAdultJourneyLayoutRoute
     }
+    '/_app/adult/journey/_layout/progress': {
+      id: '/_app/adult/journey/_layout/progress'
+      path: '/progress'
+      fullPath: '/adult/journey/progress'
+      preLoaderRoute: typeof AppAdultJourneyLayoutProgressLazyRouteImport
+      parentRoute: typeof AppAdultJourneyLayoutRoute
+    }
+    '/_app/adult/journey/_layout/finance-report': {
+      id: '/_app/adult/journey/_layout/finance-report'
+      path: '/finance-report'
+      fullPath: '/adult/journey/finance-report'
+      preLoaderRoute: typeof AppAdultJourneyLayoutFinanceReportLazyRouteImport
+      parentRoute: typeof AppAdultJourneyLayoutRoute
+    }
     '/_app/children/setting/_layout/change-pin-success': {
       id: '/_app/children/setting/_layout/change-pin-success'
       path: '/change-pin-success'
@@ -847,11 +899,17 @@ const AppChildrenLayoutRouteWithChildren =
 
 interface AppAdultJourneyLayoutRouteChildren {
   AppAdultJourneyLayoutGoalsRoute: typeof AppAdultJourneyLayoutGoalsRoute
+  AppAdultJourneyLayoutFinanceReportLazyRoute: typeof AppAdultJourneyLayoutFinanceReportLazyRoute
+  AppAdultJourneyLayoutProgressLazyRoute: typeof AppAdultJourneyLayoutProgressLazyRoute
   AppAdultJourneyLayoutRecentActivitiesLazyRoute: typeof AppAdultJourneyLayoutRecentActivitiesLazyRoute
 }
 
 const AppAdultJourneyLayoutRouteChildren: AppAdultJourneyLayoutRouteChildren = {
   AppAdultJourneyLayoutGoalsRoute: AppAdultJourneyLayoutGoalsRoute,
+  AppAdultJourneyLayoutFinanceReportLazyRoute:
+    AppAdultJourneyLayoutFinanceReportLazyRoute,
+  AppAdultJourneyLayoutProgressLazyRoute:
+    AppAdultJourneyLayoutProgressLazyRoute,
   AppAdultJourneyLayoutRecentActivitiesLazyRoute:
     AppAdultJourneyLayoutRecentActivitiesLazyRoute,
 }

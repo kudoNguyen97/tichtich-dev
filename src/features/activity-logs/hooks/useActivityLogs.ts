@@ -1,23 +1,41 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import { activityLogKeys } from '@/features/activity-logs/api/activityLog.keys';
 import { activityLogService } from '@/features/activity-logs/api/activityLog.service';
-import type { ActivityLogsListFilters } from '@/features/activity-logs/types/activityLog.type';
+import type {
+    ActivityLogsListData,
+    ActivityLogsListFilters,
+} from '@/features/activity-logs/types/activityLog.type';
 
 const DEFAULT_RECENT_LIMIT = 100;
 const DEFAULT_RECENT_OFFSET = 0;
 const DEFAULT_INFINITE_PAGE_SIZE = 20;
+
+type RecentActivitiesQueryKey = ReturnType<
+    typeof activityLogKeys.recent
+>;
 
 export interface UseRecentActivitiesOptions {
     profileId: string;
     limit?: number;
     offset?: number;
     enabled?: boolean;
+    options?: Omit<
+        UseQueryOptions<
+            ActivityLogsListData,
+            Error,
+            ActivityLogsListData,
+            RecentActivitiesQueryKey
+        >,
+        'queryKey' | 'queryFn' | 'enabled'
+    >;
 }
 
 export function useRecentActivities({
     profileId,
     limit,
     offset,
+    options,
     enabled = true,
 }: UseRecentActivitiesOptions) {
     const resolvedFilters: ActivityLogsListFilters = {
@@ -25,11 +43,17 @@ export function useRecentActivities({
         offset: offset ?? DEFAULT_RECENT_OFFSET,
     };
 
-    return useQuery({
+    return useQuery<
+        ActivityLogsListData,
+        Error,
+        ActivityLogsListData,
+        RecentActivitiesQueryKey
+    >({
         queryKey: activityLogKeys.recent(profileId, resolvedFilters),
         queryFn: () =>
             activityLogService.getRecentActivities(profileId, resolvedFilters),
         enabled: Boolean(profileId) && enabled,
+        ...options,
     });
 }
 

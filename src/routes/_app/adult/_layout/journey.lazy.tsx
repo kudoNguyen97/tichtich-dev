@@ -38,7 +38,7 @@ function RouteComponent() {
             <JourneyNavCard
                 label="Hành trình tiến bộ của con"
                 variant="primary"
-                onClick={() => {}}
+                onClick={() => navigate({ to: '/adult/journey/progress' })}
             />
             <JourneyNavCard
                 label="Mục tiêu của con"

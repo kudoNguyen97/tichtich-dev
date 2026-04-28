@@ -31,6 +31,9 @@ export function useEquippedItems(profileId: string) {
     return useQuery({
         queryKey: itemKeys.equippedListByProfileId(profileId),
         queryFn: () => itemService.getEquippedItems(profileId),
+        meta: {
+            globalLoading: true,
+        },
         enabled: Boolean(profileId),
     });
 }

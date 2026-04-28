@@ -26,7 +26,9 @@ export function AppBar({
                 className
             )}
         >
-            <div className="flex items-center justify-start">{leftAction}</div>
+            <div className="flex items-center justify-start cursor-pointer">
+                {leftAction}
+            </div>
 
             <div className="flex flex-col items-center justify-center text-center">
                 <h1 className="text-lg font-bold font-display text-tichtich-black leading-tight truncate w-full text-center">
@@ -39,7 +41,9 @@ export function AppBar({
                 )}
             </div>
 
-            <div className="flex items-center justify-end">{rightAction}</div>
+            <div className="flex items-center justify-end cursor-pointer">
+                {rightAction}
+            </div>
         </header>
     );
 }

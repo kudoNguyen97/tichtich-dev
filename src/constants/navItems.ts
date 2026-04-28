@@ -1,5 +1,3 @@
-import { LayoutDashboard, Users, BarChart2, Settings } from 'lucide-react';
-
 export interface NavItem {
     labelKey: string;
     to: string;
@@ -65,12 +63,4 @@ export const ADULT_NAV_ITEMS: NavItem[] = [
         to: '/adult/settings',
         iconSrc: '/icons/navbar/setting.svg',
     },
-];
-
-// Parent profile — URL: /parent/  /parent/manage  /parent/reports  /parent/settings
-export const PARENT_NAV_ITEMS: NavItem[] = [
-    { labelKey: 'nav.overview', to: '/parent', icon: LayoutDashboard },
-    { labelKey: 'nav.manage', to: '/parent/manage', icon: Users },
-    { labelKey: 'nav.reports', to: '/parent/reports', icon: BarChart2 },
-    { labelKey: 'nav.settings', to: '/parent/settings', icon: Settings },
 ];

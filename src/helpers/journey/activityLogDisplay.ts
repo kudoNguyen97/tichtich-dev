@@ -4,14 +4,14 @@ import type {
     WalletDistributionEntry,
     WalletDistributionType,
 } from '@/features/activity-logs/types/activityLog.type';
-import defaultJourneyIcon from '@/assets/icons/navbar/adult-award.svg';
+import defaultJourneyIcon from '@/assets/icons/mission.svg';
 import addMoneyIcon from '@/assets/icons/add-money.svg';
 import spendMoneyIcon from '@/assets/icons/spend-money.svg';
-import adultTargetIcon from '@/assets/icons/navbar/adult-target.svg';
 import charityIcon from '@/assets/icons/charity-heart.svg';
-import educationIcon from '@/assets/icons/target-mission/learning.svg';
-import savingsIcon from '@/assets/icons/target-mission/saving.svg';
-import allowanceIcon from '@/assets/icons/target-mission/candy.svg';
+import educationIcon from '@/assets/icons/study.svg';
+import savingsIcon from '@/assets/icons/save.svg';
+import allowanceIcon from '@/assets/icons/candy.svg';
+import unlockItemIcon from '@/assets/icons/unlock-item.svg';
 import { formatCurrency } from '@/utils/format';
 
 const enum ActivityType {
@@ -75,18 +75,16 @@ export function getActivityDisplayTitle(activity: ActivityLog): string {
     }
 }
 
-const DEFAULT_JOURNEY_ICON = defaultJourneyIcon;
-
 const ACTIVITY_TYPE_ICONS: Record<string, string> = {
-    [ActivityType.REWARD]: DEFAULT_JOURNEY_ICON,
+    [ActivityType.REWARD]: defaultJourneyIcon,
     [ActivityType.DEPOSIT]: addMoneyIcon,
     [ActivityType.SPENDING]: spendMoneyIcon,
-    [ActivityType.PROFILE_TRANSACTION_RECEIVED]: DEFAULT_JOURNEY_ICON,
-    [ActivityType.REWARD_RECEIVED]: DEFAULT_JOURNEY_ICON,
+    [ActivityType.PROFILE_TRANSACTION_RECEIVED]: defaultJourneyIcon,
+    [ActivityType.REWARD_RECEIVED]: defaultJourneyIcon,
     [ActivityType.WALLET_DISTRIBUTION]: addMoneyIcon,
-    [ActivityType.MISSION_STARTED]: adultTargetIcon,
-    [ActivityType.MISSION_COMPLETED]: DEFAULT_JOURNEY_ICON,
-    [ActivityType.ITEM_UNLOCKED]: allowanceIcon,
+    [ActivityType.MISSION_STARTED]: defaultJourneyIcon,
+    [ActivityType.MISSION_COMPLETED]: defaultJourneyIcon,
+    [ActivityType.ITEM_UNLOCKED]: unlockItemIcon,
 };
 
 export function getJourneyActivityIconSrc(activity: ActivityLog): string {

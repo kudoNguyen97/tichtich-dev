@@ -33,7 +33,7 @@ function WalletBadge({ entry }: WalletBadgeProps) {
     const walletType = entry.wallet_type ?? entry.walletType ?? 'spending';
     return (
         <div className="flex items-center gap-1">
-            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-tichtich-primary-200">
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-tichtich-primary-100">
                 <img
                     src={WALLET_DISTRIBUTION_ICONS[walletType]}
                     alt=""
@@ -69,8 +69,12 @@ export function ActivityLogCard({ activity, className }: ActivityLogCardProps) {
                 className
             )}
         >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tichtich-primary-100">
-                <img src={iconSrc} alt="" className="h-6 w-6 object-contain" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ">
+                <img
+                    src={iconSrc}
+                    alt=""
+                    className="h-full w-full object-contain"
+                />
             </div>
 
             <div className="min-w-0 flex-1 flex flex-col gap-1">

@@ -155,18 +155,18 @@ function RouteComponent() {
         try {
             if (isEquipped(item)) {
                 await unequipMutation.mutateAsync({ itemType: slot });
-                showNotification({
-                    title: `Đã bỏ trang bị ${item.itemName}`,
-                    variant: 'success',
-                });
+                // showNotification({
+                //     title: `Đã bỏ trang bị ${item.itemName}`,
+                //     variant: 'success',
+                // });
                 return;
             }
 
             await equipMutation.mutateAsync({ itemId: item.id });
-            showNotification({
-                title: `Đã trang bị ${item.itemName}`,
-                variant: 'success',
-            });
+            // showNotification({
+            //     title: `Đã trang bị ${item.itemName}`,
+            //     variant: 'success',
+            // });
         } catch (error) {
             showNotification({
                 title: 'Không thể cập nhật trang bị',
@@ -211,7 +211,10 @@ function RouteComponent() {
     return (
         <div className="w-full max-w-[720px] mx-auto px-4 py-4 mb-25">
             <div className="flex flex-col">
-                <PointBadge points={points} onClick={() => setShowPointsModal(true)} />
+                <PointBadge
+                    points={points}
+                    onClick={() => setShowPointsModal(true)}
+                />
                 {/* Stage with overlay point badge */}
                 <div className="mb-4">
                     <CharacterStage

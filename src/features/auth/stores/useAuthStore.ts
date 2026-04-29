@@ -4,6 +4,7 @@ import type { Profile, User } from '@/features/auth/types/auth.type';
 
 interface AuthState {
     user: User | null;
+    /** Backend session token from login; HTTP Bearer is Firebase ID token via `getAuthToken()`. */
     accessToken: string | null;
     profiles: Profile[];
     selectedProfile: Profile | null;

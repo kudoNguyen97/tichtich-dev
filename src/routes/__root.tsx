@@ -12,7 +12,6 @@ export const Route = createRootRoute({
     beforeLoad: async () => {
         const { accessToken, user, setAuth, logout } = useAuthStore.getState();
 
-        // Skip neu khong co token hoac da hydrate user roi
         if (!accessToken || user) return;
 
         try {

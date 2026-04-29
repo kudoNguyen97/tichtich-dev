@@ -3,6 +3,7 @@ import type { AxiosError } from 'axios';
 import { config } from '@/constants/config';
 import { getOrCreateDeviceId } from './deviceId';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { getAuthToken } from '@/hooks/useGetAuthToke';
 
 export const axiosInstance = axios.create({
     baseURL: config.API_BASE_URL,
@@ -15,12 +16,14 @@ export const axiosInstance = axios.create({
     },
 });
 
-axiosInstance.interceptors.request.use((requestConfig) => {
-    const token = localStorage.getItem('access_token');
+axiosInstance.interceptors.request.use(async (requestConfig) => {
+    const token = await getAuthToken();
     const deviceId = getOrCreateDeviceId();
 
     if (token) {
         requestConfig.headers.Authorization = `Bearer ${token}`;
+    } else {
+        delete requestConfig.headers.Authorization;
     }
     if (deviceId) {
         requestConfig.headers['x-device-id'] = deviceId;

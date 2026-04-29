@@ -45,8 +45,6 @@ function RegisterPage() {
     });
 
     const onSubmit = async (data: RegisterFormData) => {
-        console.log('data', data);
-
         try {
             const { user } = await createUserWithEmailAndPassword(
                 auth,

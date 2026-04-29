@@ -69,7 +69,6 @@ function ChangePasswordPage() {
 
     const onSubmit = async (data: ChangePasswordFormData) => {
         const fbUser = auth.currentUser;
-        console.log('fbUser', fbUser);
 
         if (!fbUser?.email) {
             showError(

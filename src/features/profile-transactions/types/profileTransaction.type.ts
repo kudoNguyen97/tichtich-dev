@@ -34,6 +34,8 @@ export interface Sender {
 
 export interface Receiver {
     id: string;
+    type?: string;
+    status?: ProfileTransactionStatus;
     userId: string;
     profileType: string;
     fullName: string;

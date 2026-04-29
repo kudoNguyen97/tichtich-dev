@@ -13,6 +13,7 @@ function RouteComponent() {
     const navigate = useNavigate();
     const profile = useSelectedChildProfile();
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const logout = useAuthStore((s) => s.logout);
     if (!profile) return null;
     const handleChangeAccount = () => {
         useAuthStore.setState({
@@ -22,15 +23,8 @@ function RouteComponent() {
         navigate({ to: '/profiles' });
     };
     const confirmLogout = () => {
-        useAuthStore.setState({
-            isAuthenticated: false,
-            selectedProfile: null,
-            managedKidProfileId: null,
-            user: null,
-            accessToken: null,
-            profiles: [],
-        });
-        navigate({ to: '/' });
+        logout();
+        navigate({ to: '/login' });
     };
     const openLogoutDialog = () => setIsLogoutDialogOpen(true);
     const closeLogoutDialog = () => setIsLogoutDialogOpen(false);

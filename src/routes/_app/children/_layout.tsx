@@ -17,6 +17,7 @@ import { RefreshCw, User } from 'lucide-react';
 import { AppBar } from '@/components/layout/AppBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { RewardTransactionDialog } from '@/components/children/home/RewardTransactionDialog';
+import { InitialRewardDialog } from '@/components/children/home/InitialRewardDialog';
 import { useGetReceivedTransactions } from '@/features/profile-transactions/hooks/useProfileTransactions';
 import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
 
@@ -37,6 +38,10 @@ function ChildrenAppLayout() {
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [isRewardTransactionDialogOpen, setIsRewardTransactionDialogOpen] =
+        useState(false);
+    const [isInitialRewardDialogOpen, setIsInitialRewardDialogOpen] =
+        useState(false);
+    const [hasShownInitialRewardDialog, setHasShownInitialRewardDialog] =
         useState(false);
 
     const titlePrefix = 'Xin chào';
@@ -60,6 +65,14 @@ function ChildrenAppLayout() {
         profile?.id ?? ''
     );
 
+    const firstTransaction =
+        transactions?.length === 1 ? transactions[0] : null;
+
+    const isInitialRewardPending =
+        !!firstTransaction &&
+        firstTransaction.type === 'initial_reward' &&
+        firstTransaction.status === 'pending';
+
     const pending = useMemo(
         () => (transactions ?? []).filter((t) => t.status === 'pending'),
         [transactions]
@@ -76,10 +89,22 @@ function ChildrenAppLayout() {
     );
 
     useEffect(() => {
+        if (isInitialRewardPending || pending.length === 0) {
+            return;
+        }
+
         if (pending.length > 0) {
             setIsRewardTransactionDialogOpen(true);
         }
-    }, [pending]);
+    }, [isInitialRewardPending, pending]);
+
+    useEffect(() => {
+        if (hasShownInitialRewardDialog) return;
+        if (!isInitialRewardPending) return;
+
+        setIsInitialRewardDialogOpen(true);
+        setHasShownInitialRewardDialog(true);
+    }, [hasShownInitialRewardDialog, isInitialRewardPending]);
 
     const totalAmount = useMemo(
         () => pending.reduce((sum, t) => sum + t.amount, 0),
@@ -107,7 +132,7 @@ function ChildrenAppLayout() {
             />
             <div className="bg-[url('/images/background-illustration-desktop-v2.png')] no-repeat bg-fixed bg-contain bg-start min-h-screen">
                 <Outlet />
-                {pending.length > 0 && (
+                {!isInitialRewardPending && pending.length > 0 && (
                     <RewardTransactionDialog
                         isOpen={isRewardTransactionDialogOpen}
                         totalAmount={totalAmount}
@@ -121,6 +146,20 @@ function ChildrenAppLayout() {
                         }}
                         onClose={() => {}}
                         navigateTo="/adult/journey"
+                    />
+                )}
+                {firstTransaction && isInitialRewardPending && (
+                    <InitialRewardDialog
+                        isOpen={isInitialRewardDialogOpen}
+                        amount={firstTransaction.amount}
+                        nameProfile={subtitleKidName}
+                        onShareNow={() => {
+                            setIsInitialRewardDialogOpen(false);
+                            navigate({
+                                to: `/children/treasury?share=${firstTransaction.id}&index=0`,
+                            });
+                        }}
+                        onClose={() => setIsInitialRewardDialogOpen(false)}
                     />
                 )}
             </div>

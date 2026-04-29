@@ -2,6 +2,29 @@ import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
 import type { Profile, User } from '@/features/auth/types/auth.type';
 
+const PRESERVED_LOCAL_STORAGE_KEYS = [
+    'app_splash_shown',
+    'i18nextLng',
+    'device_id',
+] as const;
+
+function clearLocalStorageExcept(keys: readonly string[]) {
+    const preserved = new Map<string, string>();
+
+    keys.forEach((key) => {
+        const value = localStorage.getItem(key);
+        if (value !== null) {
+            preserved.set(key, value);
+        }
+    });
+
+    localStorage.clear();
+
+    preserved.forEach((value, key) => {
+        localStorage.setItem(key, value);
+    });
+}
+
 interface AuthState {
     user: User | null;
     accessToken: string | null;
@@ -122,7 +145,7 @@ export const useAuthStore = create<AuthState>()(
                     set({ selectedProfile: null, managedKidProfileId: null }),
 
                 logout: () => {
-                    localStorage.removeItem('access_token');
+                    clearLocalStorageExcept(PRESERVED_LOCAL_STORAGE_KEYS);
                     set({
                         user: null,
                         accessToken: null,

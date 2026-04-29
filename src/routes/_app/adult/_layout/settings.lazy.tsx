@@ -31,6 +31,7 @@ function AdultSettingsPage() {
         isPending: isSettingsQueryPending,
         isError: isSettingsError,
     } = useMeSettings();
+    const logout = useAuthStore((s) => s.logout);
     const { mutateAsync: updateSettings, isPending: isUpdateSettingsPending } =
         useUpdateMeSettings();
 
@@ -57,15 +58,8 @@ function AdultSettingsPage() {
     const closeLogoutDialog = () => setIsLogoutDialogOpen(false);
 
     const confirmLogout = () => {
-        useAuthStore.setState({
-            isAuthenticated: false,
-            selectedProfile: null,
-            managedKidProfileId: null,
-            user: null,
-            accessToken: null,
-            profiles: [],
-        });
-        navigate({ to: '/' });
+        logout();
+        navigate({ to: '/login' });
     };
 
     return (

@@ -11,6 +11,7 @@ import { SpendPreviewChart } from '../../../../components/children/treasury/Spen
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichTextArea } from '@/components/common/TichTichTextArea';
 import { TichTichModal } from '@/components/common/TichTichModal';
+import { MoneyAmountField } from '@/components/common/MoneyAmountField';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useMeSettings } from '@/features/auth/hooks/useAuth';
 import { useMissionsByProfileIdKid } from '@/features/missions/hooks/useMissions';
@@ -37,6 +38,20 @@ const toSafeNumber = (value: unknown, fallback = 0) => {
 
     return Number.isFinite(parsed) ? parsed : fallback;
 };
+
+const TREASURY_MIN_AMOUNT = 1_000;
+const TREASURY_MAX_AMOUNT = 100_000_000;
+
+function getTreasuryAmountSuggestions(
+    typedDigits: string,
+    maxAmount: number = TREASURY_MAX_AMOUNT
+): number[] {
+    const n = parseInt(typedDigits, 10);
+    if (!n || Number.isNaN(n)) return [];
+    return [n * 1_000, n * 10_000].filter(
+        (v) => v >= TREASURY_MIN_AMOUNT && v <= maxAmount
+    );
+}
 
 const CATEGORY_TO_WALLET_TYPE = {
     savings: 'saving',
@@ -159,6 +174,10 @@ function RouteComponent() {
     const [treasuryTab, setTreasuryTab] = useState<TreasuryTabKey>('add');
     const [sliderResetKey, setSliderResetKey] = useState(0);
     const [spendAmountInput, setSpendAmountInput] = useState('0');
+    const [addSuggestionsDismissed, setAddSuggestionsDismissed] =
+        useState(false);
+    const [spendSuggestionsDismissed, setSpendSuggestionsDismissed] =
+        useState(false);
     const [selectedSpendCategoryId, setSelectedSpendCategoryId] =
         useState<CategoryId | null>(null);
     const [spendReason, setSpendReason] = useState('');
@@ -272,6 +291,7 @@ function RouteComponent() {
                     setTotalInput('0');
                     setCategories(DEFAULT_CATEGORIES);
                     setSliderResetKey((k) => k + 1);
+                    setAddSuggestionsDismissed(false);
                     await queryClient.invalidateQueries({
                         queryKey:
                             walletKeys.listByProfileId(managedKidProfileId),
@@ -311,6 +331,7 @@ function RouteComponent() {
                     setSpendAmountInput('0');
                     setSelectedSpendCategoryId(null);
                     setSpendReason('');
+                    setSpendSuggestionsDismissed(false);
                     queryClient.invalidateQueries({
                         queryKey: missionKeys.listByProfileIdKid(
                             managedKidProfileId,
@@ -413,29 +434,30 @@ function RouteComponent() {
 
                     <TabPanel id="add" className="flex flex-col gap-4">
                         <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
-                            <label className="text-sm font-bold text-tichtich-black">
-                                Hôm nay mình nhận{' '}
-                                <span className="text-tichtich-red">*</span>
-                            </label>
-                            <div className="bg-white border border-tichtich-primary-200 rounded-xl h-13 flex items-center gap-2 p-3">
-                                <input
-                                    type="text"
-                                    inputMode="numeric"
-                                    value={formatMoney(total)}
-                                    onChange={(e) => {
-                                        const raw = e.target.value.replace(
-                                            /\D/g,
-                                            ''
-                                        );
-                                        setTotalInput(raw || '0');
-                                        setCategories(DEFAULT_CATEGORIES);
-                                    }}
-                                    className="flex-1 border-none outline-none text-base font-bold text-tichtich-black bg-transparent"
-                                />
-                                <span className="text-sm font-bold text-muted-foreground">
-                                    đ
-                                </span>
-                            </div>
+                            <MoneyAmountField
+                                label="Hôm nay mình nhận"
+                                isRequired
+                                value={formatMoney(total)}
+                                onChange={(val) => {
+                                    const raw = val.replace(/\D/g, '');
+                                    setTotalInput(raw || '0');
+                                    setCategories(DEFAULT_CATEGORIES);
+                                    setAddSuggestionsDismissed(false);
+                                }}
+                                suggestions={
+                                    addSuggestionsDismissed
+                                        ? []
+                                        : getTreasuryAmountSuggestions(
+                                              totalInput
+                                          )
+                                }
+                                selectedAmount={total > 0 ? total : undefined}
+                                onPickSuggestion={(amount) => {
+                                    setTotalInput(String(amount));
+                                    setCategories(DEFAULT_CATEGORIES);
+                                    setAddSuggestionsDismissed(true);
+                                }}
+                            />
                         </div>
 
                         {/* Split section */}
@@ -576,33 +598,38 @@ function RouteComponent() {
 
                     <TabPanel id="spend" className="flex flex-col gap-4">
                         <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
-                            <label className="text-base font-bold text-tichtich-black">
-                                Hôm nay mình chi{' '}
-                                <span className="text-tichtich-red">*</span>
-                            </label>
-                            <div className="bg-white border border-tichtich-primary-200 rounded-xl h-13 flex items-center gap-2 p-3">
-                                <input
-                                    type="text"
-                                    inputMode="numeric"
-                                    value={formatMoney(spendAmount)}
-                                    onChange={(e) => {
-                                        const raw = e.target.value.replace(
-                                            /\D/g,
-                                            ''
-                                        );
-                                        setSpendAmountInput(raw || '0');
-                                    }}
-                                    className="flex-1 border-none outline-none text-base font-bold text-tichtich-black bg-transparent"
-                                />
-                                <span className="text-sm font-bold text-muted-foreground">
-                                    đ
-                                </span>
-                            </div>
-                            {isInsufficient && (
-                                <p className="text-sm font-medium text-tichtich-red">
-                                    số tiền hiện tại trong ví không đủ
-                                </p>
-                            )}
+                            <MoneyAmountField
+                                label="Hôm nay mình chi"
+                                isRequired
+                                value={formatMoney(spendAmount)}
+                                onChange={(val) => {
+                                    const raw = val.replace(/\D/g, '');
+                                    setSpendAmountInput(raw || '0');
+                                    setSpendSuggestionsDismissed(false);
+                                }}
+                                error={
+                                    isInsufficient
+                                        ? 'số tiền hiện tại trong ví không đủ'
+                                        : undefined
+                                }
+                                suggestions={
+                                    spendSuggestionsDismissed
+                                        ? []
+                                        : getTreasuryAmountSuggestions(
+                                              spendAmountInput,
+                                              selectedSpendCategory
+                                                  ? selectedWalletBalance
+                                                  : TREASURY_MAX_AMOUNT
+                                          )
+                                }
+                                selectedAmount={
+                                    spendAmount > 0 ? spendAmount : undefined
+                                }
+                                onPickSuggestion={(amount) => {
+                                    setSpendAmountInput(String(amount));
+                                    setSpendSuggestionsDismissed(true);
+                                }}
+                            />
                         </div>
 
                         <div className="flex flex-col gap-2">

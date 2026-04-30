@@ -4,10 +4,11 @@ import type { Mission } from '@/features/missions/types/mission.type';
 import { cn } from '@/utils/cn';
 import { missionWalletIconSrc } from '@/helpers/adult/missions/missionWalletIconSrc';
 import {
-    formatMissionEndDayVi,
-    getMissionStatusBadge,
-    missionStatusBadgeClassName,
-} from '@/helpers/adult/missions/missionSuccessDisplay';
+    formatMissionDayVi,
+    getMissionCardBadge,
+    getMissionCardBadgeClassName,
+    getMissionProgressBarPercent,
+} from '@/helpers/missions/missionUi';
 
 function MissionProgressRow({ percent }: { percent: number }) {
     const clamped = Math.min(100, Math.max(0, percent));
@@ -52,10 +53,10 @@ export function MissionSuccessCard({
     isDeleting = false,
     onDelete,
 }: MissionSuccessCardProps) {
-    const badge = getMissionStatusBadge(mission);
+    const badge = getMissionCardBadge(mission);
     const iconSrc = missionWalletIconSrc(mission.walletType);
-    const deadline = formatMissionEndDayVi(mission.endDay);
-    const pct = mission.progress?.progressPercent ?? 0;
+    const deadline = formatMissionDayVi(mission.endDay);
+    const pct = getMissionProgressBarPercent(mission);
 
     return (
         <article
@@ -98,7 +99,7 @@ export function MissionSuccessCard({
                             <span
                                 className={cn(
                                     'inline-flex rounded-full px-3 py-1 text-xs font-semibold text-tichtich-black',
-                                    missionStatusBadgeClassName(badge.variant)
+                                    getMissionCardBadgeClassName(mission)
                                 )}
                             >
                                 {badge.label}

@@ -26,6 +26,3 @@ export const TichTichItemSetting: React.FC<TichTichItemSettingProps> = ({
         </div>
     );
 };
-
-// Example usage:
-// <TichTichItemSetting label="Chuyển đổi tài khoản" onClick={() => {}} />

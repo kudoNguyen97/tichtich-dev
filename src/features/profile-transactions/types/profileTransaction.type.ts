@@ -61,3 +61,13 @@ export interface CreateProfileTransactionPayload {
     amount: number;
     note: string;
 }
+
+export interface ProcessProfileTransactionPayload {
+    transactionId: string;
+    walletUpdates: WalletUpdate[];
+}
+
+export interface WalletUpdate {
+    walletId: string;
+    amount: number;
+}

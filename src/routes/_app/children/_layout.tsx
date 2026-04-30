@@ -137,15 +137,16 @@ function ChildrenAppLayout() {
                         isOpen={isRewardTransactionDialogOpen}
                         totalAmount={totalAmount}
                         rewards={rewards}
-                        onShare={(reward, index) => {
+                        onShare={(reward) => {
                             setIsRewardTransactionDialogOpen(false);
 
                             navigate({
-                                to: `/children/treasury?share=${reward.id}&index=${index}`,
+                                to: '/children/treasury/sharing-now',
+                                search: {
+                                    share: reward.id,
+                                },
                             });
                         }}
-                        onClose={() => {}}
-                        navigateTo="/adult/journey"
                     />
                 )}
                 {firstTransaction && isInitialRewardPending && (
@@ -156,7 +157,10 @@ function ChildrenAppLayout() {
                         onShareNow={() => {
                             setIsInitialRewardDialogOpen(false);
                             navigate({
-                                to: `/children/treasury?share=${firstTransaction.id}&index=0`,
+                                to: '/children/treasury/sharing-now',
+                                search: {
+                                    share: firstTransaction.id,
+                                },
                             });
                         }}
                         onClose={() => setIsInitialRewardDialogOpen(false)}

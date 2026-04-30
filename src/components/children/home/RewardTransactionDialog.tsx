@@ -10,8 +10,7 @@ interface Props {
     totalAmount: number;
     rewards: RewardCard[];
     onShare?: (reward: RewardCard, index: number) => void; // optional, tự kết nối sau
-    onClose: () => void;
-    navigateTo: string; // path để navigate khi bấm Bắt đầu, vd: '/adult/journey'
+    onClose?: () => void;
 }
 
 export function RewardTransactionDialog({
@@ -55,7 +54,7 @@ export function RewardTransactionDialog({
     return (
         <ModalOverlay
             isOpen={isOpen}
-            onOpenChange={(open) => !open && onClose()}
+            onOpenChange={(open) => !open && onClose?.()}
             className="fixed inset-0 bg-black/45 flex items-center justify-center z-50 border-none"
         >
             <Modal
@@ -87,23 +86,6 @@ export function RewardTransactionDialog({
                             ))}
                         </div>
                     </div>
-
-                    {/* Dots */}
-                    {/* <div className="flex justify-center gap-1.5 mb-5">
-                        {rewards.map((_, i) => (
-                            <span
-                                key={i}
-                                className="h-2 rounded-full transition-all duration-200"
-                                style={{
-                                    width: i === selectedIndex ? 20 : 8,
-                                    background:
-                                        i === selectedIndex
-                                            ? '#F59E0B'
-                                            : '#D1D5DB',
-                                }}
-                            />
-                        ))}
-                    </div> */}
 
                     {/* Actions */}
                     <TichTichButton

@@ -14,12 +14,12 @@ export function MissionTargetListSection({
     return (
         <section>
             <h2 className="text-lg font-bold text-tichtich-black mb-3">
-                Mục tiêu
+                Mục tiêu đang thực hiện
             </h2>
 
             {missions.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                    Chưa có mục tiêu nào
+                <p className="bg-tichtich-primary-300 rounded-lg p-10 text-base text-muted-foreground text-center">
+                    Chưa có mục tiêu mới
                 </p>
             ) : (
                 <div className="flex flex-col gap-3">

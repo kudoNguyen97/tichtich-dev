@@ -1,22 +1,6 @@
-import type { Wallet, WalletType } from '@/features/wallets/types/wallet.type';
+import type { Wallet } from '@/features/wallets/types/wallet.type';
+import { WALLET_DISPLAY_CONFIG } from '@/constants/wallets/walletDisplay';
 import { WalletOverviewCard } from './WalletOverviewCard';
-
-interface WalletDisplayConfig {
-    walletType: WalletType;
-    label: string;
-    icon: string;
-}
-
-const WALLET_DISPLAY_CONFIG: WalletDisplayConfig[] = [
-    { walletType: 'saving', label: 'Tiết kiệm', icon: '/icons/save.svg' },
-    { walletType: 'education', label: 'Học tập', icon: '/icons/study.svg' },
-    {
-        walletType: 'charity',
-        label: 'Từ thiện',
-        icon: '/icons/charity-heart.svg',
-    },
-    { walletType: 'spending', label: 'Tiêu vặt', icon: '/icons/candy.svg' },
-];
 
 interface WalletOverviewSectionProps {
     wallets: Wallet[] | undefined;

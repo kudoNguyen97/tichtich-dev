@@ -7,7 +7,6 @@ import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import type { Profile } from '@/features/auth/types/auth.type';
 import { authService } from '@/features/auth/api/auth.service';
 import { profileKeys } from '@/features/profiles/api/profile.keys';
-import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 
 export const Route = createFileRoute('/profiles')({
     component: ProfilesPage,
@@ -25,9 +24,10 @@ function ProfilesPage() {
     const setProfiles = useAuthStore((s) => s.setProfiles);
     const clearSelectedProfile = useAuthStore((s) => s.clearSelectedProfile);
 
-    const { data: profiles = [], isLoading } = useQuery({
+    const { data: profiles = [], isFetching } = useQuery({
         queryKey: profileKeys.profile,
         queryFn: () => authService.meProfiles(),
+        refetchOnMount: 'always',
     });
 
     useEffect(() => {
@@ -46,7 +46,6 @@ function ProfilesPage() {
 
     return (
         <div className="flex min-h-full flex-1 flex-col bg-[url('/images/background-illustration-desktop.png')] bg-cover bg-center">
-            {isLoading && <LoadingTichTich isLoading={isLoading} />}
             <div className="px-4 pt-8 pb-6">
                 <h1 className="text-center text-xl font-bold text-tichtich-black">
                     {t('profiles.title')}
@@ -55,13 +54,23 @@ function ProfilesPage() {
                     {t('profiles.subtitle')}
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
-                    {profiles.map((profile) => (
-                        <ProfileCard
-                            key={profile.id}
-                            profile={profile}
-                            onSelect={() => handleSelect(profile)}
-                        />
-                    ))}
+                    {isFetching ? (
+                        <div
+                            className="flex items-center justify-center py-12"
+                            role="status"
+                            aria-label="Đang tải"
+                        >
+                            <span className="h-20 w-20 animate-spin rounded-full border-4 border-tichtich-primary-200 border-t-transparent" />
+                        </div>
+                    ) : (
+                        profiles.map((profile) => (
+                            <ProfileCard
+                                key={profile.id}
+                                profile={profile}
+                                onSelect={() => handleSelect(profile)}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

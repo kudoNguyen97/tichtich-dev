@@ -161,7 +161,7 @@ const MissionForm = ({ existingMissions }: MissionFormProps) => {
             await createMission.mutateAsync({
                 profileId,
                 title: pendingData.name,
-                targetAmount: pendingData.amount,
+                amount: pendingData.amount,
                 walletType,
                 startDay,
                 endDay,

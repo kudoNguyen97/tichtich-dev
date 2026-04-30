@@ -2,6 +2,7 @@ import type {
     CreateMissionPayload,
     DeleteMissionData,
     Mission,
+    MissionResolveData,
 } from '@/features/missions/types/mission.type';
 import { apiClient } from '@/lib/apiClient';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
@@ -34,4 +35,18 @@ export const missionService = {
         apiClient.delete<DeleteMissionData>(`/missions/${missionId}`, {
             headers: { 'x-profile-id': profileAdultId },
         }),
+
+    startKidMission: (missionId: string, profileId: string) =>
+        apiClient.post<Mission>(`/missions/${missionId}/start`, undefined, {
+            headers: { 'x-profile-id': profileId },
+        }),
+
+    resolveKidMission: (missionId: string, profileId: string) =>
+        apiClient.post<MissionResolveData>(
+            `/missions/${missionId}/resolve`,
+            undefined,
+            {
+                headers: { 'x-profile-id': profileId },
+            }
+        ),
 };

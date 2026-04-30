@@ -3,7 +3,7 @@ import { Info } from 'lucide-react';
 export function MissionThreeTargetsNotice() {
     return (
         <div
-            className="rounded-xl bg-tichtich-primary-200 px-4 py-3 text-white shadow-sm"
+            className="rounded-lg bg-tichtich-primary-100 px-4 py-3 text-white"
             role="status"
         >
             <div className="flex gap-3">

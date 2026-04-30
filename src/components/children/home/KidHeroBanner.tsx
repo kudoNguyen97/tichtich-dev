@@ -1,45 +1,37 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import type { EquippedItemRecord } from '@/features/items/hooks/useItems';
+import { EquippedCharacterFigure } from '@/components/children/character/EquippedCharacterFigure';
+import { useNavigate } from '@tanstack/react-router';
 
 const formatMoney = (n: number) => n.toLocaleString('vi-VN');
-
-const PIG_SRC: Record<'male' | 'female', string> = {
-    male: '/pig-full-body-male.svg',
-    female: '/pig-full-body-female.svg',
-};
 
 interface KidHeroBannerProps {
     kidName: string;
     totalBalance: number;
     gender: 'male' | 'female';
+    equippedItems: EquippedItemRecord[];
 }
 
 export function KidHeroBanner({
     kidName,
     totalBalance,
-    gender,
+    equippedItems,
 }: KidHeroBannerProps) {
     const textPig = `Chia tiền là thêm đó nha ${kidName}!`;
-
+    const navigate = useNavigate();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
 
     return (
         <section className="relative px-4 pb-6 pt-4 mt-20">
             <div className="flex">
-                {/* Left: pig on floating island */}
-                <div className="relative w-70 shrink-0">
-                    <img
-                        src="/images/home-kid/land-fly.png"
-                        alt=""
-                        className="w-full"
-                    />
-                    <img
-                        src={PIG_SRC[gender]}
-                        alt="Heo đất"
-                        className="absolute bottom-[55%] left-1/2 w-30 -translate-x-1/2"
-                    />
-                </div>
+                {/* Left: pig with equipped items on floating island */}
+                <EquippedCharacterFigure
+                    equippedItems={equippedItems}
+                    className="w-70 shrink-0 cursor-pointer"
+                    onClick={() => navigate({ to: '/children/character' })}
+                />
 
                 {/* Right: speech bubble + name + balance */}
                 <div className="flex min-w-0 flex-1 flex-col items-start gap-2 pb-4">

@@ -1,6 +1,15 @@
+import type { Wallet } from '@/features/wallets/types/wallet.type';
+
 export type WalletType = 'charity' | 'education' | 'saving' | 'spending';
 
-export type MissionStatus = 'in_progress' | 'completed' | 'cancelled' | string;
+export type MissionStatus =
+    | 'pending'
+    | 'in_progress'
+    | 'completed'
+    | 'cancelled'
+    | 'resolved'
+    | 'failed'
+    | string;
 
 export interface MissionProgress {
     id: string;
@@ -34,7 +43,7 @@ export interface Mission {
 export interface CreateMissionPayload {
     profileId: string;
     title: string;
-    targetAmount: number;
+    amount: number;
     walletType: WalletType;
     startDay: string;
     endDay: string;
@@ -43,4 +52,11 @@ export interface CreateMissionPayload {
 export interface DeleteMissionData {
     missionId: string;
     isDeleteSuccess: boolean;
+}
+
+export interface MissionResolveData {
+    profileId: string;
+    wallet: Wallet;
+    mission: Mission;
+    isFirstMission: boolean;
 }

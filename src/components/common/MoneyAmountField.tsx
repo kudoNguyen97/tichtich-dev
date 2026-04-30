@@ -6,6 +6,7 @@ import { formatRewardAmountDisplay } from '@/helpers/adult/reward/rewardFormat';
 export interface MoneyAmountFieldProps {
     label: string;
     isRequired?: boolean;
+    isDisabled?: boolean;
     value: string;
     onChange: (value: string) => void;
     onBlur?: () => void;
@@ -29,6 +30,7 @@ const inputClassName = [
 export function MoneyAmountField({
     label,
     isRequired = false,
+    isDisabled = false,
     value,
     onChange,
     onBlur,
@@ -45,6 +47,7 @@ export function MoneyAmountField({
         {
             label,
             isRequired,
+            isDisabled,
             value,
             onChange,
             onBlur,
@@ -79,7 +82,8 @@ export function MoneyAmountField({
                             inputClassName,
                             error
                                 ? 'border-red-400 focus:ring-red-200'
-                                : 'border-tichtich-black hover:border-tichtich-primary-200 focus:border-tichtich-primary-200'
+                                : 'border-tichtich-black hover:border-tichtich-primary-200 focus:border-tichtich-primary-200',
+                            'disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500 disabled:hover:border-tichtich-black'
                         )}
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-orange-400 pointer-events-none select-none">
@@ -98,7 +102,7 @@ export function MoneyAmountField({
                 ) : null}
             </div>
 
-            {suggestions.length > 0 ? (
+            {!isDisabled && suggestions.length > 0 ? (
                 <div
                     role="group"
                     aria-label={suggestionGroupLabel}

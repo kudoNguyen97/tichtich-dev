@@ -24,7 +24,10 @@ const schema = z.object({
         .number({
             error: 'Vui lòng nhập số tiền thưởng hợp lệ.',
         })
-        .min(MIN_AMOUNT, `Số tiền tối thiểu là ${formatVndAmount(MIN_AMOUNT)}đ.`)
+        .min(
+            MIN_AMOUNT,
+            `Số tiền tối thiểu là ${formatVndAmount(MIN_AMOUNT)}đ.`
+        )
         .refine(
             (v) => v % 1000 === 0,
             'Số tiền phải tròn nghìn (ví dụ: 1.000đ).'
@@ -75,7 +78,7 @@ function MessageField({ value, onChange, onBlur, error }: any) {
         <div className="mb-5">
             <label
                 {...labelProps}
-                className="flex items-center gap-1 text-sm font-bold text-gray-700 mb-2"
+                className="flex items-center gap-1 text-base font-bold text-gray-700 mb-2"
             >
                 Lời nhắn cho con <span className="text-red-500">*</span>
             </label>

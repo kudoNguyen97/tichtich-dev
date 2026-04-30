@@ -17,6 +17,7 @@ import { Route as ProfilesRouteImport } from './routes/profiles'
 import { Route as ProfilePinRouteImport } from './routes/profile-pin'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CreateProfileRouteImport } from './routes/create-profile'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
 import { Route as AppChildrenLayoutRouteImport } from './routes/_app/children/_layout'
@@ -114,6 +115,11 @@ const NotFoundRoute = NotFoundRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateProfileRoute = CreateProfileRouteImport.update({
+  id: '/create-profile',
+  path: '/create-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -361,6 +367,7 @@ const AppAdultJourneyLayoutGoalsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
+  '/create-profile': typeof CreateProfileRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -404,6 +411,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
+  '/create-profile': typeof CreateProfileRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -444,6 +452,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
+  '/create-profile': typeof CreateProfileRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -492,6 +501,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/create-profile'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -535,6 +545,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/create-profile'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -574,6 +585,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
+    | '/create-profile'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -621,6 +633,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  CreateProfileRoute: typeof CreateProfileRoute
   LoginRoute: typeof LoginRoute
   NotFoundRoute: typeof NotFoundRoute
   ProfilePinRoute: typeof ProfilePinRoute
@@ -680,6 +693,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-profile': {
+      id: '/create-profile'
+      path: '/create-profile'
+      fullPath: '/create-profile'
+      preLoaderRoute: typeof CreateProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
@@ -1102,6 +1122,7 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
+  CreateProfileRoute: CreateProfileRoute,
   LoginRoute: LoginRoute,
   NotFoundRoute: NotFoundRoute,
   ProfilePinRoute: ProfilePinRoute,

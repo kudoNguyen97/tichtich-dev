@@ -75,7 +75,7 @@ export function useUpdateProfile() {
 
 export function useCreateProfile() {
     return useMutation({
-        mutationFn: (data: Array<Partial<Profile>>) =>
+        mutationFn: (data: { profiles: Array<Partial<Profile>> }) =>
             profileService.createProfile(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: profileKeys.profile });

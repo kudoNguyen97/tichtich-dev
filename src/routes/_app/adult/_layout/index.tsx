@@ -1,6 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import HomeCardSelectProfile from '@/components/adult/home/HomeCardSelectProfile';
+import { KidWalletOverviewCard } from '@/components/adult/home/KidWalletOverviewCard';
+import { KidStatsSection } from '@/components/adult/home/KidStatsSection';
+import { SpendPreviewChart } from '@/components/children/treasury/SpendPreviewChart';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import {
+    useWalletsByProfileId,
+    useWalletTransactions,
+} from '@/features/wallets/hooks/useWallets';
+import { WALLET_DISPLAY_CONFIG } from '@/constants/wallets/walletDisplay';
 import { createFileRoute } from '@tanstack/react-router';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { cn } from '@/utils/cn';
@@ -47,13 +56,78 @@ function HomeAdultPage() {
         cardProfile = resolved;
     }
 
+    const hasManagedKid = kidProfiles.length > 0;
+
+    const { data: wallets } = useWalletsByProfileId(
+        hasManagedKid ? cardProfile.id : ''
+    );
+
+    const totalBalance = useMemo(
+        () => wallets?.reduce((sum, w) => sum + w.balance, 0) ?? 0,
+        [wallets]
+    );
+
+    const chartCategories = useMemo(
+        () =>
+            WALLET_DISPLAY_CONFIG.map((c) => ({
+                id: c.walletType,
+                label: c.label,
+                icon: c.icon,
+                amount: Math.max(
+                    0,
+                    wallets?.find((w) => w.walletType === c.walletType)
+                        ?.balance ?? 0
+                ),
+            })),
+        [wallets]
+    );
+
+    // 30-day range including today: [today - 29 days, today + 1 day].
+    // Memoize with empty deps so a single mount yields one stable query key.
+    const transactionsFilters = useMemo(() => {
+        const today = dayjs();
+        return {
+            fromDate: today.subtract(29, 'day').format('YYYY-MM-DD'),
+            toDate: today.add(1, 'day').format('YYYY-MM-DD'),
+        };
+    }, []);
+
+    const { data: transactionsData } = useWalletTransactions(
+        hasManagedKid ? cardProfile.id : '',
+        transactionsFilters
+    );
+
     return (
         <>
-            <div className="px-4 pt-8 pb-6">
+            <div className="flex flex-col gap-6 px-4 pt-8 pb-6 ">
                 <HomeCardSelectProfile
                     profile={cardProfile}
                     onSelect={handleSelect}
                 />
+
+                {hasManagedKid ? (
+                    <>
+                        <KidWalletOverviewCard
+                            kidName={cardProfile.fullName}
+                            totalBalance={totalBalance}
+                        />
+
+                        <section className="bg-tichtich-primary-300  border-tichtich-primary-200 rounded-lg p-5">
+                            <h2 className="mb-3 text-lg font-bold text-tichtich-black">
+                                Tỉ lệ chia tiền
+                            </h2>
+                            <SpendPreviewChart
+                                categories={chartCategories}
+                                selectedCategoryId={null}
+                                spendAmount={0}
+                            />
+                        </section>
+
+                        <KidStatsSection
+                            transactions={transactionsData?.transactions ?? []}
+                        />
+                    </>
+                ) : null}
             </div>
 
             <BottomSheet

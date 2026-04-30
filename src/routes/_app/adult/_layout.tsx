@@ -75,19 +75,19 @@ function AdultAppLayout() {
                         variant="primary"
                         size="md"
                         fullWidth
-                        onPress={handleSwitchAccount}
+                        onPress={handleAccountInfo}
                     >
                         <User className="size-5" />
-                        <span>Chuyển đổi tài khoản</span>
+                        <span>Thông tin tài khoản</span>
                     </TichTichButton>
                     <TichTichButton
                         variant="primary"
                         size="md"
                         fullWidth
-                        onPress={handleAccountInfo}
+                        onPress={handleSwitchAccount}
                     >
                         <RefreshCw className="h-5 w-5" />
-                        <span>Thông tin tài khoản</span>
+                        <span>Chuyển đổi tài khoản</span>
                     </TichTichButton>
                 </div>
             </BottomSheet>

@@ -56,9 +56,9 @@ function ChildrenAppLayout() {
         navigate({ to: '/profiles' });
     };
 
-    const handleAccountInfo = () => {
+    const handleViewCharacter = () => {
         setIsSheetOpen(false);
-        navigate({ to: '/children/settings' });
+        navigate({ to: '/children/character' });
     };
     const profile = useSelectedChildProfile();
     const { data: transactions } = useGetReceivedTransactions(
@@ -178,19 +178,19 @@ function ChildrenAppLayout() {
                         variant="primary"
                         size="md"
                         fullWidth
-                        onPress={handleSwitchAccount}
+                        onPress={handleViewCharacter}
                     >
-                        <RefreshCw className="h-5 w-5" />
-                        <span>Chuyển đổi tài khoản</span>
+                        <User className="size-5" />
+                        <span>Xem nhân vật</span>
                     </TichTichButton>
                     <TichTichButton
                         variant="primary"
                         size="md"
                         fullWidth
-                        onPress={handleAccountInfo}
+                        onPress={handleSwitchAccount}
                     >
-                        <User className="size-5" />
-                        <span>Thông tin tài khoản</span>
+                        <RefreshCw className="h-5 w-5" />
+                        <span>Chuyển đổi tài khoản</span>
                     </TichTichButton>
                 </div>
             </BottomSheet>

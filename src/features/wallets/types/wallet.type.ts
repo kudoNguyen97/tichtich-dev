@@ -34,6 +34,8 @@ export type WalletTransactionType =
 export interface WalletTransaction {
     id: string;
     walletId: string;
+    /** Nested wallet snapshot returned by `/wallets/transactions` (optional for legacy callers). */
+    wallet?: Wallet;
     profileId: string;
     amount: number;
     balanceBeforeAction: number;

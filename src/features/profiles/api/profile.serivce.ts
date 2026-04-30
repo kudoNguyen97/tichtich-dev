@@ -8,6 +8,6 @@ export const profileService = {
         apiClient.put<void>(`/me/profiles/${id}`, data),
     updateProfilePinCode: (id: string, pinCode: string) =>
         apiClient.put<void>(`/me/profiles/${id}/pin-code`, { pinCode }),
-    createProfile: (data: Array<Partial<Profile>>) =>
+    createProfile: (data: { profiles: Array<Partial<Profile>> }) =>
         apiClient.post<void>('/me/profiles', data),
 };

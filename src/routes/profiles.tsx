@@ -30,12 +30,21 @@ function ProfilesPage() {
         refetchOnMount: 'always',
     });
 
+    const hasKidProfile = profiles.some((p) => p.profileType === 'kid');
+    const shouldRedirectToCreate = !isFetching && !hasKidProfile;
+
     useEffect(() => {
         clearSelectedProfile();
         if (profiles.length > 0) {
             setProfiles(profiles);
         }
     }, [profiles, setProfiles, clearSelectedProfile]);
+
+    useEffect(() => {
+        if (shouldRedirectToCreate) {
+            navigate({ to: '/create-profile', replace: true });
+        }
+    }, [shouldRedirectToCreate, navigate]);
 
     const handleSelect = (profile: Profile) => {
         navigate({
@@ -54,7 +63,7 @@ function ProfilesPage() {
                     {t('profiles.subtitle')}
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
-                    {isFetching ? (
+                    {isFetching || shouldRedirectToCreate ? (
                         <div
                             className="flex items-center justify-center py-12"
                             role="status"

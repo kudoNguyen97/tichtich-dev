@@ -71,14 +71,18 @@ function LoginPage() {
 
             // Email đã xác thực: lấy idToken từ Firebase và gọi API login backend
             const idToken = await firebaseUser.getIdToken();
-            await login({
+            const response = await login({
                 method: 'email',
                 provider: 'firebase',
                 idToken,
             });
 
+            const hasKidProfile = response.user.profiles.some(
+                (p) => p.profileType === 'kid'
+            );
+
             navigate({
-                to: '/profiles',
+                to: hasKidProfile ? '/profiles' : '/create-profile',
                 replace: true,
             });
         } catch (error) {

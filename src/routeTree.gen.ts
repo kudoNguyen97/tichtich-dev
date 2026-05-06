@@ -45,6 +45,7 @@ import { Route as AppAdultSettingLayoutChangePasswordSuccessRouteImport } from '
 import { Route as AppAdultSettingLayoutChangePasswordRouteImport } from './routes/_app/adult/setting/_layout/change-password'
 import { Route as AppAdultJourneyLayoutGoalsRouteImport } from './routes/_app/adult/journey/_layout/goals'
 
+const TrailLazyRouteImport = createFileRoute('/trail')()
 const CreateSuccessLazyRouteImport = createFileRoute('/create-success')()
 const AppChildrenNotificationsIndexLazyRouteImport = createFileRoute(
   '/_app/children/notifications/',
@@ -80,6 +81,11 @@ const AppAdultJourneyLayoutFinanceReportLazyRouteImport = createFileRoute(
   '/_app/adult/journey/_layout/finance-report',
 )()
 
+const TrailLazyRoute = TrailLazyRouteImport.update({
+  id: '/trail',
+  path: '/trail',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/trail.lazy').then((d) => d.Route))
 const CreateSuccessLazyRoute = CreateSuccessLazyRouteImport.update({
   id: '/create-success',
   path: '/create-success',
@@ -375,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
+  '/trail': typeof TrailLazyRoute
   '/adult': typeof AppAdultLayoutRouteWithChildren
   '/children': typeof AppChildrenLayoutRouteWithChildren
   '/adult/mission': typeof AppAdultLayoutMissionRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
+  '/trail': typeof TrailLazyRoute
   '/adult/mission': typeof AppAdultLayoutMissionRoute
   '/adult/journey': typeof AppAdultLayoutJourneyLazyRoute
   '/adult/mission-success': typeof AppAdultMissionSuccessIndexRoute
@@ -460,6 +468,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/verify-account': typeof VerifyAccountRoute
   '/create-success': typeof CreateSuccessLazyRoute
+  '/trail': typeof TrailLazyRoute
   '/_auth/': typeof AuthIndexRoute
   '/_app/adult/_layout': typeof AppAdultLayoutRouteWithChildren
   '/_app/children/_layout': typeof AppChildrenLayoutRouteWithChildren
@@ -509,6 +518,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
+    | '/trail'
     | '/adult'
     | '/children'
     | '/adult/mission'
@@ -553,6 +563,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
+    | '/trail'
     | '/adult/mission'
     | '/adult/journey'
     | '/adult/mission-success'
@@ -593,6 +604,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/verify-account'
     | '/create-success'
+    | '/trail'
     | '/_auth/'
     | '/_app/adult/_layout'
     | '/_app/children/_layout'
@@ -641,11 +653,19 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   VerifyAccountRoute: typeof VerifyAccountRoute
   CreateSuccessLazyRoute: typeof CreateSuccessLazyRoute
+  TrailLazyRoute: typeof TrailLazyRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trail': {
+      id: '/trail'
+      path: '/trail'
+      fullPath: '/trail'
+      preLoaderRoute: typeof TrailLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/create-success': {
       id: '/create-success'
       path: '/create-success'
@@ -1130,6 +1150,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   VerifyAccountRoute: VerifyAccountRoute,
   CreateSuccessLazyRoute: CreateSuccessLazyRoute,
+  TrailLazyRoute: TrailLazyRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 export const routeTree = rootRouteImport

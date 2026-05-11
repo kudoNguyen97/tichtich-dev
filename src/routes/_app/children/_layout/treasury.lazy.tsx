@@ -1,5 +1,6 @@
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichModal } from '@/components/common/TichTichModal';
 import { SpendPreviewChart } from '@/components/children/treasury/SpendPreviewChart';
@@ -98,6 +99,8 @@ function RouteComponent() {
                                         ),
                                     type: 'active',
                                 });
+
+                                toast.success('Lưu kho báu thành công');
                                 setIsTreasureOverviewOpen(true);
                             },
                         }
@@ -129,6 +132,7 @@ function RouteComponent() {
                         },
                         {
                             onSuccess: () => {
+                                toast.success('Rút tiền thành công');
                                 resetSpendForm();
                                 queryClient.invalidateQueries({
                                     queryKey: missionKeys.listByProfileIdKid(

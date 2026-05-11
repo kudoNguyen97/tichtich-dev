@@ -45,18 +45,18 @@ export function KidMissionCarouselSection({
     }
 
     return (
-        <section className="rounded-2xl border border-tichtich-primary-200 bg-tichtich-primary-300 p-4">
+        <section className="rounded-lg bg-tichtich-primary-300 p-4">
             <h2 className="text-base font-bold text-tichtich-black">
-                Mục tiêu của con
+                Mục tiêu đang thực hiện
             </h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-                Đang thực hiện và đã hoàn thành
-            </p>
 
             <div ref={emblaRef} className="mt-3 overflow-hidden">
                 <div className="flex cursor-grab select-none active:cursor-grabbing">
                     {missions.map((mission) => (
-                        <div key={mission.id} className="min-w-0 flex-[0_0_85%] pr-2">
+                        <div
+                            key={mission.id}
+                            className="min-w-0 flex-[0_0_85%] pr-2"
+                        >
                             <MissionSuccessCard mission={mission} />
                         </div>
                     ))}

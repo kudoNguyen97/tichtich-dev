@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Tab, TabList, TabPanel, Tabs } from 'react-aria-components';
 import { ArrowLeft } from 'lucide-react';
 import dayjs from 'dayjs';
+import { toast } from 'sonner';
 import { cn } from '@/utils/cn';
 import { AppBar } from '@/components/layout/AppBar';
 import { TichTichButton } from '@/components/common/TichTichButton';
@@ -207,6 +208,7 @@ function RouteComponent() {
             },
             {
                 onSuccess: () => {
+                    toast.success('Thêm tiền thành công');
                     setCategories(DEFAULT_CATEGORIES);
                     setSliderResetKey((k) => k + 1);
                     queryClient.invalidateQueries({
@@ -298,7 +300,7 @@ function RouteComponent() {
                         </TabList>
 
                         <TabPanel id="add" className="flex flex-col gap-4">
-                            <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
+                            <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-2.5">
                                 <MoneyAmountField
                                     label="Hôm nay mình nhận"
                                     isRequired
@@ -310,7 +312,7 @@ function RouteComponent() {
                             </div>
 
                             {/* Split section */}
-                            <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-4">
+                            <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-4">
                                 <div>
                                     <p className="text-base font-bold text-tichtich-black mb-0">
                                         Cùng chia tiền nào
@@ -432,7 +434,7 @@ function RouteComponent() {
                                 }
                                 onClick={handleSubmit}
                             >
-                                lưu kho báu
+                                Lưu kho báu
                             </TichTichButton>
                         </TabPanel>
 

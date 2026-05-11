@@ -57,7 +57,10 @@ export function CategorySlider({
      */
     const handleChange = (val: number) => {
         // Clamp về maxValue để không vượt ngân sách còn lại
-        const clamped = Math.max(0, Math.min(toSafeNumber(val, 0), safeMaxValue));
+        const clamped = Math.max(
+            0,
+            Math.min(toSafeNumber(val, 0), safeMaxValue)
+        );
         onChange(clamped);
     };
 
@@ -68,10 +71,10 @@ export function CategorySlider({
             value={sliderValue}
             step={1000}
             onChange={handleChange}
-            className="w-full"
+            className="w-full "
         >
             {/* Header */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3">
                 <Label className="font-bold text-foreground text-base select-none">
                     {category.name}
                 </Label>
@@ -88,7 +91,10 @@ export function CategorySlider({
                 {() => {
                     const pct =
                         safeTotalAmount > 0
-                            ? Math.min((sliderValue / safeTotalAmount) * 100, 100)
+                            ? Math.min(
+                                  (sliderValue / safeTotalAmount) * 100,
+                                  100
+                              )
                             : 0;
 
                     return (

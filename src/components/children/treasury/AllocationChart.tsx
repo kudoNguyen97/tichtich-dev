@@ -60,7 +60,7 @@ export function AllocationChart({
     return (
         <div className="relative my-[100px]">
             {/* ── Horizontal bar ── */}
-            <div className="flex gap-2 h-20 rounded-xl">
+            <div className="flex gap-2 h-12 rounded-xl">
                 {categories.map((c, i) => (
                     <div
                         key={c.id}

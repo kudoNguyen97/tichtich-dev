@@ -112,7 +112,7 @@ function HomeAdultPage() {
                             totalBalance={totalBalance}
                         />
 
-                        <section className="bg-tichtich-primary-300  border-tichtich-primary-200 rounded-lg p-5">
+                        <section className="bg-tichtich-primary-300  border-tichtich-primary-200 rounded-lg p-4">
                             <h2 className="mb-3 text-lg font-bold text-tichtich-black">
                                 Tỉ lệ chia tiền
                             </h2>

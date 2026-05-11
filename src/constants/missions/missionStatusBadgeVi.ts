@@ -3,7 +3,7 @@ export const MISSION_STATUS_BADGE_LABEL_VI = {
     in_progress: 'Đang thực hiện',
     completed: 'Đạt mục tiêu',
     resolved: 'Đã hoàn thành',
-    failed: 'Đã cố gắng',
+    failed: 'Sắp hết hạn',
     cancelled: 'Đã huỷ',
 } as const;
 

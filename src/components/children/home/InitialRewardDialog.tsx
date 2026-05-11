@@ -25,7 +25,7 @@ export function InitialRewardDialog({
             isOpen={isOpen}
             onClose={onClose}
             size="lg"
-            className="rounded-3xl bg-tichtich-primary-300 border-2 border-[#ED7B46] p-5"
+            className="rounded-3xl bg-tichtich-primary-300 border-2 border-[#ED7B46] p-4"
             title={greeting}
         >
             <div className="flex flex-col items-center text-center">

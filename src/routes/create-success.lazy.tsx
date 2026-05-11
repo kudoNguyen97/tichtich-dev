@@ -30,7 +30,7 @@ function CreateSuccessPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[url('/images/success-background.png')] bg-no-repeat bg-contain bg-tichtich-primary-300 bg-center p-5">
+        <div className="flex flex-col min-h-screen bg-[url('/images/success-background.png')] bg-no-repeat bg-contain bg-tichtich-primary-300 bg-center p-4">
             <div className="flex flex-1 flex-col items-center justify-start mt-6">
                 <ProfileAvatar profile={selectedProfile} size="sm" />
                 <p className="text-center text-base font-medium text-tichtich-black mt-2 mb-4">

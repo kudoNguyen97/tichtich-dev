@@ -103,7 +103,9 @@ export function buildDepositPayload(
 export function mapWalletsToSpendCategories(wallets: Wallet[]): CategoryItem[] {
     return DEFAULT_CATEGORIES.map((category) => {
         const walletType = CATEGORY_TO_WALLET_TYPE[category.id];
-        const matchedWallet = wallets.find((wallet) => wallet.walletType === walletType);
+        const matchedWallet = wallets.find(
+            (wallet) => wallet.walletType === walletType
+        );
         return {
             ...category,
             amount: Math.max(0, toSafeNumber(matchedWallet?.balance, 0)),
@@ -125,7 +127,9 @@ export function buildWithdrawPayload({
     spendCategories: CategoryItem[];
 }): BatchWithdrawPayload | null {
     const walletType = CATEGORY_TO_WALLET_TYPE[selectedCategoryId];
-    const selectedWallet = wallets.find((wallet) => wallet.walletType === walletType);
+    const selectedWallet = wallets.find(
+        (wallet) => wallet.walletType === walletType
+    );
     if (!selectedWallet) return null;
 
     const selectedCategory = spendCategories.find(
@@ -186,8 +190,10 @@ export function TreasuryExperienceScreen({
     const [treasuryTab, setTreasuryTab] = useState<TreasuryTabKey>('add');
     const [sliderResetKey, setSliderResetKey] = useState(0);
     const [spendAmountInput, setSpendAmountInput] = useState('0');
-    const [addSuggestionsDismissed, setAddSuggestionsDismissed] = useState(false);
-    const [spendSuggestionsDismissed, setSpendSuggestionsDismissed] = useState(false);
+    const [addSuggestionsDismissed, setAddSuggestionsDismissed] =
+        useState(false);
+    const [spendSuggestionsDismissed, setSpendSuggestionsDismissed] =
+        useState(false);
     const [selectedSpendCategoryId, setSelectedSpendCategoryId] =
         useState<CategoryId | null>(null);
     const [spendReason, setSpendReason] = useState('');
@@ -199,7 +205,8 @@ export function TreasuryExperienceScreen({
     const allocated = useMemo(
         () =>
             categories.reduce(
-                (sum, category) => sum + Math.max(0, toSafeNumber(category.amount)),
+                (sum, category) =>
+                    sum + Math.max(0, toSafeNumber(category.amount)),
                 0
             ),
         [categories]
@@ -209,8 +216,9 @@ export function TreasuryExperienceScreen({
     const spendAmount = Math.max(0, toSafeNumber(spendAmountInput, 0));
     const selectedSpendCategory = useMemo(
         () =>
-            spendCategories.find((category) => category.id === selectedSpendCategoryId) ??
-            null,
+            spendCategories.find(
+                (category) => category.id === selectedSpendCategoryId
+            ) ?? null,
         [selectedSpendCategoryId, spendCategories]
     );
     const selectedWalletBalance = Math.max(
@@ -257,7 +265,9 @@ export function TreasuryExperienceScreen({
                     Math.min(toSafeNumber(newValue, 0), maxAllowed)
                 );
                 return prev.map((category) =>
-                    category.id === id ? { ...category, amount: clamped } : category
+                    category.id === id
+                        ? { ...category, amount: clamped }
+                        : category
                 );
             });
         },
@@ -280,7 +290,8 @@ export function TreasuryExperienceScreen({
     };
 
     const handleSpendSubmit = () => {
-        if (!canSubmitSpend || !selectedSpendCategoryId || wallets.length === 0) return;
+        if (!canSubmitSpend || !selectedSpendCategoryId || wallets.length === 0)
+            return;
 
         onSpendSubmit({
             selectedCategoryId: selectedSpendCategoryId,
@@ -295,77 +306,85 @@ export function TreasuryExperienceScreen({
     return (
         <div className="mx-auto bg-background mb-20">
             <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-base text-muted-foreground">
-                        {dayjs().format('DD/MM/YYYY')}
-                    </span>
-                    <span className="text-base font-bold text-foreground">
-                        Hôm nay {profileName} làm gì ?
-                    </span>
-                </div>
-
                 <Tabs
                     selectedKey={treasuryTab}
-                    onSelectionChange={(key) => setTreasuryTab(key as TreasuryTabKey)}
+                    onSelectionChange={(key) =>
+                        setTreasuryTab(key as TreasuryTabKey)
+                    }
                     className="flex flex-col gap-4"
                 >
-                    <TabList aria-label="Chức năng" className="flex min-w-0 gap-2">
-                        {(
-                            [
-                                {
-                                    key: 'add' as const,
-                                    label: 'Thêm tiền',
-                                    icon: '/icons/add-money.svg',
-                                },
-                                {
-                                    key: 'spend' as const,
-                                    label: 'Chi tiền',
-                                    icon: '/icons/spend-money.svg',
-                                },
-                            ] as const
-                        ).map(({ key, label, icon }) => {
-                            const isSelected = treasuryTab === key;
-                            return (
-                                <Tab
-                                    key={key}
-                                    id={key}
-                                    className={cn(
-                                        'min-w-0 rounded-2xl px-2 py-3 flex flex-col items-center justify-center cursor-pointer outline-none transition-all duration-300 ease-out',
-                                        'focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
-                                        isSelected
-                                            ? 'flex-[2.15] shrink-0 border border-tichtich-black bg-tichtich-primary-300 opacity-100 shadow-sm'
-                                            : 'flex-1 shrink-0 border border-[#c9b896] bg-tichtich-primary-300 opacity-[0.7]'
-                                    )}
-                                >
-                                    <div
+                    <div className="bg-tichtich-primary-300   rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="text-base text-muted-foreground">
+                                {dayjs().format('DD/MM/YYYY')}
+                            </span>
+                            <span className="text-base font-bold text-foreground">
+                                Hôm nay {profileName} làm gì ?
+                            </span>
+                        </div>
+                        <TabList
+                            aria-label="Chức năng"
+                            className="flex min-w-0 gap-2"
+                        >
+                            {(
+                                [
+                                    {
+                                        key: 'add' as const,
+                                        label: 'Thêm tiền',
+                                        icon: '/icons/add-money.svg',
+                                    },
+                                    {
+                                        key: 'spend' as const,
+                                        label: 'Chi tiền',
+                                        icon: '/icons/spend-money.svg',
+                                    },
+                                ] as const
+                            ).map(({ key, label, icon }) => {
+                                const isSelected = treasuryTab === key;
+                                return (
+                                    <Tab
+                                        key={key}
+                                        id={key}
                                         className={cn(
-                                            'relative w-11 h-11 shrink-0 transition-opacity duration-300',
-                                            isSelected ? 'opacity-100' : 'opacity-50'
-                                        )}
-                                    >
-                                        <img
-                                            src={icon}
-                                            alt={label}
-                                            className="object-contain"
-                                        />
-                                    </div>
-                                    <span
-                                        className={cn(
-                                            'text-base leading-tight text-center transition-colors duration-300',
+                                            'min-w-0 rounded-lg px-2 py-3 flex flex-col items-center justify-center cursor-pointer outline-none transition-all duration-300 ease-out',
+                                            'focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
                                             isSelected
-                                                ? 'font-bold text-tichtich-black'
-                                                : 'font-medium text-tichtich-black/45'
+                                                ? 'flex-[2.15] shrink-0 border border-tichtich-black bg-tichtich-primary-300 opacity-100 shadow-sm'
+                                                : 'flex-1 shrink-0 border border-[#c9b896] bg-tichtich-primary-300 opacity-[0.7]'
                                         )}
                                     >
-                                        {label}
-                                    </span>
-                                </Tab>
-                            );
-                        })}
-                    </TabList>
+                                        <div
+                                            className={cn(
+                                                'relative w-11 h-11 shrink-0 transition-opacity duration-300',
+                                                isSelected
+                                                    ? 'opacity-100'
+                                                    : 'opacity-50'
+                                            )}
+                                        >
+                                            <img
+                                                src={icon}
+                                                alt={label}
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                        <span
+                                            className={cn(
+                                                'text-base leading-tight text-center transition-colors duration-300',
+                                                isSelected
+                                                    ? 'font-bold text-tichtich-black'
+                                                    : 'font-medium text-tichtich-black/45'
+                                            )}
+                                        >
+                                            {label}
+                                        </span>
+                                    </Tab>
+                                );
+                            })}
+                        </TabList>
+                    </div>
 
                     <TabPanel id="add" className="flex flex-col gap-4">
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
+                        <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-2.5">
                             <MoneyAmountField
                                 label="Hôm nay mình nhận"
                                 isRequired
@@ -379,7 +398,9 @@ export function TreasuryExperienceScreen({
                                 suggestions={
                                     addSuggestionsDismissed
                                         ? []
-                                        : getTreasuryAmountSuggestions(totalInput)
+                                        : getTreasuryAmountSuggestions(
+                                              totalInput
+                                          )
                                 }
                                 selectedAmount={total > 0 ? total : undefined}
                                 onPickSuggestion={(amount) => {
@@ -390,7 +411,7 @@ export function TreasuryExperienceScreen({
                             />
                         </div>
 
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-4">
+                        <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-4">
                             <div>
                                 <p className="text-base font-bold text-tichtich-black mb-0">
                                     Cùng chia tiền nào
@@ -400,7 +421,8 @@ export function TreasuryExperienceScreen({
                                     <span
                                         className={cn(
                                             'text-tichtich-red font-bold',
-                                            allocated === total && 'text-green-500'
+                                            allocated === total &&
+                                                'text-green-500'
                                         )}
                                     >
                                         {formatMoney(allocated)}
@@ -413,10 +435,16 @@ export function TreasuryExperienceScreen({
                                 <p className="text-sm font-bold text-tichtich-black mb-0">
                                     Danh mục đang phân bổ
                                 </p>
-                                <AllocationChart categories={categories} total={total} />
+                                <AllocationChart
+                                    categories={categories}
+                                    total={total}
+                                />
                             </div>
 
-                            <div key={sliderResetKey} className="flex flex-col gap-4">
+                            <div
+                                key={sliderResetKey}
+                                className="flex flex-col gap-4"
+                            >
                                 {categories.map((category) => {
                                     const safeAmount = Math.max(
                                         0,
@@ -424,7 +452,9 @@ export function TreasuryExperienceScreen({
                                     );
                                     const safeMaxValue = Math.max(
                                         0,
-                                        toSafeNumber(total - allocated + safeAmount)
+                                        toSafeNumber(
+                                            total - allocated + safeAmount
+                                        )
                                     );
 
                                     return (
@@ -435,7 +465,10 @@ export function TreasuryExperienceScreen({
                                                 name: category.label,
                                                 icon: category.icon,
                                             }}
-                                            value={Math.min(safeAmount, safeMaxValue)}
+                                            value={Math.min(
+                                                safeAmount,
+                                                safeMaxValue
+                                            )}
                                             maxValue={safeMaxValue}
                                             totalAmount={total}
                                             onChange={(val) =>
@@ -449,7 +482,7 @@ export function TreasuryExperienceScreen({
                                 })}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 mt-4">
                                 {[
                                     {
                                         label: '40-30-20-10',
@@ -466,7 +499,7 @@ export function TreasuryExperienceScreen({
                                         key={label}
                                         type="button"
                                         onClick={() => applyPreset(ratios)}
-                                        className="preset-btn cursor-pointer bg-tichtich-primary-300 border border-tichtich-black rounded-[18px] px-3 py-4 text-center transition-all duration-150 active:scale-95 active:bg-tichtich-primary-400"
+                                        className="preset-btn cursor-pointer bg-tichtich-primary-300 border border-tichtich-black rounded-lg px-3 py-4 text-center transition-all duration-150 active:scale-95 active:bg-tichtich-primary-400"
                                     >
                                         <p className="text-base font-semibold text-tichtich-black">
                                             {label}
@@ -492,12 +525,12 @@ export function TreasuryExperienceScreen({
                             isDisabled={!isFullyAllocated || isDepositPending}
                             onClick={handleSubmit}
                         >
-                            lưu kho báu
+                            Lưu kho báu
                         </TichTichButton>
                     </TabPanel>
 
                     <TabPanel id="spend" className="flex flex-col gap-4">
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-2.5">
+                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-lg p-4 flex flex-col gap-2.5">
                             <MoneyAmountField
                                 label="Hôm nay mình chi"
                                 isRequired
@@ -522,7 +555,9 @@ export function TreasuryExperienceScreen({
                                                   : TREASURY_MAX_AMOUNT
                                           )
                                 }
-                                selectedAmount={spendAmount > 0 ? spendAmount : undefined}
+                                selectedAmount={
+                                    spendAmount > 0 ? spendAmount : undefined
+                                }
                                 onPickSuggestion={(amount) => {
                                     setSpendAmountInput(String(amount));
                                     setSpendSuggestionsDismissed(true);
@@ -548,7 +583,9 @@ export function TreasuryExperienceScreen({
                                             key={category.id}
                                             type="button"
                                             onClick={() =>
-                                                setSelectedSpendCategoryId(category.id)
+                                                setSelectedSpendCategoryId(
+                                                    category.id
+                                                )
                                             }
                                             className={cn(
                                                 'cursor-pointer border rounded-lg py-4 transition-all duration-150 active:scale-95 border-tichtich-black',
@@ -573,7 +610,7 @@ export function TreasuryExperienceScreen({
                             </div>
                         </div>
 
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-2xl p-5 flex flex-col gap-4">
+                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-lg p-4 flex flex-col gap-4">
                             <p className="text-base font-bold text-tichtich-black mb-0">
                                 Xem trước
                             </p>

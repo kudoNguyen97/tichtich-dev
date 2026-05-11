@@ -52,9 +52,7 @@ export function SpendPreviewChart({
     const TOP_INDICES = [1, 3];
     const safeSpendAmount = Math.max(0, toSafeNumber(spendAmount, 0));
     const leftOffsets = basePercents.map((_, index) =>
-        basePercents
-            .slice(0, index)
-            .reduce((sum, value) => sum + value, 0)
+        basePercents.slice(0, index).reduce((sum, value) => sum + value, 0)
     );
 
     const getCategoryDisplayData = (category: SpendPreviewCategory) => {
@@ -64,7 +62,9 @@ export function SpendPreviewChart({
             ? Math.min(safeSpendAmount, safeAmount)
             : 0;
         const spentPctWithinCategory =
-            safeAmount > 0 ? Math.min(100, (spentInCategory / safeAmount) * 100) : 0;
+            safeAmount > 0
+                ? Math.min(100, (spentInCategory / safeAmount) * 100)
+                : 0;
         const remainingAmount = Math.max(0, safeAmount - spentInCategory);
 
         return {
@@ -81,7 +81,10 @@ export function SpendPreviewChart({
         position: 'top' | 'bottom'
     ) => {
         const shouldRenderTop = TOP_INDICES.includes(index);
-        if ((position === 'top' && !shouldRenderTop) || (position === 'bottom' && shouldRenderTop)) {
+        if (
+            (position === 'top' && !shouldRenderTop) ||
+            (position === 'bottom' && shouldRenderTop)
+        ) {
             return null;
         }
 
@@ -101,7 +104,7 @@ export function SpendPreviewChart({
                     left: `${leftOffsets[index]}%`,
                 }}
             >
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-md bg-tichtich-primary-100">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-tichtich-primary-100">
                     <img
                         src={category.icon}
                         alt={category.label}
@@ -126,17 +129,20 @@ export function SpendPreviewChart({
     };
 
     return (
-        <div className="my-6">
-            <div className="relative h-[88px]">
+        <div className="mt-[-12px] mb-4">
+            <div className="relative h-[76px]">
                 {safeCategories.map((category, index) =>
                     renderMetadata(category, index, 'top')
                 )}
             </div>
 
-            <div className="flex gap-2 h-20 rounded-xl">
+            <div className="flex gap-2 h-12 rounded-xl">
                 {safeCategories.map((category, index) => {
-                    const { isSelected, spentInCategory, spentPctWithinCategory } =
-                        getCategoryDisplayData(category);
+                    const {
+                        isSelected,
+                        spentInCategory,
+                        spentPctWithinCategory,
+                    } = getCategoryDisplayData(category);
 
                     return (
                         <div
@@ -163,7 +169,7 @@ export function SpendPreviewChart({
                 })}
             </div>
 
-            <div className="relative mt-2 h-[88px]">
+            <div className="relative mt-2 h-[60px]">
                 {safeCategories.map((category, index) =>
                     renderMetadata(category, index, 'bottom')
                 )}

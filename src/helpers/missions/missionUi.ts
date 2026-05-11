@@ -127,12 +127,16 @@ export function getMissionCardBadgeClassName(mission: Mission): string {
         return 'bg-tichtich-green';
     }
 
-    if (status === 'completed') {
-        return 'bg-tichtich-primary-100';
+    if (status === 'resolved' || status === 'completed') {
+        return 'bg-tichtich-green';
     }
 
-    if (status === 'failed' || status === 'cancelled') {
+    if (status === 'cancelled') {
         return 'bg-tichtich-red';
+    }
+
+    if (status === 'failed') {
+        return 'bg-tichtich-primary-200';
     }
 
     return 'bg-tichtich-primary-200';

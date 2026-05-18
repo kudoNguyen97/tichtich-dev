@@ -530,7 +530,7 @@ export function TreasuryExperienceScreen({
                     </TabPanel>
 
                     <TabPanel id="spend" className="flex flex-col gap-4">
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-lg p-4 flex flex-col gap-2.5">
+                        <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-2.5">
                             <MoneyAmountField
                                 label="Hôm nay mình chi"
                                 isRequired
@@ -610,7 +610,7 @@ export function TreasuryExperienceScreen({
                             </div>
                         </div>
 
-                        <div className="bg-tichtich-primary-300 border border-tichtich-primary-200 rounded-lg p-4 flex flex-col gap-4">
+                        <div className="bg-tichtich-primary-300 rounded-lg p-4 flex flex-col gap-4">
                             <p className="text-base font-bold text-tichtich-black mb-0">
                                 Xem trước
                             </p>

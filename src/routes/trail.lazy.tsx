@@ -7,10 +7,10 @@ import type { Mission } from '@/features/missions/types/mission.type';
 import type { Wallet } from '@/features/wallets/types/wallet.type';
 
 export const Route = createLazyFileRoute('/trail')({
-  component: RouteComponent,
+    component: RouteComponent,
 });
 
-const TRAIL_DOWNLOAD_URL = 'https://example.com/download-app';
+const TRAIL_DOWNLOAD_URL = 'https://tichtich.vn/tai-ung-dung';
 
 const trailWallets: Wallet[] = [
     {
@@ -82,7 +82,7 @@ function RouteComponent() {
     const closeTrialCta = () => setIsTrialCtaOpen(false);
 
     return (
-        <div>
+        <div className="bg-[url('/images/background-illustration-desktop-v2.png')] no-repeat bg-fixed bg-contain bg-start min-h-screen">
             <TreasuryExperienceScreen
                 profileName="bé"
                 wallets={mockWallets}
@@ -95,7 +95,7 @@ function RouteComponent() {
                 isOpen={isTrialCtaOpen}
                 onClose={closeTrialCta}
                 title="Tiếp tục trải nghiệm"
-                size="md"
+                size="xl"
                 footer={
                     <>
                         <TichTichButton

@@ -72,10 +72,11 @@ function ProfilesPage() {
                             <span className="h-20 w-20 animate-spin rounded-full border-4 border-tichtich-primary-200 border-t-transparent" />
                         </div>
                     ) : (
-                        profiles.map((profile) => (
+                        profiles.map((profile, index) => (
                             <ProfileCard
                                 key={profile.id}
                                 profile={profile}
+                                index={index}
                                 onSelect={() => handleSelect(profile)}
                             />
                         ))

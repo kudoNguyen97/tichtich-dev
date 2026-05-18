@@ -4,12 +4,14 @@ import { cn } from '@/utils/cn';
 
 interface ProfilePigProps {
     profileType: ProfileType;
+    side?: 'left' | 'right';
     className?: string;
 }
 
-export function ProfilePig({ profileType, className }: ProfilePigProps) {
+export function ProfilePig({ profileType, side, className }: ProfilePigProps) {
     const { pigImageSrc, pigPosition } = PROFILE_TYPE_CONFIG[profileType];
-    const isRight = pigPosition === 'right';
+    const resolvedSide = side ?? pigPosition;
+    const isRight = resolvedSide === 'right';
 
     return (
         <div

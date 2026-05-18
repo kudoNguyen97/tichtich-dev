@@ -7,10 +7,11 @@ import * as motion from 'motion/react-client';
 
 interface ProfileCardProps {
     profile: Profile;
+    index: number;
     onSelect?: () => void;
 }
 
-export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
+export function ProfileCard({ profile, index, onSelect }: ProfileCardProps) {
     const { t } = useTranslation();
     const profileType = getProfileType(profile);
     const config = PROFILE_TYPE_CONFIG[profileType];
@@ -20,7 +21,10 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
         ? t('profiles.typeParent')
         : t('profiles.typeChild');
 
-    const isIconLeft = config.pigPosition === 'left';
+    // Odd visual position (1,3,5...) => icon left, text right.
+    const isOddVisualPosition = index % 2 === 1;
+    const isIconLeft = isOddVisualPosition;
+    const pigSide: 'left' | 'right' = isIconLeft ? 'left' : 'right';
 
     return (
         <motion.div
@@ -43,6 +47,7 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                 onClick={onSelect}
                 className={cn(
                     'relative overflow-hidden flex w-full items-center rounded-2xl px-4 text-left transition-opacity border-transparent hover:opacity-95 hover:border-tichtich-primary-200 hover:border-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tichtich-primary-200 focus-visible:ring-offset-2',
+                    !isIconLeft && 'flex-row-reverse',
                     config.backgroundColorClass
                 )}
                 style={{ height: config.heightPx }}
@@ -50,6 +55,7 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                 <div
                     className={cn(
                         'min-w-0 flex-1 flex flex-col',
+                        isIconLeft ? 'pl-26' : 'pr-26',
                         isIconLeft && 'items-end text-right'
                     )}
                 >
@@ -62,6 +68,7 @@ export function ProfileCard({ profile, onSelect }: ProfileCardProps) {
                 </div>
                 <ProfilePig
                     profileType={profileType}
+                    side={pigSide}
                     className="h-[85%] max-h-[100px] sm:max-h-[140px] w-auto"
                 />
             </button>

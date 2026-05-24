@@ -3,8 +3,13 @@ import { authService } from '@/features/auth/api/auth.service';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { queryClient } from '@/lib/queryClient';
 import { profileKeys } from '@/features/profiles/api/profile.keys';
+import { walletKeys } from '@/features/wallets/api/wallet.keys';
+import { missionKeys } from '@/features/missions/api/mission.keys';
 import { profileService } from '../api/profile.serivce';
-import type { UpdateProfileInfoPayload } from '../api/profile.serivce';
+import type {
+    ResetProfilePayload,
+    UpdateProfileInfoPayload,
+} from '../api/profile.serivce';
 import type { Profile } from '@/features/auth/types/auth.type';
 import { showError } from '@/lib/toast';
 
@@ -20,6 +25,38 @@ export function useProfileDetail(id: string) {
         queryKey: profileKeys.profileDetail(id),
         queryFn: () => profileService.getProfileDetail(id),
         enabled: Boolean(id),
+    });
+}
+
+export function useKidProfileDetail(kidId: string, adultProfileId: string) {
+    return useQuery({
+        queryKey: profileKeys.kidProfileDetail(kidId, adultProfileId),
+        queryFn: () =>
+            profileService.getKidProfileDetail(kidId, adultProfileId),
+        enabled: Boolean(kidId) && Boolean(adultProfileId),
+    });
+}
+
+export function useResetProfile() {
+    return useMutation({
+        mutationFn: (vars: {
+            kidId: string;
+            adultProfileId: string;
+            payload: ResetProfilePayload;
+        }) =>
+            profileService.resetProfile(
+                vars.kidId,
+                vars.payload,
+                vars.adultProfileId
+            ),
+        meta: { globalLoading: true },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: walletKeys.all });
+            queryClient.invalidateQueries({ queryKey: missionKeys.all });
+        },
+        onError: (error) => {
+            showError(error.message);
+        },
     });
 }
 

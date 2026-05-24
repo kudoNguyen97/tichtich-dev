@@ -216,7 +216,9 @@ function AdultSettingsPage() {
                                         </span>
                                     </div>
                                 }
-                                onClick={() => {}}
+                                onClick={() =>
+                                    navigate({ to: '/adult/reset-profile' })
+                                }
                             />
                         </section>
 

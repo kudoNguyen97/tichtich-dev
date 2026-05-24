@@ -17,6 +17,7 @@ import { useCreateMission } from '@/features/missions/hooks/useMissions';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { showError } from '@/lib/toast';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { TOAST_VARIANT } from '@/constants/toast';
 import { cn } from '@/utils/cn';
 import {
     getTodayCalendarDate,
@@ -168,7 +169,7 @@ const MissionForm = ({ existingMissions }: MissionFormProps) => {
             });
             useNotificationStore.getState().show({
                 title: 'Đã tạo mục tiêu',
-                variant: 'success',
+                variant: TOAST_VARIANT.SUCCESS,
             });
             setConfirmOpen(false);
             setPendingData(null);

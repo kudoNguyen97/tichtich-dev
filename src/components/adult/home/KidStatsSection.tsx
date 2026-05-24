@@ -3,6 +3,7 @@ import savingIcon from '@/assets/icons/home-adult/saving.svg';
 import charityIcon from '@/assets/icons/home-adult/charity.svg';
 import spendMoneyIcon from '@/assets/icons/home-adult/spend-money.svg';
 import type { WalletTransaction } from '@/features/wallets/types/wallet.type';
+import { WALLET_TYPE } from '@/features/wallets/constants/walletType';
 
 interface KidStatsSectionProps {
     transactions: WalletTransaction[];
@@ -19,7 +20,9 @@ interface StatCardItem {
 export function KidStatsSection({ transactions }: KidStatsSectionProps) {
     const items: StatCardItem[] = useMemo(() => {
         const savingDeposits = transactions.filter(
-            (t) => t.type === 'deposit' && t.wallet?.walletType === 'saving'
+            (t) =>
+                t.type === 'deposit' &&
+                t.wallet?.walletType === WALLET_TYPE.SAVING
         );
         const savingTotal = savingDeposits.reduce(
             (sum, t) => sum + t.amount,
@@ -30,7 +33,8 @@ export function KidStatsSection({ transactions }: KidStatsSectionProps) {
         const charityTotal = transactions
             .filter(
                 (t) =>
-                    t.type === 'deposit' && t.wallet?.walletType === 'charity'
+                    t.type === 'deposit' &&
+                    t.wallet?.walletType === WALLET_TYPE.CHARITY
             )
             .reduce((sum, t) => sum + t.amount, 0);
 

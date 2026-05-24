@@ -17,6 +17,7 @@ import { Route as ProfilesRouteImport } from './routes/profiles'
 import { Route as ProfilePinRouteImport } from './routes/profile-pin'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LandingPageDemoRouteImport } from './routes/landing-page-demo'
 import { Route as CreateProfileRouteImport } from './routes/create-profile'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
@@ -121,6 +122,11 @@ const NotFoundRoute = NotFoundRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingPageDemoRoute = LandingPageDemoRouteImport.update({
+  id: '/landing-page-demo',
+  path: '/landing-page-demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateProfileRoute = CreateProfileRouteImport.update({
@@ -374,6 +380,7 @@ const AppAdultJourneyLayoutGoalsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
   '/create-profile': typeof CreateProfileRoute
+  '/landing-page-demo': typeof LandingPageDemoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
   '/create-profile': typeof CreateProfileRoute
+  '/landing-page-demo': typeof LandingPageDemoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -461,6 +469,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/create-profile': typeof CreateProfileRoute
+  '/landing-page-demo': typeof LandingPageDemoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
   '/profile-pin': typeof ProfilePinRoute
@@ -511,6 +520,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/create-profile'
+    | '/landing-page-demo'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -556,6 +566,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/create-profile'
+    | '/landing-page-demo'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -597,6 +608,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/create-profile'
+    | '/landing-page-demo'
     | '/login'
     | '/not-found'
     | '/profile-pin'
@@ -646,6 +658,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   CreateProfileRoute: typeof CreateProfileRoute
+  LandingPageDemoRoute: typeof LandingPageDemoRoute
   LoginRoute: typeof LoginRoute
   NotFoundRoute: typeof NotFoundRoute
   ProfilePinRoute: typeof ProfilePinRoute
@@ -713,6 +726,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing-page-demo': {
+      id: '/landing-page-demo'
+      path: '/landing-page-demo'
+      fullPath: '/landing-page-demo'
+      preLoaderRoute: typeof LandingPageDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create-profile': {
@@ -1143,6 +1163,7 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   CreateProfileRoute: CreateProfileRoute,
+  LandingPageDemoRoute: LandingPageDemoRoute,
   LoginRoute: LoginRoute,
   NotFoundRoute: NotFoundRoute,
   ProfilePinRoute: ProfilePinRoute,

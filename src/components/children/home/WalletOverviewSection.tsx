@@ -1,5 +1,5 @@
 import type { Wallet } from '@/features/wallets/types/wallet.type';
-import { WALLET_DISPLAY_CONFIG } from '@/constants/wallets/walletDisplay';
+import { WALLET_DISPLAY_CONFIG } from '@/features/wallets/constants/walletDisplay';
 import { WalletOverviewCard } from './WalletOverviewCard';
 
 interface WalletOverviewSectionProps {

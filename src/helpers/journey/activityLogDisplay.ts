@@ -4,6 +4,7 @@ import type {
     WalletDistributionEntry,
     WalletDistributionType,
 } from '@/features/activity-logs/types/activityLog.type';
+import { WALLET_TYPE } from '@/features/wallets/constants/walletType';
 import defaultJourneyIcon from '@/assets/icons/mission.svg';
 import addMoneyIcon from '@/assets/icons/add-money.svg';
 import spendMoneyIcon from '@/assets/icons/spend-money.svg';
@@ -14,35 +15,37 @@ import allowanceIcon from '@/assets/icons/candy.svg';
 import unlockItemIcon from '@/assets/icons/unlock-item.svg';
 import { formatCurrency } from '@/utils/format';
 
-const enum ActivityType {
-    REWARD = 'reward',
-    DEPOSIT = 'deposit',
-    SPENDING = 'spending',
-    PROFILE_TRANSACTION_RECEIVED = 'profile_transaction_received',
-    REWARD_RECEIVED = 'reward_received',
-    WALLET_DISTRIBUTION = 'wallet_distribution',
-    MISSION_STARTED = 'mission_started',
-    MISSION_COMPLETED = 'mission_completed',
-    ITEM_UNLOCKED = 'item_unlocked',
-}
+const ACTIVITY_TYPE = {
+    REWARD: 'reward',
+    DEPOSIT: 'deposit',
+    SPENDING: 'spending',
+    PROFILE_TRANSACTION_RECEIVED: 'profile_transaction_received',
+    REWARD_RECEIVED: 'reward_received',
+    WALLET_DISTRIBUTION: 'wallet_distribution',
+    MISSION_STARTED: 'mission_started',
+    MISSION_COMPLETED: 'mission_completed',
+    ITEM_UNLOCKED: 'item_unlocked',
+} as const;
 
-const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
-    [ActivityType.REWARD]: 'Nhận thưởng từ phụ huynh',
-    [ActivityType.DEPOSIT]: 'Nhận thêm tiền',
-    [ActivityType.SPENDING]: 'Tiêu từ ví',
-    [ActivityType.PROFILE_TRANSACTION_RECEIVED]: 'Nhận tiền',
-    [ActivityType.REWARD_RECEIVED]: 'Nhận thưởng từ phụ huynh',
-    [ActivityType.WALLET_DISTRIBUTION]: 'Chia tiền vào các túi',
-    [ActivityType.MISSION_STARTED]: 'Bắt đầu nhiệm vụ',
-    [ActivityType.MISSION_COMPLETED]: 'Hoàn thành nhiệm vụ',
-    [ActivityType.ITEM_UNLOCKED]: 'Mở khóa trang phục mới',
+type ActivityTypeValue = (typeof ACTIVITY_TYPE)[keyof typeof ACTIVITY_TYPE];
+
+const ACTIVITY_TYPE_LABELS: Record<ActivityTypeValue, string> = {
+    [ACTIVITY_TYPE.REWARD]: 'Nhận thưởng từ phụ huynh',
+    [ACTIVITY_TYPE.DEPOSIT]: 'Nhận thêm tiền',
+    [ACTIVITY_TYPE.SPENDING]: 'Tiêu từ ví',
+    [ACTIVITY_TYPE.PROFILE_TRANSACTION_RECEIVED]: 'Nhận tiền',
+    [ACTIVITY_TYPE.REWARD_RECEIVED]: 'Nhận thưởng từ phụ huynh',
+    [ACTIVITY_TYPE.WALLET_DISTRIBUTION]: 'Chia tiền vào các túi',
+    [ACTIVITY_TYPE.MISSION_STARTED]: 'Bắt đầu nhiệm vụ',
+    [ACTIVITY_TYPE.MISSION_COMPLETED]: 'Hoàn thành nhiệm vụ',
+    [ACTIVITY_TYPE.ITEM_UNLOCKED]: 'Mở khóa trang phục mới',
 };
 
 const WALLET_DISTRIBUTION_ORDER: WalletDistributionType[] = [
-    'charity',
-    'education',
-    'saving',
-    'spending',
+    WALLET_TYPE.CHARITY,
+    WALLET_TYPE.EDUCATION,
+    WALLET_TYPE.SAVING,
+    WALLET_TYPE.SPENDING,
 ];
 
 export function normalizeWalletDistributions(
@@ -66,9 +69,9 @@ export function normalizeWalletDistributions(
 
 export function getActivityDisplayTitle(activity: ActivityLog): string {
     switch (activity.activityType) {
-        case ActivityType.ITEM_UNLOCKED:
+        case ACTIVITY_TYPE.ITEM_UNLOCKED:
             return ACTIVITY_TYPE_LABELS[activity.activityType];
-        case ActivityType.SPENDING:
+        case ACTIVITY_TYPE.SPENDING:
             return `${activity.title} ${formatCurrency(activity.amount ?? 0)}`;
         default:
             return activity.title ?? activity.description ?? 'Hoạt động';
@@ -76,27 +79,27 @@ export function getActivityDisplayTitle(activity: ActivityLog): string {
 }
 
 const ACTIVITY_TYPE_ICONS: Record<string, string> = {
-    [ActivityType.REWARD]: defaultJourneyIcon,
-    [ActivityType.DEPOSIT]: addMoneyIcon,
-    [ActivityType.SPENDING]: spendMoneyIcon,
-    [ActivityType.PROFILE_TRANSACTION_RECEIVED]: defaultJourneyIcon,
-    [ActivityType.REWARD_RECEIVED]: defaultJourneyIcon,
-    [ActivityType.WALLET_DISTRIBUTION]: addMoneyIcon,
-    [ActivityType.MISSION_STARTED]: defaultJourneyIcon,
-    [ActivityType.MISSION_COMPLETED]: defaultJourneyIcon,
-    [ActivityType.ITEM_UNLOCKED]: unlockItemIcon,
+    [ACTIVITY_TYPE.REWARD]: defaultJourneyIcon,
+    [ACTIVITY_TYPE.DEPOSIT]: addMoneyIcon,
+    [ACTIVITY_TYPE.SPENDING]: spendMoneyIcon,
+    [ACTIVITY_TYPE.PROFILE_TRANSACTION_RECEIVED]: defaultJourneyIcon,
+    [ACTIVITY_TYPE.REWARD_RECEIVED]: defaultJourneyIcon,
+    [ACTIVITY_TYPE.WALLET_DISTRIBUTION]: addMoneyIcon,
+    [ACTIVITY_TYPE.MISSION_STARTED]: defaultJourneyIcon,
+    [ACTIVITY_TYPE.MISSION_COMPLETED]: defaultJourneyIcon,
+    [ACTIVITY_TYPE.ITEM_UNLOCKED]: unlockItemIcon,
 };
 
 export function getJourneyActivityIconSrc(activity: ActivityLog): string {
-    if (activity.activityType === ActivityType.SPENDING) {
+    if (activity.activityType === ACTIVITY_TYPE.SPENDING) {
         switch (activity.metadata?.wallet_type) {
-            case 'charity':
+            case WALLET_TYPE.CHARITY:
                 return charityIcon;
-            case 'education':
+            case WALLET_TYPE.EDUCATION:
                 return educationIcon;
-            case 'saving':
+            case WALLET_TYPE.SAVING:
                 return savingsIcon;
-            case 'spending':
+            case WALLET_TYPE.SPENDING:
                 return allowanceIcon;
         }
     }

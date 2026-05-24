@@ -11,6 +11,8 @@ import {
     useUpdateMeSettings,
 } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { GENDER } from '@/features/auth/constants/gender';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 import { cn } from '@/utils/cn';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichConfirmModal } from '@/components/common/TichTichModal';
@@ -35,7 +37,7 @@ function AdultSettingsPage() {
     const { mutateAsync: updateSettings, isPending: isUpdateSettingsPending } =
         useUpdateMeSettings();
 
-    const kidProfiles = profiles.filter((p) => p.profileType === 'kid');
+    const kidProfiles = profiles.filter(isKidProfile);
     const maxKids = user?.maxKidProfile ?? 5;
 
     const highlightedKidId = managedKidProfileId ?? kidProfiles[0]?.id;
@@ -99,7 +101,7 @@ function AdultSettingsPage() {
                         <div className="flex flex-row flex-wrap items-start gap-4">
                             {kidProfiles.map((kid) => {
                                 const isActive = kid.id === highlightedKidId;
-                                const isFemale = kid.gender === 'female';
+                                const isFemale = kid.gender === GENDER.FEMALE;
                                 return (
                                     <div
                                         key={kid.id}

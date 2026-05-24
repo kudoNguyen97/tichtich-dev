@@ -20,6 +20,7 @@ import {
     useUnequipItem,
 } from '@/features/items/hooks/useItems';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { TOAST_VARIANT } from '@/constants/toast';
 import { useRewardPoints } from '@/features/reward-points/hooks/useRewardPoints';
 import { getSlotFromItem } from '@/constants/children/character/itemVisuals';
 import type { ApiCategory, ApiItem } from '@/features/items/types/item.type';
@@ -157,7 +158,7 @@ function RouteComponent() {
                 await unequipMutation.mutateAsync({ itemType: slot });
                 showNotification({
                     title: `Đã bỏ trang bị ${item.itemName}`,
-                    variant: 'success',
+                    variant: TOAST_VARIANT.SUCCESS,
                 });
                 return;
             }
@@ -165,13 +166,13 @@ function RouteComponent() {
             await equipMutation.mutateAsync({ itemId: item.id });
             showNotification({
                 title: `Đã trang bị ${item.itemName}`,
-                variant: 'success',
+                variant: TOAST_VARIANT.SUCCESS,
             });
         } catch (error) {
             showNotification({
                 title: 'Không thể cập nhật trang bị',
                 description: error instanceof Error ? error.message : undefined,
-                variant: 'error',
+                variant: TOAST_VARIANT.ERROR,
             });
         }
     };
@@ -203,7 +204,7 @@ function RouteComponent() {
                 description:
                     getApiErrorDetails(error) ??
                     (error instanceof Error ? error.message : undefined),
-                variant: 'error',
+                variant: TOAST_VARIANT.ERROR,
             });
         }
     };

@@ -33,6 +33,9 @@ import { TichTichInput } from '@/components/common/TichTichInput';
 import { AppBar } from '@/components/layout/AppBar';
 import { cn } from '@/utils/cn';
 import { useCreateProfile } from '@/features/profiles/hooks/useProfiles';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
+import type { ChildGender } from '@/features/profiles/types/profile.type';
+import { GENDER } from '@/features/auth/constants/gender';
 
 const calendarDateSchema = z
     .custom<CalendarDate | null>(
@@ -68,8 +71,6 @@ const createProfileSchema = z.object({
         .min(1, 'Cần ít nhất một hồ sơ bé để tiếp tục'),
 });
 
-type ChildGender = 'male' | 'female' | null;
-
 type CreateProfileFormInput = {
     children: Array<{
         fullName: string;
@@ -89,14 +90,14 @@ function getChildCardTheme(gender: ChildGender): {
     iconSrc: string;
     iconAlt: string;
 } {
-    if (gender === 'male') {
+    if (gender === GENDER.MALE) {
         return {
             cardBg: 'bg-tichtich-blue',
             iconSrc: '/pig-full-body-male.svg',
             iconAlt: 'Heo bé trai',
         };
     }
-    if (gender === 'female') {
+    if (gender === GENDER.FEMALE) {
         return {
             cardBg: 'bg-tichtich-pink',
             iconSrc: '/pig-full-body-female.svg',
@@ -156,7 +157,7 @@ export function CreateKidProfileForm({
                     birthDate: dayjs(child.birthDate?.toString()).format(
                         'YYYY-MM-DD'
                     ),
-                    profileType: 'kid',
+                    profileType: PROFILE_TYPE.KID,
                     gender: child.gender ?? undefined,
                 })),
             },
@@ -392,7 +393,7 @@ export function CreateKidProfileForm({
                                                 onClick={async () => {
                                                     setValue(
                                                         `children.${index}.gender`,
-                                                        'male',
+                                                        GENDER.MALE,
                                                         {
                                                             shouldDirty: true,
                                                             shouldTouch: true,
@@ -404,7 +405,7 @@ export function CreateKidProfileForm({
                                                 }}
                                                 className={cn(
                                                     'relative h-14 overflow-hidden rounded-xl border px-4 text-left text-lg transition-colors cursor-pointer',
-                                                    gender === 'male'
+                                                    gender === GENDER.MALE
                                                         ? 'border-tichtich-black bg-tichtich-blue'
                                                         : 'border-tichtich-black bg-black/25'
                                                 )}
@@ -422,7 +423,7 @@ export function CreateKidProfileForm({
                                                 onClick={async () => {
                                                     setValue(
                                                         `children.${index}.gender`,
-                                                        'female',
+                                                        GENDER.FEMALE,
                                                         {
                                                             shouldDirty: true,
                                                             shouldTouch: true,
@@ -434,7 +435,7 @@ export function CreateKidProfileForm({
                                                 }}
                                                 className={cn(
                                                     'relative h-14 overflow-hidden rounded-xl border px-4 text-left text-lg transition-colors cursor-pointer',
-                                                    gender === 'female'
+                                                    gender === GENDER.FEMALE
                                                         ? 'border-tichtich-black bg-tichtich-pink'
                                                         : 'border-tichtich-black bg-black/25'
                                                 )}

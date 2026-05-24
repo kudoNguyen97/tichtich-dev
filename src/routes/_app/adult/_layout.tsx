@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
+import { GENDER } from '@/features/auth/constants/gender';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 import { User, RefreshCw } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { TichTichButton } from '@/components/common/TichTichButton';
@@ -13,7 +16,10 @@ import {
 export const Route = createFileRoute('/_app/adult/_layout')({
     beforeLoad: () => {
         const { selectedProfile } = useAuthStore.getState();
-        if (!selectedProfile || selectedProfile.profileType !== 'adult') {
+        if (
+            !selectedProfile ||
+            selectedProfile.profileType !== PROFILE_TYPE.ADULT
+        ) {
             throw redirect({ to: '/profiles' });
         }
     },
@@ -28,9 +34,11 @@ function AdultAppLayout() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const titlePrefix =
-        selectedProfile?.gender === 'male' ? 'Chào ba của' : 'Chào mẹ của';
+        selectedProfile?.gender === GENDER.MALE
+            ? 'Chào ba của'
+            : 'Chào mẹ của';
 
-    const kidProfiles = allProfiles.filter((p) => p.profileType === 'kid');
+    const kidProfiles = allProfiles.filter(isKidProfile);
     // Store đã set managedKidProfileId mặc định; ?? kidProfiles[0] phòng dữ liệu lệch.
     const subtitleKidName =
         kidProfiles.find((p) => p.id === managedKidProfileId)?.fullName ??

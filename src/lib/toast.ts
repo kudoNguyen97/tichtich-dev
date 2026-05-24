@@ -3,6 +3,7 @@ import { useNotificationStore } from '@/stores/useNotificationStore';
 import { ApiError } from '@/types/api.type';
 import { ERROR_CODE_I18N } from '@/constants/errorCodes';
 import { FIREBASE_AUTH_ERROR_I18N } from '@/constants/firebaseAuthErrorI18n';
+import { TOAST_VARIANT } from '@/constants/toast';
 
 type FirebaseLikeError = {
     code: string;
@@ -26,7 +27,7 @@ export function showError(error: unknown) {
         show({
             title: 'Có lỗi xảy ra',
             description: error,
-            variant: 'error',
+            variant: TOAST_VARIANT.ERROR,
         });
         return;
     }
@@ -37,7 +38,7 @@ export function showError(error: unknown) {
         show({
             title: 'Có lỗi xảy ra',
             description: message,
-            variant: 'error',
+            variant: TOAST_VARIANT.ERROR,
         });
         return;
     }
@@ -50,7 +51,7 @@ export function showError(error: unknown) {
         show({
             title: 'Có lỗi xảy ra',
             description: message,
-            variant: 'error',
+            variant: TOAST_VARIANT.ERROR,
         });
         return;
     }
@@ -59,7 +60,7 @@ export function showError(error: unknown) {
         show({
             title: 'Có lỗi xảy ra',
             description: error.message,
-            variant: 'error',
+            variant: TOAST_VARIANT.ERROR,
         });
         return;
     }
@@ -67,7 +68,7 @@ export function showError(error: unknown) {
     show({
         title: 'Có lỗi xảy ra',
         description: i18n.t('error.unknown'),
-        variant: 'error',
+        variant: TOAST_VARIANT.ERROR,
     });
 }
 
@@ -75,7 +76,7 @@ export function showSuccess(key: string, description?: string) {
     useNotificationStore.getState().show({
         title: i18n.t(key),
         description,
-        variant: 'success',
+        variant: TOAST_VARIANT.SUCCESS,
     });
 }
 
@@ -83,6 +84,6 @@ export function showInfo(key: string, description?: string) {
     useNotificationStore.getState().show({
         title: i18n.t(key),
         description,
-        variant: 'info',
+        variant: TOAST_VARIANT.INFO,
     });
 }

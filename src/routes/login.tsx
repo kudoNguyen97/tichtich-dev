@@ -26,6 +26,7 @@ import type { LoginFormData } from '@/features/auth/types/auth.schema';
 import { loginSchema } from '@/features/auth/types/auth.schema';
 import { useLogin } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 
 export const Route = createFileRoute('/login')({
     component: LoginPage,
@@ -86,7 +87,7 @@ function LoginPage() {
             });
 
             const hasKidProfile = response.user.profiles.some(
-                (p) => p.profileType === 'kid'
+                isKidProfile
             );
 
             navigate({
@@ -126,7 +127,7 @@ function LoginPage() {
             });
 
             const hasKidProfile = response.user.profiles.some(
-                (p) => p.profileType === 'kid'
+                isKidProfile
             );
 
             navigate({
@@ -175,7 +176,7 @@ function LoginPage() {
             });
 
             const hasKidProfile = response.user.profiles.some(
-                (p) => p.profileType === 'kid'
+                isKidProfile
             );
 
             navigate({

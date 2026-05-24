@@ -1,15 +1,17 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import type { EquippedItemRecord } from '@/features/items/hooks/useItems';
+import type { Gender } from '@/features/auth/constants/gender';
 import { EquippedCharacterFigure } from '@/components/children/character/EquippedCharacterFigure';
 import { useNavigate } from '@tanstack/react-router';
+import { ANIMATION_DURATION_S } from '@/constants/timing';
 
 const formatMoney = (n: number) => n.toLocaleString('vi-VN');
 
 interface KidHeroBannerProps {
     kidName: string;
     totalBalance: number;
-    gender: 'male' | 'female';
+    gender: Gender;
     equippedItems: EquippedItemRecord[];
 }
 
@@ -50,7 +52,9 @@ export function KidHeroBanner({
                                         exit="hidden"
                                         transition={{
                                             duration: 0.5,
-                                            delay: i * 0.1,
+                                            delay:
+                                                i *
+                                                ANIMATION_DURATION_S.STAGGER_STEP,
                                         }}
                                         className="text-base text-start font-bold tracking-tighter"
                                     >

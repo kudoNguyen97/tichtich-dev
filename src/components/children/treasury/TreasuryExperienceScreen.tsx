@@ -15,6 +15,11 @@ import type {
     BatchWithdrawPayload,
     Wallet,
 } from '@/features/wallets/types/wallet.type';
+import {
+    CATEGORY_TO_WALLET_TYPE
+    
+} from '@/features/wallets/constants/walletCategoryMap';
+import type {CategoryId} from '@/features/wallets/constants/walletCategoryMap';
 
 const formatMoney = (n: number) => n.toLocaleString('vi-VN');
 
@@ -41,14 +46,7 @@ function getTreasuryAmountSuggestions(
     );
 }
 
-const CATEGORY_TO_WALLET_TYPE = {
-    savings: 'saving',
-    learning: 'education',
-    charity: 'charity',
-    spending: 'spending',
-} as const;
-
-export type CategoryId = keyof typeof CATEGORY_TO_WALLET_TYPE;
+export type { CategoryId };
 
 export type CategoryItem = {
     id: CategoryId;

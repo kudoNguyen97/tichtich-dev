@@ -12,6 +12,7 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 import { AppBar } from '@/components/layout/AppBar';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
 import { showError } from '@/lib/toast';
 import { cn } from '@/utils/cn';
@@ -38,7 +39,7 @@ function ChangePinPage() {
         useUpdateProfilePinCode();
 
     useEffect(() => {
-        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+        if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.KID) {
             navigate({ to: '/profiles', replace: true });
         }
     }, [selectedProfile, navigate]);
@@ -86,7 +87,7 @@ function ChangePinPage() {
         setPin((prev) => prev.slice(0, -1));
     };
 
-    if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+    if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.KID) {
         return null;
     }
 

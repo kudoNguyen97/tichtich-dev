@@ -1,6 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import type { Profile } from '@/features/auth/types/auth.type';
-import { PROFILE_TYPE_CONFIG, getProfileType } from '@/features/profiles/types';
+import {
+    PROFILE_TYPE_CONFIG,
+    getProfileType,
+} from '@/features/profiles/types/profile.type';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 import { ProfilePig } from '@/components/profiles/ProfilePig';
 import { cn } from '@/utils/cn';
 import * as motion from 'motion/react-client';
@@ -16,7 +20,7 @@ export function ProfileCard({ profile, index, onSelect }: ProfileCardProps) {
     const profileType = getProfileType(profile);
     const config = PROFILE_TYPE_CONFIG[profileType];
 
-    const isAdult = profile.profileType === 'adult';
+    const isAdult = profile.profileType === PROFILE_TYPE.ADULT;
     const typeLabel = isAdult
         ? t('profiles.typeParent')
         : t('profiles.typeChild');

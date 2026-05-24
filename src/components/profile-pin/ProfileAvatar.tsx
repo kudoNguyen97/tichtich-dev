@@ -1,6 +1,6 @@
 import type { Profile } from '@/features/auth/types/auth.type';
-import { getProfileType } from '@/features/profiles/types';
-import type { ProfileType } from '@/features/profiles/types';
+import { getProfileType } from '@/features/profiles/types/profile.type';
+import type { ProfileVariant } from '@/features/profiles/types/profile.type';
 import { cn } from '@/utils/cn';
 
 interface ProfileAvatarProps {
@@ -10,7 +10,7 @@ interface ProfileAvatarProps {
     className?: string;
 }
 
-const PROFILE_TYPE_AVATAR_SRC: Record<ProfileType, string> = {
+const PROFILE_TYPE_AVATAR_SRC: Record<ProfileVariant, string> = {
     adult: '/images/avatar/adult-fullface.png',
     kidBoy: '/images/avatar/kidboy-fullface.png',
     kidGirl: '/images/avatar/kidgirl-fullface.png',

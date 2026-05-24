@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useRouterState } from '@tanstack/react-router';
+import { ANIMATION_DURATION_S } from '@/constants/timing';
 
 interface PageTransitionProps {
     children: React.ReactNode;
@@ -22,7 +23,10 @@ export function PageTransition({ children }: PageTransitionProps) {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+                transition={{
+                    duration: ANIMATION_DURATION_S.FAST,
+                    ease: [0.32, 0.72, 0, 1],
+                }}
             >
                 {children}
             </motion.div>
@@ -68,7 +72,10 @@ export function StaggerItem({
                 visible: {
                     opacity: 1,
                     y: 0,
-                    transition: { duration: 0.22, ease: 'easeOut' },
+                    transition: {
+                        duration: ANIMATION_DURATION_S.NORMAL,
+                        ease: 'easeOut',
+                    },
                 },
             }}
         >

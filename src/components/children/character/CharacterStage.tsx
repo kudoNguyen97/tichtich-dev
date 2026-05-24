@@ -1,9 +1,10 @@
 import type { EquippedItemRecord } from '@/features/items/hooks/useItems';
+import type { Gender } from '@/features/auth/constants/gender';
 import { EquippedCharacterFigure } from '@/components/children/character/EquippedCharacterFigure';
 
 interface CharacterStageProps {
     equippedItems: EquippedItemRecord[];
-    gender: 'male' | 'female';
+    gender: Gender;
 }
 
 export function CharacterStage({ equippedItems }: CharacterStageProps) {

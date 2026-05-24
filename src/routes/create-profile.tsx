@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from 'react-aria-components';
 import { CreateKidProfileForm } from '@/components/profiles/CreateKidProfileForm';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 
 export const Route = createFileRoute('/create-profile')({
     beforeLoad: () => {
@@ -10,7 +11,7 @@ export const Route = createFileRoute('/create-profile')({
         if (!isAuthenticated) {
             throw redirect({ to: '/login' });
         }
-        if (profiles.some((p) => p.profileType === 'kid')) {
+        if (profiles.some(isKidProfile)) {
             throw redirect({ to: '/profiles' });
         }
     },

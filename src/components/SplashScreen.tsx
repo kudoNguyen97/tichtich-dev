@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import {
+    SPLASH_DURATION_MS,
+    SPLASH_FADE_OFFSET_MS,
+} from '@/constants/timing';
 
 interface SplashScreenProps {
     onDone: () => void;
@@ -7,12 +11,15 @@ interface SplashScreenProps {
 
 export const SplashScreen = ({
     onDone,
-    duration = 2500,
+    duration = SPLASH_DURATION_MS,
 }: SplashScreenProps) => {
     const [fadeOut, setFadeOut] = useState(false);
 
     useEffect(() => {
-        const fadeTimer = setTimeout(() => setFadeOut(true), duration - 600);
+        const fadeTimer = setTimeout(
+            () => setFadeOut(true),
+            duration - SPLASH_FADE_OFFSET_MS
+        );
         const doneTimer = setTimeout(onDone, duration);
 
         return () => {

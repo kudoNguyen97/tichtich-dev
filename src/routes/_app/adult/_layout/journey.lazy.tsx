@@ -4,6 +4,7 @@ import { KidProfileSummaryCard } from '@/components/adult/journey/KidProfileSumm
 import { JourneyNavCard } from '@/components/adult/journey/JourneyNavCard';
 import { ActivityCalendar } from '@/components/ui/ActivityCalendar';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 import { useRewardPoints } from '@/features/reward-points/hooks/useRewardPoints';
 
 export const Route = createLazyFileRoute('/_app/adult/_layout/journey')({
@@ -18,7 +19,9 @@ function RouteComponent() {
     const kidProfile = useMemo(
         () =>
             profiles.find(
-                (p) => p.id === managedKidProfileId && p.profileType === 'kid'
+                (p) =>
+                    p.id === managedKidProfileId &&
+                    p.profileType === PROFILE_TYPE.KID
             ) ?? null,
         [profiles, managedKidProfileId]
     );

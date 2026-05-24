@@ -1,4 +1,5 @@
 import type { Profile } from '@/features/auth/types/auth.type';
+import { GENDER } from '@/features/auth/constants/gender';
 import { cn } from '@/utils/cn';
 
 export interface KidProfileSummaryCardProps {
@@ -15,7 +16,7 @@ export function KidProfileSummaryCard({
     className,
 }: KidProfileSummaryCardProps) {
     const avatarSrc =
-        kidProfile.gender === 'female'
+        kidProfile.gender === GENDER.FEMALE
             ? '/pig-full-body-female.svg'
             : '/pig-full-body-male.svg';
 

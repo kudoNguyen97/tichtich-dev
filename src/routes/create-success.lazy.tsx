@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { Check } from 'lucide-react';
 import { TichTichButton } from '@/components/common/TichTichButton';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 
 export const Route = createLazyFileRoute('/create-success')({
     component: CreateSuccessPage,
@@ -25,7 +26,9 @@ function CreateSuccessPage() {
 
     const handleContinue = () => {
         const target =
-            selectedProfile.profileType === 'adult' ? '/adult' : '/children';
+            selectedProfile.profileType === PROFILE_TYPE.ADULT
+                ? '/adult'
+                : '/children';
         navigate({ to: target, replace: true });
     };
 

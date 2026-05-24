@@ -11,8 +11,8 @@ import type { ToastProps } from 'react-aria-components';
 import { X } from 'lucide-react';
 import { flushSync } from 'react-dom';
 import { cn } from '@/utils/cn';
-
-type ToastVariant = 'success' | 'error' | 'info';
+import { TOAST_VARIANT  } from '@/constants/toast';
+import type {ToastVariant} from '@/constants/toast';
 
 export interface ToastContent {
     title: string;
@@ -74,7 +74,7 @@ export function AppToastRegion() {
 }
 
 function AppToast(props: ToastProps<ToastContent>) {
-    const variant = props.toast.content.variant ?? 'info';
+    const variant = props.toast.content.variant ?? TOAST_VARIANT.INFO;
     return (
         <Toast
             {...props}

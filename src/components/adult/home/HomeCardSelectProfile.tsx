@@ -1,4 +1,5 @@
 import type { Profile } from '@/features/auth/types/auth.type';
+import { GENDER } from '@/features/auth/constants/gender';
 import { cn } from '@/utils/cn';
 import { RefreshCw } from 'lucide-react';
 
@@ -16,7 +17,7 @@ function HomeCardSelectProfile({
             className={cn(
                 'flex items-center justify-end gap-6 h-[140px]',
                 ' rounded-lg px-6 py-4 w-full relative overflow-hidden',
-                profile.gender === 'male'
+                profile.gender === GENDER.MALE
                     ? 'bg-tichtich-blue'
                     : 'bg-tichtich-pink'
             )}

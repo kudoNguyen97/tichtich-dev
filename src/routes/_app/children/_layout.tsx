@@ -6,6 +6,8 @@ import {
     useNavigate,
 } from '@tanstack/react-router';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 import { useEffect, useMemo, useState } from 'react';
 import {
     AdultAppBarLeftAvatarButton,
@@ -24,7 +26,10 @@ import { useSelectedChildProfile } from '@/hooks/useSelectedChildProfile';
 export const Route = createFileRoute('/_app/children/_layout')({
     beforeLoad: () => {
         const { selectedProfile } = useAuthStore.getState();
-        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+        if (
+            !selectedProfile ||
+            selectedProfile.profileType !== PROFILE_TYPE.KID
+        ) {
             throw redirect({ to: '/profiles' });
         }
     },
@@ -46,7 +51,7 @@ function ChildrenAppLayout() {
 
     const titlePrefix = 'Xin chào';
 
-    const kidProfiles = allProfiles.filter((p) => p.profileType === 'kid');
+    const kidProfiles = allProfiles.filter(isKidProfile);
     const subtitleKidName =
         kidProfiles.find((p) => p.id === managedKidProfileId)?.fullName ??
         kidProfiles[0]?.fullName;

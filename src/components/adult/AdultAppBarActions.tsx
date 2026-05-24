@@ -2,6 +2,7 @@ import { Button } from 'react-aria-components';
 import { Bell, RefreshCw } from 'lucide-react';
 
 import type { Profile } from '@/features/auth/types/auth.type';
+import { GENDER } from '@/features/auth/constants/gender';
 import { cn } from '@/utils/cn';
 
 type AdultAppBarLeftAvatarButtonProps = {
@@ -19,14 +20,14 @@ export function AdultAppBarLeftAvatarButton({
                 className={cn(
                     'relative',
                     'size-10 rounded-full flex items-center justify-center transition-transform duration-150 group-hover:scale-105 group-hover:shadow-lg',
-                    selectedProfile?.gender === 'male'
+                    selectedProfile?.gender === GENDER.MALE
                         ? 'bg-tichtich-primary-100'
                         : 'bg-tichtich-primary-200'
                 )}
             >
                 <img
                     src={
-                        selectedProfile?.gender === 'male'
+                        selectedProfile?.gender === GENDER.MALE
                             ? '/images/avatar/adult-fullface.png'
                             : '/images/avatar/kidgirl-fullface.png'
                     }
@@ -37,7 +38,7 @@ export function AdultAppBarLeftAvatarButton({
                     className={cn(
                         'absolute bottom-0 right-0 size-4 text-white font-bold',
                         'transition-transform duration-150 group-hover:scale-110',
-                        selectedProfile?.gender === 'male'
+                        selectedProfile?.gender === GENDER.MALE
                             ? 'text-tichtich-primary-200'
                             : 'text-tichtich-primary-100'
                     )}

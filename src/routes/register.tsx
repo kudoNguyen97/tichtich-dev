@@ -17,6 +17,7 @@ import type { RegisterFormData } from '@/features/auth/types/auth.schema';
 import { registerSchema } from '@/features/auth/types/auth.schema';
 import { cn } from '@/utils/cn';
 import { authService } from '@/features/auth/api/auth.service';
+import { GENDER } from '@/features/auth/constants/gender';
 
 export const Route = createFileRoute('/register')({
     component: RegisterPage,
@@ -63,7 +64,7 @@ function RegisterPage() {
                     idToken: accessToken,
                     fullName: data.fullName,
                     phoneNumber: data.phone || undefined,
-                    parentGender: 'male',
+                    parentGender: GENDER.MALE,
                 }),
                 sendEmailVerification(user),
             ]);

@@ -17,6 +17,7 @@ import { AuthFormLayout } from '@/components/layout/AuthFormLayout';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { showError } from '@/lib/toast';
 import { useUpdateProfilePinCode } from '@/features/profiles/hooks/useProfiles';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 
 const PIN_LENGTH = 4;
 
@@ -79,7 +80,7 @@ function ProfilePinPage() {
                 if (value === selectedProfile.pinCode) {
                     setSelectedProfile(selectedProfile);
                     const target =
-                        selectedProfile.profileType === 'adult'
+                        selectedProfile.profileType === PROFILE_TYPE.ADULT
                             ? '/adult'
                             : '/children';
                     navigate({ to: target, replace: true });

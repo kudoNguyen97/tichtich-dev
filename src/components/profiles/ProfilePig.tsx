@@ -1,9 +1,9 @@
-import type { ProfileType } from '@/features/profiles/types';
-import { PROFILE_TYPE_CONFIG } from '@/features/profiles/types';
+import type { ProfileVariant } from '@/features/profiles/types/profile.type';
+import { PROFILE_TYPE_CONFIG } from '@/features/profiles/types/profile.type';
 import { cn } from '@/utils/cn';
 
 interface ProfilePigProps {
-    profileType: ProfileType;
+    profileType: ProfileVariant;
     side?: 'left' | 'right';
     className?: string;
 }

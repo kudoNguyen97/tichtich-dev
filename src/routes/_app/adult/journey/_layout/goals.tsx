@@ -9,6 +9,7 @@ import {
 } from '@/features/missions/hooks/useMissions';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { TOAST_VARIANT } from '@/constants/toast';
 import { showError } from '@/lib/toast';
 
 export const Route = createFileRoute('/_app/adult/journey/_layout/goals')({
@@ -58,7 +59,7 @@ function GoalsPage() {
             useNotificationStore.getState().show({
                 title: 'Đã xóa mục tiêu',
                 description: 'Mục tiêu đã được gỡ khỏi danh sách.',
-                variant: 'success',
+                variant: TOAST_VARIANT.SUCCESS,
             });
         } catch (error) {
             showError(error);

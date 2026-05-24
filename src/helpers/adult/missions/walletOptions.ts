@@ -1,4 +1,5 @@
 import type { WalletType } from '@/features/missions/types/mission.type';
+import { WALLET_TYPE } from '@/features/wallets/constants/walletType';
 
 export interface WalletFormOption {
     id: string;
@@ -14,25 +15,25 @@ export const WALLET_FORM_OPTIONS: WalletFormOption[] = [
         id: 'savings',
         label: 'Tiết kiệm',
         icon: '/icons/target-mission/saving.svg',
-        walletType: 'saving',
+        walletType: WALLET_TYPE.SAVING,
     },
     {
         id: 'learning',
         label: 'Học tập',
         icon: '/icons/target-mission/learning.svg',
-        walletType: 'education',
+        walletType: WALLET_TYPE.EDUCATION,
     },
     {
         id: 'charity',
         label: 'Từ thiện',
         icon: '/icons/target-mission/heart.svg',
-        walletType: 'charity',
+        walletType: WALLET_TYPE.CHARITY,
     },
     {
         id: 'spending',
         label: 'Tiêu vặt',
         icon: '/icons/target-mission/candy.svg',
-        walletType: 'spending',
+        walletType: WALLET_TYPE.SPENDING,
     },
 ];
 

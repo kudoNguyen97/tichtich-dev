@@ -7,6 +7,7 @@ import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import type { Profile } from '@/features/auth/types/auth.type';
 import { authService } from '@/features/auth/api/auth.service';
 import { profileKeys } from '@/features/profiles/api/profile.keys';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 
 export const Route = createFileRoute('/profiles')({
     component: ProfilesPage,
@@ -30,7 +31,7 @@ function ProfilesPage() {
         refetchOnMount: 'always',
     });
 
-    const hasKidProfile = profiles.some((p) => p.profileType === 'kid');
+    const hasKidProfile = profiles.some(isKidProfile);
     const shouldRedirectToCreate = !isFetching && !hasKidProfile;
 
     useEffect(() => {

@@ -23,6 +23,12 @@ import {
 import { profileTransactionKeys } from '@/features/profile-transactions/api/profileTransaction.keys';
 import { walletKeys } from '@/features/wallets/api/wallet.keys';
 import { queryClient } from '@/lib/queryClient';
+import {
+    CATEGORY_TO_WALLET_TYPE
+    
+} from '@/features/wallets/constants/walletCategoryMap';
+import type {CategoryId} from '@/features/wallets/constants/walletCategoryMap';
+import { MISSION_STATUS } from '@/features/missions/constants/missionStatus';
 
 type SharingNowSearch = {
     share: string;
@@ -48,14 +54,6 @@ const toSafeNumber = (value: unknown, fallback = 0) => {
     return Number.isFinite(parsed) ? parsed : fallback;
 };
 
-const CATEGORY_TO_WALLET_TYPE = {
-    savings: 'saving',
-    learning: 'education',
-    charity: 'charity',
-    spending: 'spending',
-} as const;
-
-type CategoryId = keyof typeof CATEGORY_TO_WALLET_TYPE;
 type CategoryItem = {
     id: CategoryId;
     label: string;
@@ -112,8 +110,8 @@ function RouteComponent() {
         isLoading: isMissionsLoading,
         isError: isMissionsError,
     } = useMissionsByProfileIdKid(managedKidProfileId ?? '', [
-        'in_progress',
-        'completed',
+        MISSION_STATUS.IN_PROGRESS,
+        MISSION_STATUS.COMPLETED,
     ]);
     const { data: transactions } = useGetReceivedTransactions(
         managedKidProfileId ?? ''

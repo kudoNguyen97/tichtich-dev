@@ -4,15 +4,17 @@ import type { WalletTransaction } from '@/features/wallets/types/wallet.type';
 export function groupTransactionsByDay(
     transactions: WalletTransaction[]
 ): Record<string, WalletTransaction[]> {
-    const grouped: Record<string, WalletTransaction[]> = {};
+    const grouped = new Map<string, WalletTransaction[]>();
 
     for (const tx of transactions) {
         const key = dayjs(tx.createdAt).format('YYYY-MM-DD');
-        if (!grouped[key]) {
-            grouped[key] = [];
+        const existing = grouped.get(key);
+        if (existing) {
+            existing.push(tx);
+        } else {
+            grouped.set(key, [tx]);
         }
-        grouped[key].push(tx);
     }
 
-    return grouped;
+    return Object.fromEntries(grouped);
 }

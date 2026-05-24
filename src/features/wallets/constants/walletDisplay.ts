@@ -1,4 +1,5 @@
 import type { WalletType } from '@/features/wallets/types/wallet.type';
+import { WALLET_TYPE } from '@/features/wallets/constants/walletType';
 
 export interface WalletDisplayConfig {
     walletType: WalletType;
@@ -12,14 +13,26 @@ export interface WalletDisplayConfig {
  * (post-start mission summary) to keep wording/icons in sync.
  */
 export const WALLET_DISPLAY_CONFIG: WalletDisplayConfig[] = [
-    { walletType: 'saving', label: 'Tiết kiệm', icon: '/icons/save.svg' },
-    { walletType: 'education', label: 'Học tập', icon: '/icons/study.svg' },
     {
-        walletType: 'charity',
+        walletType: WALLET_TYPE.SAVING,
+        label: 'Tiết kiệm',
+        icon: '/icons/save.svg',
+    },
+    {
+        walletType: WALLET_TYPE.EDUCATION,
+        label: 'Học tập',
+        icon: '/icons/study.svg',
+    },
+    {
+        walletType: WALLET_TYPE.CHARITY,
         label: 'Từ thiện',
         icon: '/icons/charity-heart.svg',
     },
-    { walletType: 'spending', label: 'Tiêu vặt', icon: '/icons/candy.svg' },
+    {
+        walletType: WALLET_TYPE.SPENDING,
+        label: 'Tiêu vặt',
+        icon: '/icons/candy.svg',
+    },
 ];
 
 export function getWalletDisplay(

@@ -12,9 +12,15 @@ export const Route = createFileRoute('/_app/adult/_layout/mission')({
 
 function RouteComponent() {
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
-    const { data: missions, isLoading, isError } = useMissionsByProfileIdKid(
-        managedKidProfileId ?? ''
-    );
+    const {
+        data: missions,
+        isLoading,
+        isError,
+    } = useMissionsByProfileIdKid(managedKidProfileId ?? '', [
+        'pending',
+        'in_progress',
+        'completed',
+    ]);
     const existingMissions =
         !managedKidProfileId || isLoading || isError ? [] : (missions ?? []);
 

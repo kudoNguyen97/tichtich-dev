@@ -1,3 +1,6 @@
+import type { ProfileType } from '@/features/auth/constants/profileType';
+import type { Gender } from '@/features/auth/constants/gender';
+
 /** Wallet item từ API (balance có thể dùng để tính tổng theo profile) */
 export interface ProfileWallet {
     id?: string;
@@ -8,11 +11,11 @@ export interface ProfileWallet {
 export interface Profile {
     id: string;
     userId: string;
-    profileType: 'adult' | 'kid';
+    profileType: ProfileType;
     fullName: string;
     wallets: ProfileWallet[];
     pinCode: string;
-    gender: 'male' | 'female';
+    gender: Gender;
     phone?: string;
     /** ISO 8601 — optional until API always returns */
     dateOfBirth?: string;
@@ -55,7 +58,7 @@ export interface SignupPayload {
     idToken: string;
     fullName: string;
     phoneNumber?: string;
-    parentGender: 'male' | 'female';
+    parentGender: Gender;
 }
 
 export interface SignupResponse {

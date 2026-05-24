@@ -7,6 +7,7 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { AppBar } from '@/components/layout/AppBar';
 import { ProfileAvatar } from '@/components/profile-pin/ProfileAvatar';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 
 export const Route = createFileRoute(
     '/_app/children/setting/_layout/change-pin-success'
@@ -19,12 +20,12 @@ function RouteComponent() {
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
 
     useEffect(() => {
-        if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+        if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.KID) {
             navigate({ to: '/profiles', replace: true });
         }
     }, [selectedProfile, navigate]);
 
-    if (!selectedProfile || selectedProfile.profileType !== 'kid') {
+    if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.KID) {
         return null;
     }
 

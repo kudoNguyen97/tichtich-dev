@@ -1,11 +1,11 @@
-const DEVICE_ID_KEY = 'device_id';
+import { STORAGE_KEYS } from '@/constants/storage';
 
 export function getOrCreateDeviceId() {
     if (typeof window === 'undefined') return '';
-    let id = localStorage.getItem(DEVICE_ID_KEY);
+    let id = localStorage.getItem(STORAGE_KEYS.DEVICE_ID);
     if (!id) {
         id = crypto.randomUUID();
-        localStorage.setItem(DEVICE_ID_KEY, id);
+        localStorage.setItem(STORAGE_KEYS.DEVICE_ID, id);
     }
     return id;
 }

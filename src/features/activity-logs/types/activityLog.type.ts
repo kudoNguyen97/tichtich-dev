@@ -1,11 +1,9 @@
+import type { WalletType } from '@/features/wallets/types/wallet.type';
+
 /** Backend may add new values; keep as string until a stable contract exists. */
 export type ActivityType = string;
 
-export type WalletDistributionType =
-    | 'charity'
-    | 'education'
-    | 'saving'
-    | 'spending';
+export type WalletDistributionType = WalletType;
 
 export interface WalletDistributionEntry {
     walletType?: WalletDistributionType;

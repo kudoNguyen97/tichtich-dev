@@ -17,6 +17,7 @@ import { MissionConfirmCompleteDialog } from '@/components/children/home/Mission
 import { MissionCompletedSuccessDialog } from '@/components/children/home/MissionCompletedSuccessDialog';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { getMissionAppendDescriptor } from '@/helpers/missions/missionUi';
+import { GENDER } from '@/features/auth/constants/gender';
 
 export const Route = createFileRoute('/_app/children/_layout/')({
     component: RouteComponent,
@@ -52,7 +53,7 @@ function RouteComponent() {
         data: missions,
         isLoading: isMissionsLoading,
         isError: isMissionsError,
-    } = useMissionsByProfileIdKid(managedKidProfileId ?? '');
+    } = useMissionsByProfileIdKid(managedKidProfileId ?? '', ['pending']);
 
     const displayMissions = useMemo(() => {
         if (!managedKidProfileId || isMissionsLoading || isMissionsError) {
@@ -137,7 +138,7 @@ function RouteComponent() {
             <KidHeroBanner
                 kidName={kidProfile?.fullName ?? ''}
                 totalBalance={totalBalance}
-                gender={kidProfile?.gender ?? 'male'}
+                gender={kidProfile?.gender ?? GENDER.MALE}
                 equippedItems={equippedItems ?? []}
             />
             <div className="p-4 flex flex-col gap-6">

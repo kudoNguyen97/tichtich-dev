@@ -1,6 +1,6 @@
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { TichTichModal } from '@/components/common/TichTichModal';
-import { getWalletDisplay } from '@/constants/wallets/walletDisplay';
+import { getWalletDisplay } from '@/features/wallets/constants/walletDisplay';
 import type { Mission } from '@/features/missions/types/mission.type';
 import { calendarDaysUntilEnd } from '@/helpers/missions/missionUi';
 

@@ -5,6 +5,8 @@ import { TichTichButton } from '@/components/common/TichTichButton';
 import { TreasuryExperienceScreen } from '@/components/children/treasury/TreasuryExperienceScreen';
 import type { Mission } from '@/features/missions/types/mission.type';
 import type { Wallet } from '@/features/wallets/types/wallet.type';
+import { MISSION_STATUS } from '@/features/missions/constants/missionStatus';
+import { WALLET_TYPE } from '@/features/wallets/constants/walletType';
 
 export const Route = createLazyFileRoute('/trail')({
     component: RouteComponent,
@@ -15,28 +17,28 @@ const TRAIL_DOWNLOAD_URL = 'https://tichtich.vn/tai-ung-dung';
 const trailWallets: Wallet[] = [
     {
         id: 'wallet-saving-trial',
-        walletType: 'saving',
+        walletType: WALLET_TYPE.SAVING,
         balance: 300000,
         createdAt: '2026-01-01T00:00:00.000Z',
         updatedAt: '2026-01-01T00:00:00.000Z',
     },
     {
         id: 'wallet-education-trial',
-        walletType: 'education',
+        walletType: WALLET_TYPE.EDUCATION,
         balance: 180000,
         createdAt: '2026-01-01T00:00:00.000Z',
         updatedAt: '2026-01-01T00:00:00.000Z',
     },
     {
         id: 'wallet-charity-trial',
-        walletType: 'charity',
+        walletType: WALLET_TYPE.CHARITY,
         balance: 120000,
         createdAt: '2026-01-01T00:00:00.000Z',
         updatedAt: '2026-01-01T00:00:00.000Z',
     },
     {
         id: 'wallet-spending-trial',
-        walletType: 'spending',
+        walletType: WALLET_TYPE.SPENDING,
         balance: 95000,
         createdAt: '2026-01-01T00:00:00.000Z',
         updatedAt: '2026-01-01T00:00:00.000Z',
@@ -49,12 +51,12 @@ const trailMissions: Mission[] = [
         title: 'Để dành mua truyện tranh',
         description: 'Tiết kiệm đủ 500.000đ trong tháng này',
         profileId: 'trial-kid-profile',
-        walletType: 'saving',
+        walletType: WALLET_TYPE.SAVING,
         amount: 500000,
         startDay: '2026-05-01',
         endDay: '2026-05-31',
         rewardPoint: 50,
-        status: 'in_progress',
+        status: MISSION_STATUS.IN_PROGRESS,
         progress: {
             id: 'mission-progress-trial-1',
             missionId: 'mission-trial-1',

@@ -1,4 +1,5 @@
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type {Dayjs} from 'dayjs';
 
 const GRID_SIZE = 42;
 

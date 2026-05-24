@@ -1,15 +1,9 @@
-import type { Wallet } from '@/features/wallets/types/wallet.type';
+import type { Wallet, WalletType } from '@/features/wallets/types/wallet.type';
+import type { MissionStatusValue } from '@/features/missions/constants/missionStatus';
 
-export type WalletType = 'charity' | 'education' | 'saving' | 'spending';
+export type { WalletType };
 
-export type MissionStatus =
-    | 'pending'
-    | 'in_progress'
-    | 'completed'
-    | 'cancelled'
-    | 'resolved'
-    | 'failed'
-    | string;
+export type MissionStatus = MissionStatusValue;
 
 export interface MissionProgress {
     id: string;

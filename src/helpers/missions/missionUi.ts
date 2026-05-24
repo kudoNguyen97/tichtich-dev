@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
-import { MISSION_STATUS_BADGE_LABEL_VI } from '@/constants/missions/missionStatusBadgeVi';
+import { MISSION_STATUS_BADGE_LABEL_VI } from '@/features/missions/constants/missionStatusBadgeVi';
 import type { Mission } from '@/features/missions/types/mission.type';
+import { MISSION_STATUS } from '@/features/missions/constants/missionStatus';
+import { isMissionTerminal } from '@/features/missions/helpers/missionStatus';
 
 const BADGE_VI = MISSION_STATUS_BADGE_LABEL_VI;
 
@@ -44,7 +46,7 @@ export function normalizeMissionProgressPercent(
 export function getMissionProgressBarPercent(mission: Mission): number {
     const status = normalizeMissionStatus(mission.status);
 
-    if (status === 'pending') {
+    if (status === MISSION_STATUS.PENDING) {
         return 0;
     }
 
@@ -92,24 +94,24 @@ export function getMissionCardBadge(mission: Mission): MissionCardBadge {
 
     const daysUntilEnd = calendarDaysUntilEnd(mission.endDay);
     const urgentSoon =
-        status === 'in_progress' && daysUntilEnd >= 0 && daysUntilEnd < 3;
+        status === MISSION_STATUS.IN_PROGRESS && daysUntilEnd >= 0 && daysUntilEnd < 3;
 
     if (urgentSoon) {
         return { label: 'Sắp hết hạn', variant: 'progress' };
     }
 
     switch (status) {
-        case 'completed':
+        case MISSION_STATUS.COMPLETED:
             return { label: BADGE_VI.completed, variant: 'done' };
-        case 'cancelled':
+        case MISSION_STATUS.CANCELLED:
             return { label: BADGE_VI.cancelled, variant: 'cancelled' };
-        case 'resolved':
+        case MISSION_STATUS.RESOLVED:
             return { label: BADGE_VI.resolved, variant: 'done' };
-        case 'failed':
+        case MISSION_STATUS.FAILED:
             return { label: BADGE_VI.failed, variant: 'cancelled' };
-        case 'pending':
+        case MISSION_STATUS.PENDING:
             return { label: BADGE_VI.pending, variant: 'pending' };
-        case 'in_progress':
+        case MISSION_STATUS.IN_PROGRESS:
             return { label: BADGE_VI.in_progress, variant: 'progress' };
         default:
             return {
@@ -123,20 +125,20 @@ export function getMissionCardBadge(mission: Mission): MissionCardBadge {
 export function getMissionCardBadgeClassName(mission: Mission): string {
     const status = normalizeMissionStatus(mission.status);
 
-    if (status === 'pending') {
+    if (status === MISSION_STATUS.PENDING) {
         return 'bg-tichtich-green';
     }
 
-    if (status === 'resolved' || status === 'completed') {
+    if (status === MISSION_STATUS.COMPLETED) {
         return 'bg-tichtich-green';
     }
 
-    if (status === 'cancelled') {
+    if (status === MISSION_STATUS.CANCELLED) {
         return 'bg-tichtich-red';
     }
 
-    if (status === 'failed') {
-        return 'bg-tichtich-primary-200';
+    if (status === MISSION_STATUS.FAILED) {
+        return 'bg-tichtich-red';
     }
 
     return 'bg-tichtich-primary-200';
@@ -160,15 +162,11 @@ export function getMissionAppendDescriptor(
         mission.progress?.progressPercent
     );
 
-    if (
-        status === 'resolved' ||
-        status === 'failed' ||
-        status === 'cancelled'
-    ) {
+    if (isMissionTerminal(mission)) {
         return { kind: 'none' };
     }
 
-    if (status === 'pending') {
+    if (status === MISSION_STATUS.PENDING) {
         if (isCalendarStartDayAfterToday(mission.startDay)) {
             return {
                 kind: 'pending_before_start',
@@ -178,12 +176,12 @@ export function getMissionAppendDescriptor(
         return { kind: 'pending_start' };
     }
 
-    if (status === 'in_progress') {
+    if (status === MISSION_STATUS.IN_PROGRESS) {
         if (pct < 100) return { kind: 'none' };
         return { kind: 'confirm_complete' };
     }
 
-    if (status === 'completed') {
+    if (status === MISSION_STATUS.COMPLETED) {
         return { kind: 'confirm_complete' };
     }
 

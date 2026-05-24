@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
+import { STORAGE_KEYS } from '@/constants/storage';
 
 export const useSplash = () => {
     const [showSplash] = useState(() => {
-        const seen = localStorage.getItem('app_splash_shown');
+        const seen = localStorage.getItem(STORAGE_KEYS.APP_SPLASH_SHOWN);
         if (seen) return false;
-        localStorage.setItem('app_splash_shown', '1');
+        localStorage.setItem(STORAGE_KEYS.APP_SPLASH_SHOWN, '1');
         return true;
     });
 

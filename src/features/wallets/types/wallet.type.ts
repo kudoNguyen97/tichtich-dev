@@ -1,4 +1,6 @@
-export type WalletType = 'charity' | 'education' | 'saving' | 'spending';
+import type { WalletTypeValue } from '@/features/wallets/constants/walletType';
+
+export type WalletType = WalletTypeValue;
 
 export interface Wallet {
     id: string;

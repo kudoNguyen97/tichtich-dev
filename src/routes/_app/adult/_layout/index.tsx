@@ -5,11 +5,13 @@ import { KidWalletOverviewCard } from '@/components/adult/home/KidWalletOverview
 import { KidStatsSection } from '@/components/adult/home/KidStatsSection';
 import { SpendPreviewChart } from '@/components/children/treasury/SpendPreviewChart';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { GENDER } from '@/features/auth/constants/gender';
+import { isKidProfile } from '@/features/auth/helpers/profile';
 import {
     useWalletsByProfileId,
     useWalletTransactions,
 } from '@/features/wallets/hooks/useWallets';
-import { WALLET_DISPLAY_CONFIG } from '@/constants/wallets/walletDisplay';
+import { WALLET_DISPLAY_CONFIG } from '@/features/wallets/constants/walletDisplay';
 import { createFileRoute } from '@tanstack/react-router';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { cn } from '@/utils/cn';
@@ -31,7 +33,7 @@ function HomeAdultPage() {
 
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    const kidProfiles = profiles.filter((p) => p.profileType === 'kid');
+    const kidProfiles = profiles.filter(isKidProfile);
 
     const handleSelect = () => {
         if (!kidProfiles.length) return;
@@ -153,7 +155,7 @@ function HomeAdultPage() {
                                 <div
                                     className={cn(
                                         'flex h-22 w-22 p-3 items-center justify-center rounded-lg bg-white overflow-hidden',
-                                        kid.gender === 'female'
+                                        kid.gender === GENDER.FEMALE
                                             ? 'bg-[#F9CCD7] border border-[#f07997]'
                                             : 'bg-[#C0E0F0] border border-tichtich-primary-200',
                                         'transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-lg'
@@ -161,7 +163,7 @@ function HomeAdultPage() {
                                 >
                                     <img
                                         src={
-                                            kid.gender === 'female'
+                                            kid.gender === GENDER.FEMALE
                                                 ? '/images/face-icons/female-kid.png'
                                                 : '/images/face-icons/male-kid.png'
                                         }

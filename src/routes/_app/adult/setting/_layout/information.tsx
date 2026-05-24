@@ -32,6 +32,10 @@ import { TichTichInput } from '@/components/common/TichTichInput';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { LoadingTichTich } from '@/components/common/LoadingTichTich';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
+import { TOAST_VARIANT } from '@/constants/toast';
+import { GENDER  } from '@/features/auth/constants/gender';
+import type {Gender} from '@/features/auth/constants/gender';
 // import {
 //     AdultAppBarLeftAvatarButton,
 //     AdultAppBarRightBellButton,
@@ -129,7 +133,7 @@ const adultInformationSchema = z.object({
 type AdultInformationFormInput = {
     fullName: string;
     phone: string;
-    gender: 'male' | 'female';
+    gender: Gender;
     birthDate: CalendarDate | null;
 };
 
@@ -142,7 +146,7 @@ function AdultInformationPage() {
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
 
     const adultProfile = useMemo((): Profile | null => {
-        if (!selectedProfile || selectedProfile.profileType !== 'adult')
+        if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.ADULT)
             return null;
         return selectedProfile;
     }, [selectedProfile]);
@@ -182,7 +186,7 @@ function AdultInformationPage() {
             defaultValues: {
                 fullName: '',
                 phone: '',
-                gender: 'male',
+                gender: GENDER.MALE,
                 birthDate: null,
             },
         });
@@ -217,7 +221,7 @@ function AdultInformationPage() {
     }, [initialFormData, reset]);
 
     useEffect(() => {
-        if (!selectedProfile || selectedProfile.profileType !== 'adult') {
+        if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.ADULT) {
             navigate({ to: '/profiles' });
         }
     }, [selectedProfile, navigate]);
@@ -250,7 +254,7 @@ function AdultInformationPage() {
             useNotificationStore.getState().show({
                 title: 'Đã lưu',
                 description: 'Thông tin đã được cập nhật.',
-                variant: 'success',
+                variant: TOAST_VARIANT.SUCCESS,
             });
             setIsEditing(false);
         } catch (e) {
@@ -259,7 +263,7 @@ function AdultInformationPage() {
     };
 
     const avatarSrc =
-        gender === 'female'
+        gender === GENDER.FEMALE
             ? '/images/face-icons/female-adult.png'
             : '/images/face-icons/male-adult.png';
 
@@ -284,7 +288,7 @@ function AdultInformationPage() {
                                 <div
                                     className={cn(
                                         'flex size-28 items-center justify-center overflow-hidden rounded-2xl',
-                                        gender === 'male'
+                                        gender === GENDER.MALE
                                             ? 'bg-tichtich-primary-100'
                                             : 'bg-tichtich-primary-200'
                                     )}
@@ -326,19 +330,19 @@ function AdultInformationPage() {
                                             }}
                                             className={cn(
                                                 'flex size-20 cursor-pointer items-center justify-center rounded-full transition border-2 border-tichtich-primary-100',
-                                                g === 'male'
+                                                g === GENDER.MALE
                                                     ? 'bg-tichtich-primary-100'
                                                     : 'bg-tichtich-primary-200',
                                                 fieldLocked &&
                                                     'cursor-default opacity-90'
                                             )}
                                             aria-label={
-                                                g === 'male' ? 'Nam' : 'Nữ'
+                                                g === GENDER.MALE ? 'Nam' : 'Nữ'
                                             }
                                         >
                                             <img
                                                 src={
-                                                    g === 'male'
+                                                    g === GENDER.MALE
                                                         ? '/images/face-icons/male-adult.png'
                                                         : '/images/face-icons/female-adult.png'
                                                 }

@@ -1,11 +1,14 @@
 import { create } from 'zustand';
 import { persist, devtools } from 'zustand/middleware';
 import type { Profile, User } from '@/features/auth/types/auth.type';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
+import { isKidProfile } from '@/features/auth/helpers/profile';
+import { STORAGE_KEYS } from '@/constants/storage';
 
 const PRESERVED_LOCAL_STORAGE_KEYS = [
-    'app_splash_shown',
-    'i18nextLng',
-    'device_id',
+    STORAGE_KEYS.APP_SPLASH_SHOWN,
+    STORAGE_KEYS.I18N_LANG,
+    STORAGE_KEYS.DEVICE_ID,
 ] as const;
 
 function clearLocalStorageExcept(keys: readonly string[]) {
@@ -49,12 +52,12 @@ function validManagedKidId(
 ): string | null {
     if (!id) return null;
     const p = profiles.find((x) => x.id === id);
-    return p?.profileType === 'kid' ? id : null;
+    return p?.profileType === PROFILE_TYPE.KID ? id : null;
 }
 
 /** Kid đầu tiên theo thứ tự mảng `profiles` (filter kid). */
 function firstKidProfileId(profiles: Profile[]): string | null {
-    const first = profiles.find((p) => p.profileType === 'kid');
+    const first = profiles.find(isKidProfile);
     return first?.id ?? null;
 }
 
@@ -82,7 +85,10 @@ export const useAuthStore = create<AuthState>()(
                 isAuthenticated: false,
 
                 setAuth: (user, accessToken, profiles) => {
-                    localStorage.setItem('access_token', accessToken);
+                    localStorage.setItem(
+                        STORAGE_KEYS.ACCESS_TOKEN,
+                        accessToken
+                    );
                     const prev = useAuthStore.getState().selectedProfile;
                     const matched = prev
                         ? (profiles.find((p) => p.id === prev.id) ?? null)
@@ -122,7 +128,7 @@ export const useAuthStore = create<AuthState>()(
                     set((state) => ({
                         selectedProfile: profile,
                         managedKidProfileId:
-                            profile.profileType === 'kid'
+                            profile.profileType === PROFILE_TYPE.KID
                                 ? profile.id
                                 : resolveManagedKidProfileId(
                                       state.profiles,

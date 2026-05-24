@@ -6,6 +6,7 @@ import { ArrowLeft, Check } from 'lucide-react';
 import { ProfileAvatar } from '@/components/profile-pin/ProfileAvatar';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
+import { PROFILE_TYPE } from '@/features/auth/constants/profileType';
 import { AppBar } from '@/components/layout/AppBar';
 
 export const Route = createFileRoute(
@@ -19,12 +20,12 @@ function RouteComponent() {
     const selectedProfile = useAuthStore((s) => s.selectedProfile);
 
     useEffect(() => {
-        if (!selectedProfile || selectedProfile.profileType !== 'adult') {
+        if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.ADULT) {
             navigate({ to: '/profiles', replace: true });
         }
     }, [selectedProfile, navigate]);
 
-    if (!selectedProfile || selectedProfile.profileType !== 'adult') {
+    if (!selectedProfile || selectedProfile.profileType !== PROFILE_TYPE.ADULT) {
         return null;
     }
 

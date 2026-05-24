@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { AppBar } from '@/components/layout/AppBar';
 import { TichTichButton } from '@/components/common/TichTichButton';
 import { useRecentActivities } from '@/features/activity-logs/hooks/useActivityLogs';
+import { useCheckFinanceReport, useExportWeeklyReport } from '@/features/finance-reports/hooks/useFinanceReport';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { cn } from '@/utils/cn';
 import dayjs from 'dayjs';
@@ -49,7 +51,41 @@ function ProgressPage() {
     const isReady = spendingCount >= TOTAL_STEPS;
 
     const { start, end } = getLastWeekRange();
+    const fromDate = start.format('YYYY-MM-DD');
+    const toDate = end.format('YYYY-MM-DD');
     const dateRangeLabel = `${start.format('DD/MM/YYYY')} - ${end.format('DD/MM/YYYY')}`;
+
+    const { data: checkData, isPending: isCheckPending } = useCheckFinanceReport(
+        {
+            profileId: managedKidProfileId ?? '',
+            fromDate,
+            toDate,
+            granularity: 'weekly',
+        },
+        { enabled: Boolean(managedKidProfileId) && isReady }
+    );
+
+    const { mutateAsync: exportReport, isPending: isExporting } =
+        useExportWeeklyReport();
+
+    useEffect(() => {
+        if (isReady && checkData?.exists === true) {
+            void navigate({
+                to: '/adult/journey/finance-report',
+                replace: true,
+            });
+        }
+    }, [isReady, checkData?.exists, navigate]);
+
+    const handleExport = async () => {
+        if (!managedKidProfileId) return;
+        if (checkData?.exists) {
+            navigate({ to: '/adult/journey/finance-report' });
+            return;
+        }
+        await exportReport(managedKidProfileId);
+        navigate({ to: '/adult/journey/finance-report' });
+    };
 
     if (!managedKidProfileId) return null;
 
@@ -114,10 +150,8 @@ function ProgressPage() {
                         variant={isReady ? 'primary' : 'disabled'}
                         size="lg"
                         fullWidth
-                        isDisabled={!isReady}
-                        onPress={() =>
-                            navigate({ to: '/adult/journey/finance-report' })
-                        }
+                        isDisabled={!isReady || isCheckPending || isExporting}
+                        onPress={() => void handleExport()}
                     >
                         Xuất báo cáo tuần
                     </TichTichButton>

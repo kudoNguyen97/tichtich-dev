@@ -7,6 +7,9 @@ export function useExportWeeklyReport() {
     return useMutation({
         mutationFn: (profileId: string) =>
             financeReportService.exportWeeklyReport(profileId),
+        meta: {
+            globalLoading: true,
+        },
     });
 }
 
@@ -18,5 +21,8 @@ export function useCheckFinanceReport(
         queryKey: financeReportKeys.check(params),
         queryFn: () => financeReportService.checkReport(params),
         enabled: options?.enabled ?? Boolean(params.profileId),
+        meta: {
+            globalLoading: true,
+        },
     });
 }

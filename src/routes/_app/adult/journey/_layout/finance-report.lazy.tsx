@@ -102,6 +102,8 @@ function FinanceReportPage() {
     const managedKidProfileId = useAuthStore((s) => s.managedKidProfileId);
 
     const { fromDate, toDate } = useMemo(() => getLastWeekRange(), []);
+    const fromDateDisplay = dayjs(fromDate).format('DD/MM/YYYY');
+    const toDateDisplay = dayjs(toDate).format('DD/MM/YYYY');
 
     const { data: checkData, isPending: isCheckPending } =
         useCheckFinanceReport(
@@ -158,44 +160,58 @@ function FinanceReportPage() {
                 className="bg-tichtich-primary-300"
             />
 
-            <div className="w-full max-w-[720px] mx-auto bg-tichtich-primary-300 h-[calc(100dvh-56px)] overflow-hidden px-2">
-                <div className="h-full w-full flex items-center justify-center">
-                    <div className="relative w-full max-w-[390px] h-full max-h-[820px] origin-top scale-[0.88] sm:scale-[0.95] md:scale-100">
-                        <img
-                            src={roadImage}
-                            alt="Finance report road"
-                            className="absolute inset-0 h-[85%] w-full object-contain select-none pointer-events-none"
-                        />
-
-                        {ROAD_MILESTONES.map((milestone) => (
-                            <button
-                                key={milestone.id}
-                                type="button"
-                                onClick={() =>
-                                    handleMilestoneClick(milestone.sectionKey)
-                                }
-                                aria-label={milestone.label}
-                                className="absolute -translate-y-1/2 rounded-full transition-transform cursor-pointer active:scale-95"
-                                style={{
-                                    top: milestone.top,
-                                    left: milestone.left,
-                                    right: milestone.right,
-                                }}
-                            >
-                                <img
-                                    src={milestone.src}
-                                    alt={milestone.label}
-                                    className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
-                                />
-                            </button>
-                        ))}
-
-                        <div className="absolute bottom-[3%] left-1/2 -translate-x-1/2">
+            <div className="w-full max-w-[720px] mx-auto bg-tichtich-primary-300 flex flex-col h-[calc(100dvh-56px)] ">
+                <div className="px-4 pt-4 pb-2 flex flex-col items-center gap-1">
+                    <h1 className="text-xl font-bold text-center text-tichtich-black leading-snug">
+                        Báo cáo tuần {fromDateDisplay} - {toDateDisplay} đã sẵn
+                        sàng
+                    </h1>
+                    <p className="text-sm text-tichtich-black text-center">
+                        Nhấp vào các mục hành trình để khám phá hành vi chi tiêu
+                        của bé
+                    </p>
+                </div>
+                <div className="flex-1 px-2 ">
+                    <div className="h-full w-full flex items-center justify-center">
+                        <div className="relative w-full max-w-[390px] h-full max-h-[720px] origin-top scale-[0.88] sm:scale-[0.95] md:scale-100">
                             <img
-                                src={finalRoadImage}
-                                alt="Finance report finish"
-                                className="h-auto w-[180px] sm:w-[210px] object-contain"
+                                src={roadImage}
+                                alt="Finance report road"
+                                className="absolute inset-0 h-[85%] w-full object-contain select-none pointer-events-none"
                             />
+
+                            {ROAD_MILESTONES.map((milestone) => (
+                                <button
+                                    key={milestone.id}
+                                    type="button"
+                                    onClick={() =>
+                                        handleMilestoneClick(
+                                            milestone.sectionKey
+                                        )
+                                    }
+                                    aria-label={milestone.label}
+                                    className="absolute -translate-y-1/2 rounded-full transition-transform cursor-pointer active:scale-95"
+                                    style={{
+                                        top: milestone.top,
+                                        left: milestone.left,
+                                        right: milestone.right,
+                                    }}
+                                >
+                                    <img
+                                        src={milestone.src}
+                                        alt={milestone.label}
+                                        className="h-16 w-16 sm:h-20 sm:w-20 object-contain"
+                                    />
+                                </button>
+                            ))}
+
+                            <div className="absolute bottom-[3%] left-1/2 -translate-x-1/2">
+                                <img
+                                    src={finalRoadImage}
+                                    alt="Finance report finish"
+                                    className="h-auto w-[180px] sm:w-[210px] object-contain"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

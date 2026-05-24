@@ -18,7 +18,11 @@ function MissionSuccessPage() {
         data: missions,
         isLoading,
         isError,
-    } = useMissionsByProfileIdKid(managedKidProfileId ?? '');
+    } = useMissionsByProfileIdKid(managedKidProfileId ?? '', [
+        'pending',
+        'in_progress',
+        'completed',
+    ]);
 
     useEffect(() => {
         if (!managedKidProfileId) {
@@ -66,7 +70,10 @@ function MissionSuccessPage() {
                     <ul className="flex flex-col gap-4">
                         {list.map((m) => (
                             <li key={m.id}>
-                                <MissionSuccessCard mission={m} />
+                                <MissionSuccessCard
+                                    mission={m}
+                                    displayValue="amount"
+                                />
                             </li>
                         ))}
                     </ul>

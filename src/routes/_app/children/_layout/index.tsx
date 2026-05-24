@@ -53,7 +53,11 @@ function RouteComponent() {
         data: missions,
         isLoading: isMissionsLoading,
         isError: isMissionsError,
-    } = useMissionsByProfileIdKid(managedKidProfileId ?? '', ['pending']);
+    } = useMissionsByProfileIdKid(managedKidProfileId ?? '', [
+        'pending',
+        'in_progress',
+        'completed',
+    ]);
 
     const displayMissions = useMemo(() => {
         if (!managedKidProfileId || isMissionsLoading || isMissionsError) {

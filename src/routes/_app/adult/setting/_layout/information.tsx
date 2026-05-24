@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { I18nProvider } from 'react-aria';
 import {
@@ -42,11 +43,10 @@ import type {Gender} from '@/features/auth/constants/gender';
 // } from '@/components/adult/AdultAppBarActions';
 import { cn } from '@/utils/cn';
 import { useNotificationStore } from '@/stores/useNotificationStore';
+import { authKeys } from '@/features/auth/api/auth.keys';
+import { useMeWithProfile } from '@/features/auth/hooks/useAuth';
+import { useUpdateProfileInfo } from '@/features/profiles/hooks/useProfiles';
 import type { Profile } from '@/features/auth/types/auth.type';
-import {
-    useProfileDetail,
-    useUpdateProfile,
-} from '@/features/profiles/hooks/useProfiles';
 import { showError } from '@/lib/toast';
 import dayjs from 'dayjs';
 import { AppBar } from '@/components/layout/AppBar';
@@ -152,29 +152,25 @@ function AdultInformationPage() {
     }, [selectedProfile]);
 
     const {
-        data: profileDetailData,
-        isLoading: isProfileDetailLoading,
-        isFetching: isProfileDetailFetching,
-    } = useProfileDetail(adultProfile?.id ?? '');
-    const isProfileDetailPending =
-        Boolean(adultProfile?.id) &&
-        (isProfileDetailLoading || isProfileDetailFetching);
+        data: meData,
+        isLoading: isMeLoading,
+        isFetching: isMeFetching,
+    } = useMeWithProfile(adultProfile?.id ?? '');
+    const isMePending =
+        Boolean(adultProfile?.id) && (isMeLoading || isMeFetching);
 
     const initialFormData = useMemo(() => {
-        if (!user || !adultProfile) return null;
-        const profileDetail = profileDetailData as
-            | (Profile & { phone?: string; email?: string })
-            | undefined;
+        if (!adultProfile) return null;
         return {
-            fullName: profileDetail?.fullName ?? user.fullName,
-            phone: profileDetail?.phone ?? user.phone,
-            gender: profileDetail?.gender ?? adultProfile.gender,
+            fullName: meData?.fullName ?? user?.fullName ?? '',
+            phone: meData?.phone ?? user?.phone ?? '',
+            gender: meData?.gender ?? adultProfile.gender,
             birthDate: isoToCalendarDate(
-                profileDetail?.dateOfBirth ?? adultProfile.dateOfBirth
+                meData?.dateOfBirth ?? adultProfile.dateOfBirth
             ),
-            email: profileDetail?.email ?? user.email,
+            email: meData?.email ?? user?.email ?? '',
         };
-    }, [user, adultProfile, profileDetailData]);
+    }, [user, adultProfile, meData]);
 
     const { control, handleSubmit, reset, watch, setValue, clearErrors } =
         useForm<
@@ -196,8 +192,9 @@ function AdultInformationPage() {
     const [isEditing, setIsEditing] = useState(false);
     const [isOpenSelectGender, setIsOpenSelectGender] = useState(false);
 
-    const { mutateAsync: updateProfile, isPending: isSavingProfile } =
-        useUpdateProfile();
+    const queryClient = useQueryClient();
+    const { mutateAsync: updateProfileInfo, isPending: isSavingProfile } =
+        useUpdateProfileInfo();
     const isSaving = isSavingProfile;
 
     useEffect(() => {
@@ -241,14 +238,18 @@ function AdultInformationPage() {
 
     const onSubmit = async (data: AdultInformationFormSubmitted) => {
         try {
-            await updateProfile({
+            await updateProfileInfo({
                 id: adultProfile.id,
                 data: {
                     fullName: data.fullName,
                     gender: data.gender,
                     dateOfBirth: calendarDateToIsoDateString(data.birthDate),
-                    phone: data.phone,
+                    phoneNumber: data.phone,
                 },
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: authKeys.meWithProfile(adultProfile.id),
             });
 
             useNotificationStore.getState().show({
@@ -269,7 +270,7 @@ function AdultInformationPage() {
 
     return (
         <>
-            <LoadingTichTich isLoading={isProfileDetailPending} />
+            <LoadingTichTich isLoading={isMePending} />
             <AppBar
                 title="Thông tin tài khoản"
                 subtitle=""

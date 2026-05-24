@@ -6,18 +6,16 @@ export function MissionThreeTargetsNotice() {
             className="rounded-lg bg-tichtich-primary-100 px-4 py-3 text-white"
             role="status"
         >
-            <div className="flex gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20">
-                    <Info className="size-5" aria-hidden />
+            <div className="min-w-0 space-y-1">
+                <span className="inline-block">
+                    <Info className=" text-tichtich-black" aria-hidden />
                 </span>
-                <div className="min-w-0 space-y-1">
-                    <p className="text-sm font-bold leading-snug">
-                        Bé đã có 3 mục tiêu
-                    </p>
-                    <p className="text-xs font-medium leading-snug text-white/95">
-                        Hãy hỗ trợ bé hoàn thành trước khi giao thêm mục tiêu
-                    </p>
-                </div>
+                <p className="text-sm font-bold leading-snug text-tichtich-black">
+                    Bé đã có 3 mục tiêu
+                </p>
+                <p className="text-xs font-medium leading-snug text-tichtich-black">
+                    Hãy hỗ trợ bé hoàn thành trước khi giao thêm mục tiêu
+                </p>
             </div>
         </div>
     );

@@ -14,6 +14,9 @@ export const authService = {
 
     me: () => apiClient.get<User>('/me'),
 
+    meWithProfileId: (profileId: string) =>
+        apiClient.get<User>('/me', { headers: { 'x-profile-id': profileId } }),
+
     meSettings: () => apiClient.get<UserSettings>('/me/settings'),
 
     updateMeSettings: (payload: Partial<UserSettings>) =>

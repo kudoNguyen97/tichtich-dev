@@ -36,6 +36,8 @@ export interface User {
     phoneVerified?: boolean;
     status: string;
     profiles: Profile[];
+    gender?: Gender;
+    dateOfBirth?: string;
     // createdAt: string;
     // updatedAt: string;
 }

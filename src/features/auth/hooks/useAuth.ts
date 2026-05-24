@@ -17,6 +17,16 @@ export function useMe() {
     });
 }
 
+export function useMeWithProfile(profileId: string) {
+    const { isAuthenticated } = useAuthStore();
+
+    return useQuery<User>({
+        queryKey: authKeys.meWithProfile(profileId),
+        queryFn: () => authService.meWithProfileId(profileId),
+        enabled: isAuthenticated && Boolean(profileId),
+    });
+}
+
 export function useLogin() {
     const queryClient = useQueryClient();
     const setAuth = useAuthStore((s) => s.setAuth);

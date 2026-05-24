@@ -2,6 +2,7 @@ import { useProgressBar } from '@react-aria/progress';
 import { Star, Trash2 } from 'lucide-react';
 import type { Mission } from '@/features/missions/types/mission.type';
 import { cn } from '@/utils/cn';
+import { formatRewardAmountDisplay } from '@/helpers/adult/reward/rewardFormat';
 import { missionWalletIconSrc } from '@/helpers/adult/missions/missionWalletIconSrc';
 import {
     formatMissionDayVi,
@@ -42,6 +43,7 @@ function MissionProgressRow({ percent }: { percent: number }) {
 
 interface MissionSuccessCardProps {
     mission: Mission;
+    displayValue?: 'points' | 'amount';
     showDelete?: boolean;
     isDeleting?: boolean;
     onDelete?: (missionId: string) => void;
@@ -49,6 +51,7 @@ interface MissionSuccessCardProps {
 
 export function MissionSuccessCard({
     mission,
+    displayValue = 'points',
     showDelete = false,
     isDeleting = false,
     onDelete,
@@ -114,15 +117,23 @@ export function MissionSuccessCard({
                     </p>
                     <MissionProgressRow percent={pct} />
                 </div>
-                <div className="flex-1 flex items-center justify-end gap-0.5 text-tichtich-primary-200">
-                    <span className="text-base font-bold tabular-nums">
-                        {mission.rewardPoint}
-                    </span>
-                    <Star
-                        className="size-5 fill-tichtich-primary-200 text-tichtich-primary-200"
-                        aria-hidden
-                    />
-                </div>
+                {displayValue === 'amount' ? (
+                    <div className="flex-1 flex items-center justify-end">
+                        <span className="text-base font-bold tabular-nums text-tichtich-black">
+                            {formatRewardAmountDisplay(mission.amount)}
+                        </span>
+                    </div>
+                ) : (
+                    <div className="flex-1 flex items-center justify-end gap-0.5 text-tichtich-primary-200">
+                        <span className="text-base font-bold tabular-nums">
+                            {mission.rewardPoint}
+                        </span>
+                        <Star
+                            className="size-5 fill-tichtich-primary-200 text-tichtich-primary-200"
+                            aria-hidden
+                        />
+                    </div>
+                )}
             </div>
         </article>
     );

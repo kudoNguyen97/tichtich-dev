@@ -4,6 +4,7 @@ import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { queryClient } from '@/lib/queryClient';
 import { profileKeys } from '@/features/profiles/api/profile.keys';
 import { profileService } from '../api/profile.serivce';
+import type { UpdateProfileInfoPayload } from '../api/profile.serivce';
 import type { Profile } from '@/features/auth/types/auth.type';
 import { showError } from '@/lib/toast';
 
@@ -70,6 +71,13 @@ export function useUpdateProfile() {
                 queryKey: profileKeys.profileDetail(id),
             });
         },
+    });
+}
+
+export function useUpdateProfileInfo() {
+    return useMutation({
+        mutationFn: (payload: { id: string; data: UpdateProfileInfoPayload }) =>
+            profileService.updateProfileInfo(payload.id, payload.data),
     });
 }
 
